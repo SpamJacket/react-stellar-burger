@@ -1,0 +1,40 @@
+.header {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  composes: pt-4 pb-4 from global;
+  align-items: center;
+  background-color: #1C1C21;
+}
+
+.navBar {
+  display: flex;
+  column-gap: 8px;
+}
+
+.navBar:nth-of-type(1) {
+  margin-right: 112px;
+}
+.navBar:nth-of-type(2) {
+  margin-left: 288px;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  composes: pl-5 pr-5 pt-4 pb-4 from global;
+}
+
+.link {
+  margin: 0;
+  composes: pl-2 text text_type_main-default from global;
+}
+
+.link_inactive {
+  composes: link;
+  composes: text_color_inactive from global;
+}
