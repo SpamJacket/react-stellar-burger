@@ -21,6 +21,7 @@
 }
 
 .button {
+  cursor: pointer;
   background-color: transparent;
   border: none;
   color: inherit;
@@ -30,7 +31,6 @@
 }
 
 .link {
-  margin: 0;
   composes: pl-2 text text_type_main-default from global;
 }
 
