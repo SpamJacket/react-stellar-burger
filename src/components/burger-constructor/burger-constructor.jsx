@@ -1,7 +1,9 @@
 import React from "react";
-import { ConstructorElement, CurrencyIcon, DragIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import PropTypes from "prop-types";
+import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-constructor.module.css";
 import BurgerElement from "../burger-element/burger-element.jsx";
+import { ingredientPropType } from "../../utils/prop-types.js";
 
 function BurgerConstructor(props) {
   let bun = {};
@@ -19,7 +21,7 @@ function BurgerConstructor(props) {
         <ConstructorElement
           type="top"
           isLocked={true}
-          text={bun.name}
+          text={bun.name + " (верх)"}
           price={bun.price}
           thumbnail={bun.image}
           extraClass={[styles.element_background_dark, styles.borderElement]}
@@ -30,7 +32,7 @@ function BurgerConstructor(props) {
         <ConstructorElement
           type="bottom"
           isLocked={true}
-          text={bun.name}
+          text={bun.name  + " (низ)"}
           price={bun.price}
           thumbnail={bun.image}
           extraClass={[styles.element_background_dark, styles.borderElement]}
@@ -72,5 +74,7 @@ function BurgerConstructor(props) {
     </section>
   );
 }
+
+BurgerConstructor.propTypes = { data: PropTypes.arrayOf(ingredientPropType) };
 
 export default BurgerConstructor;

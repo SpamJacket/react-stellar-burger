@@ -1,7 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredients.module.css";
+import { ingredientPropType } from "../../utils/prop-types.js";
 
 function BurgerIngredients(props) {
   const [current, setCurrent] = React.useState('Buns');
@@ -64,5 +66,7 @@ function BurgerIngredients(props) {
     </section>
   );
 }
+
+BurgerIngredients.propTypes = { data: PropTypes.arrayOf(ingredientPropType) };
 
 export default BurgerIngredients;
