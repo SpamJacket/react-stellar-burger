@@ -5,66 +5,47 @@ import styles from "./burger-constructor.module.css";
 import BurgerElement from "../burger-element/burger-element.jsx";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
-function BurgerConstructor(props) {
-  let bun = {};
-  props.data.forEach(obj => {
-    if(obj.type === 'bun' && obj.__v > 0) {
-      bun = obj;
-    }
-  });
-
+function BurgerConstructor({ data }) {
   const [totalPrice, setTotalPrice] = React.useState(0);
 
-  function renderBun(bun, position){
-    if(position === 'top') {
-      return (
-        <ConstructorElement
-          type="top"
-          isLocked={true}
-          text={bun.name + " (верх)"}
-          price={bun.price}
-          thumbnail={bun.image}
-          extraClass={[styles.element_background_dark, styles.borderElement]}
-        />
-      );
-    } else {
-      return (
-        <ConstructorElement
-          type="bottom"
-          isLocked={true}
-          text={bun.name  + " (низ)"}
-          price={bun.price}
-          thumbnail={bun.image}
-          extraClass={[styles.element_background_dark, styles.borderElement]}
-        />
-      );
-    }
-  }
-  
-  function renderIngridients(data) {
-    let index = -1;
-    const array = [];
-  
-    data.forEach(obj => {
-      if(obj.type !== 'bun' && obj.__v > 0) {
-        for(let i = 0; i < obj.__v; i++) {
-          index += 1;
-          array.push((<BurgerElement key={index} name={obj.name} price={obj.price} img={obj.image} />));
-        }
+  function renderIngredients() {
+    return data.map((ingredient, index) => {
+      if(ingredient.type !== 'bun') {
+        return <BurgerElement key={index} data={ingredient} />
       }
     });
-  
-    return array;
   }
+
+  React.useEffect(() => {
+    let price = 0;
+    document.querySelectorAll('.constructor-element__price').forEach(priceElement => {
+      price += Number(priceElement.textContent);
+    });
+    setTotalPrice(price);
+  });
 
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        {renderBun(bun, 'top')}
+        <ConstructorElement
+          type="top"
+          isLocked={true}
+          text={"Краторная булка N-200i" + " (верх)"}
+          price={1255}
+          thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
+          extraClass={[styles.element_background_dark, styles.borderElement]}
+        />
         <ul className={styles.list}>
-          {renderIngridients(props.data)}
+          {renderIngredients()}
         </ul>
-        {renderBun(bun, 'bottom')}
+        <ConstructorElement
+          type="bottom"
+          isLocked={true}
+          text={"Краторная булка N-200i"  + " (низ)"}
+          price={1255}
+          thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
+          extraClass={[styles.element_background_dark, styles.borderElement]}
+        />
       </div>
       <div className={styles.price}>
         <p className={styles.digit}>{totalPrice}</p>
@@ -75,6 +56,6 @@ function BurgerConstructor(props) {
   );
 }
 
-BurgerConstructor.propTypes = { data: PropTypes.arrayOf(ingredientPropType) };
+BurgerConstructor.propTypes = { data: PropTypes.arrayOf(ingredientPropType).isRequired };
 
 export default BurgerConstructor;
