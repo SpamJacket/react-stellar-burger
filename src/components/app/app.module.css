@@ -13,11 +13,11 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: min-content 1fr;
   column-gap: 40px;
-  composes: pt-10 pb-10 from global;
+  composes: pt-10 from global;
+  height: 100%;
 }
 
 .title {
   grid-column: 1 / span 2;
-  composes: text text_type_main-large from global;
-  composes: mb-5 from global;
+  composes: mb-5 text text_type_main-large from global;
 }
