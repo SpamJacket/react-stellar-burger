@@ -5,10 +5,10 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredients.module.css";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
-function BurgerIngredients({ data }) {
+const BurgerIngredients = ({ data }) => {
   const [current, setCurrent] = React.useState('Buns');
 
-  function renderIngredients(type) {
+  const renderIngredients = type => {
     return data.map((ingredient, index) => {
       if(ingredient.type === type) {
         return <BurgerIngredient key={index} data={ingredient} />

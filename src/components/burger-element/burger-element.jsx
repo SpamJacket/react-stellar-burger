@@ -2,7 +2,7 @@ import { ingredientPropType } from "../../utils/prop-types.js";
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-element.module.css";
 
-function BurgerElement({ data }) {
+const BurgerElement = ({ data }) => {
   return (
     <li className={styles.item}>
       <DragIcon />

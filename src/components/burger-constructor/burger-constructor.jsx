@@ -5,10 +5,10 @@ import styles from "./burger-constructor.module.css";
 import BurgerElement from "../burger-element/burger-element.jsx";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
-function BurgerConstructor({ data }) {
+const BurgerConstructor = ({ data }) => {
   const [totalPrice, setTotalPrice] = React.useState(0);
 
-  function renderIngredients() {
+  const renderIngredients = () => {
     return data.map((ingredient, index) => {
       if(ingredient.type !== 'bun') {
         return <BurgerElement key={index} data={ingredient} />
