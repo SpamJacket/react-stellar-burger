@@ -5,13 +5,13 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredients.module.css";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
-const BurgerIngredients = ({ data }) => {
+const BurgerIngredients = ({ data, openModal, modalComponent }) => {
   const [current, setCurrent] = React.useState('Buns');
 
   const renderIngredients = type => {
     return data.map((ingredient, index) => {
       if(ingredient.type === type) {
-        return <BurgerIngredient key={index} data={ingredient} />
+        return <BurgerIngredient key={index} data={ingredient} counter={0} openModal={openModal} modalComponent={modalComponent} />
       }
     });
   }
@@ -47,7 +47,7 @@ const BurgerIngredients = ({ data }) => {
       </div>
     </section>
   );
-}
+};
 
 BurgerIngredients.propTypes = { data: PropTypes.arrayOf(ingredientPropType).isRequired };
 

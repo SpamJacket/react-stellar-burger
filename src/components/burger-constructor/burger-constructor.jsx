@@ -5,7 +5,7 @@ import styles from "./burger-constructor.module.css";
 import BurgerElement from "../burger-element/burger-element.jsx";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
-const BurgerConstructor = ({ data }) => {
+const BurgerConstructor = ({ data, openModal, modalComponent }) => {
   const [totalPrice, setTotalPrice] = React.useState(0);
 
   const renderIngredients = () => {
@@ -16,6 +16,16 @@ const BurgerConstructor = ({ data }) => {
     });
   }
 
+  const handleOrderButtonClick = () => {
+    const orderId = Math.floor(Math.random() * 999999 + 1);
+    const data = {
+      orderId: ('000000' + orderId).slice(-6),
+    };
+    modalComponent.current = { type: 'order', data };
+    openModal();
+  };
+
+  // Заменить! Это подсчет итоговой суммы
   React.useEffect(() => {
     let price = 0;
     document.querySelectorAll('.constructor-element__price').forEach(priceElement => {
@@ -36,7 +46,7 @@ const BurgerConstructor = ({ data }) => {
           extraClass={[styles.element_background_dark, styles.borderElement]}
         />
         <ul className={styles.list}>
-          {renderIngredients()}
+          {/* {renderIngredients()} */}
         </ul>
         <ConstructorElement
           type="bottom"
@@ -51,10 +61,10 @@ const BurgerConstructor = ({ data }) => {
         <p className={styles.digit}>{totalPrice}</p>
         <CurrencyIcon />
       </div>
-      <Button htmlType="button" type="primary" size="large" extraClass={styles.btn}>Оформить заказ</Button>
+      <Button htmlType="button" type="primary" size="large" extraClass={styles.btn} onClick={handleOrderButtonClick}>Оформить заказ</Button>
     </section>
   );
-}
+};
 
 BurgerConstructor.propTypes = { data: PropTypes.arrayOf(ingredientPropType).isRequired };
 

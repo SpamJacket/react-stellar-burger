@@ -14,7 +14,7 @@ const BurgerElement = ({ data }) => {
       />
     </li>
   );
-}
+};
 
 BurgerElement.propTypes = { data: ingredientPropType.isRequired };
 
