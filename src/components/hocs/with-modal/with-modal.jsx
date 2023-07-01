@@ -1,5 +1,6 @@
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './with-modal.module.css';
+
+import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
 const withModal = ModalComponent => props => {
   return (

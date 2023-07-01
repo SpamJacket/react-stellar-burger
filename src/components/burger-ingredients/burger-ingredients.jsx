@@ -1,20 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { ingredientPropType } from "../../utils/prop-types.js";
+
+import styles from "./burger-ingredients.module.css";
+
 import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./burger-ingredients.module.css";
-import { ingredientPropType } from "../../utils/prop-types.js";
 
 const BurgerIngredients = ({ data, openModal, modalComponent }) => {
   const [current, setCurrent] = React.useState('Buns');
 
-  const renderIngredients = type => {
+  const renderIngredients = React.useCallback(type => {
     return data.map((ingredient, index) => {
       if(ingredient.type === type) {
-        return <BurgerIngredient key={index} data={ingredient} counter={0} openModal={openModal} modalComponent={modalComponent} />
+        return <BurgerIngredient key={index} data={ingredient} openModal={openModal} modalComponent={modalComponent} />
       }
     });
-  }
+  });
 
   return (
     <section className={styles.section}>
@@ -49,6 +51,10 @@ const BurgerIngredients = ({ data, openModal, modalComponent }) => {
   );
 };
 
-BurgerIngredients.propTypes = { data: PropTypes.arrayOf(ingredientPropType).isRequired };
+BurgerIngredients.propTypes = {
+  data: PropTypes.arrayOf(ingredientPropType).isRequired,
+  openModal: PropTypes.func.isRequired,
+  modalComponent: PropTypes.object.isRequired
+};
 
 export default BurgerIngredients;

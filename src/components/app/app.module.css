@@ -21,3 +21,10 @@
   grid-column: 1 / span 2;
   composes: mb-5 text text_type_main-large from global;
 }
+
+.errorTitle {
+  position: absolute;
+  top: calc(100vh - 88px - 50%);
+  left: calc(50% - 400px);
+  composes: text text_type_main-large from global;
+}

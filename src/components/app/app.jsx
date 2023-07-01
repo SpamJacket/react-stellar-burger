@@ -1,5 +1,8 @@
 import React from 'react';
+import PropTypes from "prop-types";
+
 import styles from "./app.module.css";
+
 import AppHeader from "../app-header/app-header.jsx";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients.jsx";
 import BurgerConstructor from "../burger-constructor/burger-constructor.jsx";
@@ -10,6 +13,11 @@ const App = ({ apiUrl }) => {
   const [dataState, setDataState] = React.useState({
     data: null,
     isLoading: true
+  });
+
+  const [constructorElements, setConstructorElements] = React.useState({
+    bun: {},
+    filings: []
   });
 
   React.useEffect(() => {
@@ -36,16 +44,28 @@ const App = ({ apiUrl }) => {
     getData();
   }, [apiUrl]);
 
+  React.useEffect(() => {
+    if(dataState.data) {
+      dataState.data.forEach(el => {
+        if(el.type === 'bun') {
+          setConstructorElements(prevState => ({...prevState, bun: el}));
+        } else {
+          setConstructorElements(prevState => ({...prevState, filings: [...prevState.filings, el]}));
+        }
+      });
+    }
+  }, [dataState.data])
+
   const [isOpened, setIsOpened] = React.useState(false);
   const modalComponent = React.useRef();
 
-  const openModal = () => {
+  const openModal = React.useCallback(() => {
     setIsOpened(true);
-  }
+  });
 
-  const closeModal = () => {
+  const closeModal = React.useCallback(() => {
     setIsOpened(false);
-  }
+  });
 
   return (
     <div className={styles.app}>
@@ -55,8 +75,12 @@ const App = ({ apiUrl }) => {
         <main className={styles.main}>
           <h2 className={styles.title}>Соберите бургер</h2>
           <BurgerIngredients data={dataState.data} openModal={openModal} modalComponent={modalComponent} />
-          <BurgerConstructor data={dataState.data} openModal={openModal} modalComponent={modalComponent} />
+          <BurgerConstructor data={constructorElements} openModal={openModal} modalComponent={modalComponent} />
         </main>
+      }
+      {
+        !dataState.data && dataState.isLoading &&
+        <h2 className={styles.errorTitle}>Подождите, идет загрузка конструктора</h2>
       }
       {
         isOpened && <ModalOverlay closeModal={closeModal} modalComponent={modalComponent} />
@@ -64,5 +88,7 @@ const App = ({ apiUrl }) => {
     </div>
   );
 };
+
+App.propTypes = { apiUrl: PropTypes.string.isRequired }
 
 export default App;

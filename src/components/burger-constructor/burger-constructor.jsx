@@ -1,59 +1,57 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
-import styles from "./burger-constructor.module.css";
-import BurgerElement from "../burger-element/burger-element.jsx";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
+import styles from "./burger-constructor.module.css";
+
+import { ConstructorElement, CurrencyIcon, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import BurgerElement from "../burger-element/burger-element.jsx";
+
 const BurgerConstructor = ({ data, openModal, modalComponent }) => {
-  const [totalPrice, setTotalPrice] = React.useState(0);
-
-  const renderIngredients = () => {
-    return data.map((ingredient, index) => {
-      if(ingredient.type !== 'bun') {
-        return <BurgerElement key={index} data={ingredient} />
-      }
-    });
-  }
-
-  const handleOrderButtonClick = () => {
-    const orderId = Math.floor(Math.random() * 999999 + 1);
+  // Заменить! Это генератор номера заказа
+  const handleOrderButtonClick = React.useCallback(() => {
+    const orderId = ('000000' + Math.floor(Math.random() * 999999 + 1)).slice(-6);
     const data = {
-      orderId: ('000000' + orderId).slice(-6),
+      orderId,
+      totalPrice
     };
     modalComponent.current = { type: 'order', data };
     openModal();
-  };
-
-  // Заменить! Это подсчет итоговой суммы
-  React.useEffect(() => {
-    let price = 0;
-    document.querySelectorAll('.constructor-element__price').forEach(priceElement => {
-      price += Number(priceElement.textContent);
-    });
-    setTotalPrice(price);
   });
+
+  const [totalPrice, setTotalPrice] = React.useState(0);
+
+  React.useEffect(() => {
+    if(data.bun.price !== undefined) {
+      setTotalPrice(totalPrice + (data.bun.price * 2));
+    }
+    data.filings.forEach(el => {
+      setTotalPrice(prevState => (prevState + el.price));
+    });
+  }, [data])
 
   return (
     <section className={styles.section}>
       <div className={styles.container}>
         <ConstructorElement
+          key={0}
           type="top"
           isLocked={true}
-          text={"Краторная булка N-200i" + " (верх)"}
-          price={1255}
-          thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
+          text={data.bun.name + " (верх)"}
+          price={data.bun.price}
+          thumbnail={data.bun.image}
           extraClass={[styles.element_background_dark, styles.borderElement]}
         />
         <ul className={styles.list}>
-          {/* {renderIngredients()} */}
+          {data.filings.map((el, index) => <BurgerElement key={index + 2} data={el} />)}
         </ul>
         <ConstructorElement
+          key={1}
           type="bottom"
           isLocked={true}
-          text={"Краторная булка N-200i"  + " (низ)"}
-          price={1255}
-          thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
+          text={data.bun.name  + " (низ)"}
+          price={data.bun.price}
+          thumbnail={data.bun.image}
           extraClass={[styles.element_background_dark, styles.borderElement]}
         />
       </div>
@@ -66,6 +64,10 @@ const BurgerConstructor = ({ data, openModal, modalComponent }) => {
   );
 };
 
-BurgerConstructor.propTypes = { data: PropTypes.arrayOf(ingredientPropType).isRequired };
+BurgerConstructor.propTypes = {
+  data: PropTypes.shape({bun: PropTypes.object.isRequired, filings: PropTypes.arrayOf(ingredientPropType).isRequired}).isRequired,
+  openModal: PropTypes.func.isRequired,
+  modalComponent: PropTypes.object.isRequired
+};
 
 export default BurgerConstructor;
