@@ -3,11 +3,15 @@ import PropTypes from "prop-types";
 
 import styles from "./app.module.css";
 
+import getData from '../../utils/burger-api.js';
+
 import AppHeader from "../app-header/app-header.jsx";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients.jsx";
 import BurgerConstructor from "../burger-constructor/burger-constructor.jsx";
 
-import ModalOverlay from '../modal-overlay/modal-overlay';
+import Modal from '../modal/Modal.jsx';
+import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
+import OrderDitails from "../order-details/order-details.jsx";
 
 const App = ({ apiUrl }) => {
   const [dataState, setDataState] = React.useState({
@@ -16,36 +20,20 @@ const App = ({ apiUrl }) => {
   });
 
   const [constructorElements, setConstructorElements] = React.useState({
-    bun: {},
+    bun: null,
     filings: []
   });
 
   React.useEffect(() => {
-    const getResponseData = res => {
-      if(res.ok) {
-        return res.json();
-      }
-  
-      return Promise.reject(`Ошибка: ${res.status} ${res.statusText}`);
-    }
-
-    const getData = async () => {
-      setDataState({ ...dataState, isLoading: true });
-      const res = await fetch(apiUrl);
-      const data = await getResponseData(res);
-
-      if(data.success) {
-        setDataState({ data: data.data, isLoading: false })
-      } else {
-        alert("Произошла ошибка! Перезагрузите страницу");
-      }
-    }
-
-    getData();
+    getData(apiUrl, setDataState);
   }, [apiUrl]);
 
   React.useEffect(() => {
     if(dataState.data) {
+      setConstructorElements({
+        bun: null,
+        filings: []
+      });
       dataState.data.forEach(el => {
         if(el.type === 'bun') {
           setConstructorElements(prevState => ({...prevState, bun: el}));
@@ -67,6 +55,39 @@ const App = ({ apiUrl }) => {
     setIsOpened(false);
   });
 
+  const handleEscClose = (e) => {
+    if (e.key === 'Escape') {
+      animateClosing();
+    }
+  }
+
+  React.useEffect(() => {
+    document.addEventListener('keydown', handleEscClose);
+
+    return () => {
+      document.removeEventListener('keydown', handleEscClose);
+    };
+  }, [])
+
+  const modalRef = React.useRef();
+  const overlayRef = React.useRef();
+
+  const animateOpening = () => {
+    openModal();
+    setTimeout(() => {
+      overlayRef.current.style = 'opacity: 1';
+      modalRef.current.style = 'opacity: 1';
+    }, 0);
+  };
+
+  const animateClosing = () => {
+    modalRef.current.style = 'opacity: 0';
+    setTimeout(() => {
+      overlayRef.current.style = 'opacity: 0';
+    }, 100)
+    setTimeout(closeModal, 300);
+  };
+
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -74,8 +95,8 @@ const App = ({ apiUrl }) => {
         dataState.data && !dataState.isLoading &&
         <main className={styles.main}>
           <h2 className={styles.title}>Соберите бургер</h2>
-          <BurgerIngredients data={dataState.data} openModal={openModal} modalComponent={modalComponent} />
-          <BurgerConstructor data={constructorElements} openModal={openModal} modalComponent={modalComponent} />
+          <BurgerIngredients data={dataState.data} openModal={animateOpening} modalComponent={modalComponent} />
+          <BurgerConstructor data={constructorElements} openModal={animateOpening} modalComponent={modalComponent} />
         </main>
       }
       {
@@ -83,7 +104,10 @@ const App = ({ apiUrl }) => {
         <h2 className={styles.errorTitle}>Подождите, идет загрузка конструктора</h2>
       }
       {
-        isOpened && <ModalOverlay closeModal={closeModal} modalComponent={modalComponent} />
+        isOpened && modalComponent.current.type === 'ingredient' && <Modal closeModal={animateClosing} modalRef={modalRef} overlayRef={overlayRef}><IngredientDetails data={modalComponent.current.ingredient} /></Modal>
+      }
+      {
+        isOpened && modalComponent.current.type === 'order' && <Modal closeModal={animateClosing} modalRef={modalRef} overlayRef={overlayRef}><OrderDitails data={modalComponent.current.data} /></Modal>
       }
     </div>
   );

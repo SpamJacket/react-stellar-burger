@@ -18,31 +18,37 @@ const BurgerIngredients = ({ data, openModal, modalComponent }) => {
     });
   });
 
+  const scrollIntoTitle = (tab) => {
+    setCurrent(tab);
+    const title = document.getElementById(tab);
+    if(title) { title.scrollIntoView({ behavior: 'smooth' }) }
+  };
+
   return (
     <section className={styles.section}>
       <div style={{ display: 'flex' }}>
-        <Tab value="Buns" active={current === 'Buns'} onClick={setCurrent}>
+        <Tab value="Buns" active={current === 'Buns'} onClick={scrollIntoTitle}>
           Булки
         </Tab>
-        <Tab value="Sauces" active={current === 'Sauces'} onClick={setCurrent}>
+        <Tab value="Sauces" active={current === 'Sauces'} onClick={scrollIntoTitle}>
           Соусы
         </Tab>
-        <Tab value="Mains" active={current === 'Mains'} onClick={setCurrent}>
+        <Tab value="Mains" active={current === 'Mains'} onClick={scrollIntoTitle}>
           Начинки
         </Tab>
       </div>
       <div className={styles.ingredients}>
-        <h3 className={styles.title}>Булки</h3>
+        <h3 className={styles.title} id="Buns">Булки</h3>
         <ul className={styles.list}>
           {renderIngredients('bun')}
         </ul>
 
-        <h3 className={styles.title}>Соусы</h3>
+        <h3 className={styles.title} id="Sauces">Соусы</h3>
         <ul className={styles.list}>
           {renderIngredients('sauce')}
         </ul>
 
-        <h3 className={styles.title}>Начинки</h3>
+        <h3 className={styles.title} id="Mains">Начинки</h3>
         <ul className={styles.list}>
           {renderIngredients('main')}
         </ul>

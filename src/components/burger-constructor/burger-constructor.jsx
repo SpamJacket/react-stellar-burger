@@ -13,26 +13,22 @@ const BurgerConstructor = ({ data, openModal, modalComponent }) => {
     const orderId = ('000000' + Math.floor(Math.random() * 999999 + 1)).slice(-6);
     const data = {
       orderId,
-      totalPrice
+      price: totalPrice
     };
     modalComponent.current = { type: 'order', data };
     openModal();
   });
 
-  const [totalPrice, setTotalPrice] = React.useState(0);
-
-  React.useEffect(() => {
-    if(data.bun.price !== undefined) {
-      setTotalPrice(totalPrice + (data.bun.price * 2));
-    }
-    data.filings.forEach(el => {
-      setTotalPrice(prevState => (prevState + el.price));
-    });
-  }, [data])
+  const totalPrice = React.useMemo(() => {
+    const bunPrice = data.bun ? data.bun.price * 2 : 0;
+    const price = data.filings.reduce((total, filing) => total + filing.price, bunPrice);
+    return price
+  }, [data] );
 
   return (
     <section className={styles.section}>
       <div className={styles.container}>
+        { data.bun &&
         <ConstructorElement
           key={0}
           type="top"
@@ -41,10 +37,11 @@ const BurgerConstructor = ({ data, openModal, modalComponent }) => {
           price={data.bun.price}
           thumbnail={data.bun.image}
           extraClass={[styles.element_background_dark, styles.borderElement]}
-        />
+        />}
         <ul className={styles.list}>
           {data.filings.map((el, index) => <BurgerElement key={index + 2} data={el} />)}
         </ul>
+        { data.bun &&
         <ConstructorElement
           key={1}
           type="bottom"
@@ -53,7 +50,7 @@ const BurgerConstructor = ({ data, openModal, modalComponent }) => {
           price={data.bun.price}
           thumbnail={data.bun.image}
           extraClass={[styles.element_background_dark, styles.borderElement]}
-        />
+        />}
       </div>
       <div className={styles.price}>
         <p className={styles.digit}>{totalPrice}</p>
@@ -65,7 +62,7 @@ const BurgerConstructor = ({ data, openModal, modalComponent }) => {
 };
 
 BurgerConstructor.propTypes = {
-  data: PropTypes.shape({bun: PropTypes.object.isRequired, filings: PropTypes.arrayOf(ingredientPropType).isRequired}).isRequired,
+  data: PropTypes.shape({bun: ingredientPropType, filings: PropTypes.arrayOf(ingredientPropType).isRequired}),
   openModal: PropTypes.func.isRequired,
   modalComponent: PropTypes.object.isRequired
 };

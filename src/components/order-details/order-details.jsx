@@ -25,7 +25,7 @@ const OrderDitails = ({ data }) => {
 OrderDitails.propTypes = {
   data: PropTypes.shape({
     orderId: PropTypes.string.isRequired,
-    totalPrice: PropTypes.number.isRequired
+    price: PropTypes.number.isRequired
   }).isRequired
 };
 
