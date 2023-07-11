@@ -1,0 +1,34 @@
+.li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 8px;
+  cursor: pointer;
+}
+
+.img {
+  composes: ml-4 mr-4 from global;
+}
+
+.counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.price {
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
+}
+
+.digit {
+  composes: text text_type_digits-default from global;
+}
+
+.name {
+  text-align: center;
+  composes: text text_type_main-default from global;
+  height: 48px;
+}

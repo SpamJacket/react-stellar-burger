@@ -1,0 +1,33 @@
+.title {
+  width: 100%;
+  composes: pt-3 pb-3 text text_type_main-large from global;
+}
+
+.image {
+  width: 480px;
+  height: 240px;
+  composes: ml-20 mr-20 from global;
+}
+
+.name {
+  composes: pt-4 pb-8 text text_type_main-medium from global;
+}
+
+.nutrients {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  grid-template-rows: max-content;
+  column-gap: 20px;
+  composes: pb-5 text_color_inactive from global;
+}
+
+.nutrient {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  composes: text text_type_main-default from global;
+}
+
+.quantity {
+  composes: mt-2 text text_type_digits-default from global;
+}

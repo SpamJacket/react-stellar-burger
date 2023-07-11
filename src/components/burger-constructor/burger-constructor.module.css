@@ -1,0 +1,47 @@
+.section {
+  display: grid;
+  grid-template-columns: 1fr repeat(2, max-content);
+  grid-template-rows: repeat(2, max-content);
+  gap: 40px;
+  composes: pl-4 from global;
+}
+
+.container {
+  grid-column: 1 / span 3;
+}
+
+.list {
+  box-sizing: border-box;
+  max-height: calc(100vh - 536px);
+  overflow-y: scroll;
+  composes: custom-scroll from global;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  composes: mt-4 mb-4 from global;
+  padding: 0;
+}
+
+.element_background_dark {
+  background-color: #1C1C21;
+}
+
+.borderElement {
+  composes: ml-8 from global;
+}
+
+.price {
+  grid-column-start: 2;
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
+}
+
+.digit {
+  composes: text text_type_digits-medium from global;
+}
+
+.btn {
+  composes: mr-4 from global;
+}

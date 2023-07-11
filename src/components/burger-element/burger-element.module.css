@@ -1,0 +1,12 @@
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.element_background_dark {
+  background-color: #1C1C21;
+}
+
+.element {
+  composes: ml-2 from global;
+}
