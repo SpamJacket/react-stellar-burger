@@ -1,24 +1,26 @@
-import React from 'react';
+import React from "react";
 import PropTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-ingredient.module.css";
 
-import { Counter, CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  Counter,
+  CurrencyIcon,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 
 const BurgerIngredient = ({ data, counter, openModal, modalComponent }) => {
   const handleItemClick = React.useCallback(() => {
     modalComponent.current = {
-      type: 'ingredient',
-      ingredient: 
-        {
-          image: data.image,
-          name: data.name,
-          calories: data.calories,
-          proteins: data.proteins,
-          fat: data.fat,
-          carbohydrates: data.carbohydrates
-        }
+      type: "ingredient",
+      ingredient: {
+        image: data.image,
+        name: data.name,
+        calories: data.calories,
+        proteins: data.proteins,
+        fat: data.fat,
+        carbohydrates: data.carbohydrates,
+      },
     };
     openModal();
   });
@@ -37,14 +39,14 @@ const BurgerIngredient = ({ data, counter, openModal, modalComponent }) => {
 };
 
 BurgerIngredient.defaultProps = {
-  counter: 0
+  counter: 0,
 };
 
 BurgerIngredient.propTypes = {
   data: ingredientPropType.isRequired,
   counter: PropTypes.number.isRequired,
   openModal: PropTypes.func.isRequired,
-  modalComponent: PropTypes.object.isRequired
+  modalComponent: PropTypes.object.isRequired,
 };
 
 export default BurgerIngredient;
