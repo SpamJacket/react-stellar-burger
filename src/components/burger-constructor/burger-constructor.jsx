@@ -86,6 +86,7 @@ const BurgerConstructor = ({ ordersUrl, openModal, modalComponent }) => {
 };
 
 BurgerConstructor.propTypes = {
+  ordersUrl: PropTypes.string.isRequired,
   openModal: PropTypes.func.isRequired,
   modalComponent: PropTypes.object.isRequired,
 };
