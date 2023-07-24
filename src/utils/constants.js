@@ -1,4 +1,7 @@
-const apiUrl = "https://norma.nomoreparties.space/api/ingredients";
+const apiUrls = {
+  ingredientsUrl: "https://norma.nomoreparties.space/api/ingredients",
+  ordersApi: "https://norma.nomoreparties.space/api/orders",
+};
 
 const orderAcceptBackground = (
   <>
@@ -95,4 +98,4 @@ const orderAcceptBackground = (
   </>
 );
 
-export { apiUrl, orderAcceptBackground };
+export { apiUrls, orderAcceptBackground };

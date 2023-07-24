@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import styles from "./app.module.css";
 
-import getData from "../../utils/burger-api.js";
+import getData from "../../utils/api.js";
 
 import AppHeader from "../app-header/app-header.jsx";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients.jsx";
@@ -13,39 +13,53 @@ import Modal from "../modal/Modal.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 import OrderDetails from "../order-details/order-details.jsx";
 
-const App = ({ apiUrl }) => {
+import {
+  ConstructorContext,
+  TotalPriceContext,
+} from "../../services/constructorContext.js";
+
+const initialTotalPrice = { totalPrice: 0 };
+
+const reducerTotalPrice = (totalPriceState, action) => {
+  switch (action.type) {
+    case "increment":
+      return { totalPrice: totalPriceState.totalPrice + action.value };
+    case "decrement":
+      return { totalPrice: totalPriceState.totalPrice - action.value };
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+};
+
+const App = ({ apiUrls }) => {
+  const { ingredientsUrl, ordersUrl } = apiUrls;
+
   const [dataState, setDataState] = React.useState({
     data: null,
     isLoading: true,
   });
 
-  const [constructorElements, setConstructorElements] = React.useState({
+  const constructorList = React.useState({
     bun: null,
     filings: [],
   });
 
   React.useEffect(() => {
-    getData(apiUrl, setDataState);
-  }, [apiUrl]);
+    getData(ingredientsUrl, setDataState);
+  }, []);
 
-  React.useEffect(() => {
-    if (dataState.data) {
-      setConstructorElements({
-        bun: null,
-        filings: [],
-      });
-      dataState.data.forEach((el) => {
-        if (el.type === "bun") {
-          setConstructorElements((prevState) => ({ ...prevState, bun: el }));
-        } else {
-          setConstructorElements((prevState) => ({
-            ...prevState,
-            filings: [...prevState.filings, el],
-          }));
-        }
-      });
-    }
-  }, [dataState.data]);
+  const [totalPriceState, dispatchTotalPrice] = React.useReducer(
+    reducerTotalPrice,
+    initialTotalPrice
+  );
+
+  const handleAddIngredientPrice = (ingredientPrice) => {
+    dispatchTotalPrice({ type: "increment", value: ingredientPrice });
+  };
+
+  const handleDeleteIngredientPrice = (ingredientPrice) => {
+    dispatchTotalPrice({ type: "decrement", value: ingredientPrice });
+  };
 
   const [isOpened, setIsOpened] = React.useState(false);
   const modalComponent = React.useRef();
@@ -97,16 +111,26 @@ const App = ({ apiUrl }) => {
       {dataState.data && !dataState.isLoading && (
         <main className={styles.main}>
           <h2 className={styles.title}>Соберите бургер</h2>
-          <BurgerIngredients
-            data={dataState.data}
-            openModal={animateOpening}
-            modalComponent={modalComponent}
-          />
-          <BurgerConstructor
-            data={constructorElements}
-            openModal={animateOpening}
-            modalComponent={modalComponent}
-          />
+          <ConstructorContext.Provider value={constructorList}>
+            <TotalPriceContext.Provider
+              value={{
+                totalPriceState,
+                handleAddIngredientPrice,
+                handleDeleteIngredientPrice,
+              }}
+            >
+              <BurgerIngredients
+                data={dataState.data}
+                openModal={animateOpening}
+                modalComponent={modalComponent}
+              />
+              <BurgerConstructor
+                ordersUrl={ordersUrl}
+                openModal={animateOpening}
+                modalComponent={modalComponent}
+              />
+            </TotalPriceContext.Provider>
+          </ConstructorContext.Provider>
         </main>
       )}
       {!dataState.data && dataState.isLoading && (
@@ -136,6 +160,6 @@ const App = ({ apiUrl }) => {
   );
 };
 
-App.propTypes = { apiUrl: PropTypes.string.isRequired };
+App.propTypes = { apiUrls: PropTypes.objectOf(PropTypes.string).isRequired };
 
 export default App;

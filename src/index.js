@@ -6,11 +6,11 @@ import "./index.css";
 import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
 
-import { apiUrl } from "./utils/constants.js";
+import { apiUrls } from "./utils/constants.js";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App apiUrl={apiUrl} />
+    <App apiUrls={apiUrls} />
   </React.StrictMode>,
   document.getElementById("root")
 );
