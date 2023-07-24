@@ -153,7 +153,7 @@ const App = ({ apiUrls }) => {
           modalRef={modalRef}
           overlayRef={overlayRef}
         >
-          <OrderDetails data={modalComponent.current.data} />
+          <OrderDetails data={modalComponent.current.order} />
         </Modal>
       )}
     </div>

@@ -1,6 +1,6 @@
 const apiUrls = {
   ingredientsUrl: "https://norma.nomoreparties.space/api/ingredients",
-  ordersApi: "https://norma.nomoreparties.space/api/orders",
+  ordersUrl: "https://norma.nomoreparties.space/api/orders",
 };
 
 const orderAcceptBackground = (

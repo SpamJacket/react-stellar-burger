@@ -18,13 +18,19 @@ const getData = async (url, setData) => {
   }
 };
 
-const sendOrderData = async (url, data) => {
+const sendOrderData = async (url, ingredients) => {
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ ingredients }),
   });
-  return getResponseData(res);
+  const data = await getResponseData(res);
+
+  if (data.success) {
+    return data;
+  } else {
+    alert("Произошла ошибка! Какой-то из ингридиентов недоступен");
+  }
 };
 
 export default getData;

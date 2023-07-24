@@ -22,17 +22,19 @@ const BurgerConstructor = ({ ordersUrl, openModal, modalComponent }) => {
 
   const { totalPriceState } = React.useContext(TotalPriceContext);
 
-  // Заменить! Это генератор номера заказа
   const handleOrderButtonClick = React.useCallback(() => {
     const ingredients = [constructorList.bun._id];
     constructorList.filings.forEach((filing) => ingredients.push(filing._id));
-    console.log(sendOrderData(ordersUrl, ingredients));
-    const data = {
-      orderId: "0",
-      price: totalPriceState.totalPrice,
-    };
-    modalComponent.current = { type: "order", data };
-    openModal();
+
+    sendOrderData(ordersUrl, ingredients).then((data) => {
+      const order = {
+        name: data.name,
+        orderId: ("000000" + data.order.number).slice(-6),
+        price: totalPriceState.totalPrice,
+      };
+      modalComponent.current = { type: "order", order };
+      openModal();
+    });
   });
 
   return (
