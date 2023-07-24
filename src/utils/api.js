@@ -1,5 +1,3 @@
-import { application } from "express";
-
 const getResponseData = (res) => {
   if (res.ok) {
     return res.json();

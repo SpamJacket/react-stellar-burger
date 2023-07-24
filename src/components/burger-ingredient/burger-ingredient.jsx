@@ -36,7 +36,7 @@ const BurgerIngredient = ({ data, openModal, modalComponent }) => {
       },
     };
     openModal();
-  });
+  }, [data]);
 
   const handleAddIngredientClick = () => {
     if (data.type === "bun") {

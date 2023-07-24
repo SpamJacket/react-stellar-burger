@@ -10,20 +10,23 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 const BurgerIngredients = ({ data, openModal, modalComponent }) => {
   const [current, setCurrent] = React.useState("Buns");
 
-  const renderIngredients = React.useCallback((type) => {
-    return data.map((ingredient, index) => {
-      if (ingredient.type === type) {
-        return (
-          <BurgerIngredient
-            key={index}
-            data={ingredient}
-            openModal={openModal}
-            modalComponent={modalComponent}
-          />
-        );
-      }
-    });
-  });
+  const renderIngredients = React.useCallback(
+    (type) => {
+      return data.map((ingredient, index) => {
+        if (ingredient.type === type) {
+          return (
+            <BurgerIngredient
+              key={index}
+              data={ingredient}
+              openModal={openModal}
+              modalComponent={modalComponent}
+            />
+          );
+        }
+      });
+    },
+    [data, openModal, modalComponent]
+  );
 
   const scrollIntoTitle = (tab) => {
     setCurrent(tab);
