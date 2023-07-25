@@ -3,13 +3,13 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
-import { apiUrls } from "./utils/constants.js";
+import { endpoints } from "./utils/constants.js";
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
   <React.StrictMode>
-    <App apiUrls={apiUrls} />
+    <App endpoints={endpoints} />
   </React.StrictMode>
 );
 

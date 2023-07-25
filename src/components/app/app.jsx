@@ -31,8 +31,8 @@ const reducerTotalPrice = (totalPriceState, action) => {
   }
 };
 
-const App = ({ apiUrls }) => {
-  const { ingredientsUrl, ordersUrl } = apiUrls;
+const App = ({ endpoints }) => {
+  const { ingredientsUrl, ordersUrl } = endpoints;
 
   const [dataState, setDataState] = React.useState({
     data: null,
@@ -45,7 +45,7 @@ const App = ({ apiUrls }) => {
   });
 
   React.useEffect(() => {
-    getData(ingredientsUrl, setDataState);
+    getData(ingredientsUrl, setDataState).catch((err) => console.log(err));
   }, []);
 
   const [totalPriceState, dispatchTotalPrice] = React.useReducer(
@@ -160,6 +160,6 @@ const App = ({ apiUrls }) => {
   );
 };
 
-App.propTypes = { apiUrls: PropTypes.objectOf(PropTypes.string).isRequired };
+App.propTypes = { endpoints: PropTypes.objectOf(PropTypes.string).isRequired };
 
 export default App;

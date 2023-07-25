@@ -26,16 +26,18 @@ const BurgerConstructor = ({ ordersUrl, openModal, modalComponent }) => {
     const ingredients = [constructorList.bun._id];
     constructorList.filings.forEach((filing) => ingredients.push(filing._id));
 
-    sendOrderData(ordersUrl, ingredients).then((data) => {
-      const order = {
-        name: data.name,
-        orderId: ("000000" + data.order.number).slice(-6),
-        price: totalPriceState.totalPrice,
-      };
-      modalComponent.current = { type: "order", order };
-      openModal();
-    });
-  });
+    sendOrderData(ordersUrl, ingredients)
+      .then((res) => {
+        const order = {
+          name: res.name,
+          orderId: ("000000" + res.order.number).slice(-6),
+          price: totalPriceState.totalPrice,
+        };
+        modalComponent.current = { type: "order", order };
+        openModal();
+      })
+      .catch((err) => console.log(err));
+  }, [constructorList, ordersUrl, totalPriceState, openModal]);
 
   return (
     <section className={styles.section}>
