@@ -64,10 +64,9 @@ const BurgerConstructor = ({ ordersUrl }) => {
   };
 
   return (
-    <>
-      {order.isLoading && <h2>Идет оформление заказа, подождите</h2>}
+    <section className={styles.section}>
       {!order.isLoading && (
-        <section className={styles.section}>
+        <>
           <div className={styles.container}>
             {constructorList.bun && (
               <ConstructorElement
@@ -130,14 +129,19 @@ const BurgerConstructor = ({ ordersUrl }) => {
               Оформить заказ
             </Button>
           )}
-        </section>
+        </>
+      )}
+      {order.isLoading && (
+        <h2 className={styles.loadingTitle}>
+          Идет оформление заказа, подождите
+        </h2>
       )}
       {!order.isLoading && order.data && (
         <Modal closeModal={handleCloseModal}>
           <OrderDetails data={order.data} />
         </Modal>
       )}
-    </>
+    </section>
   );
 };
 

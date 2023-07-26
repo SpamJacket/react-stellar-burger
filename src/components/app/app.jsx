@@ -89,7 +89,7 @@ const App = ({ endpoints }) => {
         </main>
       )}
       {!dataState.data && dataState.isLoading && (
-        <h2 className={styles.errorTitle}>
+        <h2 className={styles.loadingTitle}>
           Подождите, идет загрузка конструктора
         </h2>
       )}

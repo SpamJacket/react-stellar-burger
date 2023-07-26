@@ -1,4 +1,5 @@
 .section {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr repeat(2, max-content);
   grid-template-rows: repeat(2, max-content);
@@ -44,4 +45,11 @@
 
 .btn {
   composes: mr-4 from global;
+}
+
+.loadingTitle {
+  position: absolute;
+  top: calc(50% - 30px);
+  left: calc(50% - 230px);
+  composes: text text_type_main-medium from global;
 }
