@@ -1,8 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-ingredient.module.css";
+
+import Modal from "../modal/Modal.jsx";
+import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 
 import {
   Counter,
@@ -14,7 +16,13 @@ import {
   TotalPriceContext,
 } from "../../services/constructorContext.js";
 
-const BurgerIngredient = ({ data, openModal, modalComponent }) => {
+const BurgerIngredient = ({ data }) => {
+  const [ingredient, setIngredient] = React.useState(null);
+
+  const handleCloseModal = () => {
+    setIngredient(null);
+  };
+
   const [counter, setCounter] = React.useState(0);
 
   const [constructorList, setConstructorList] =
@@ -23,20 +31,9 @@ const BurgerIngredient = ({ data, openModal, modalComponent }) => {
   const { handleAddIngredientPrice, handleDeleteIngredientPrice } =
     React.useContext(TotalPriceContext);
 
-  const handleItemClick = React.useCallback(() => {
-    modalComponent.current = {
-      type: "ingredient",
-      ingredient: {
-        image: data.image,
-        name: data.name,
-        calories: data.calories,
-        proteins: data.proteins,
-        fat: data.fat,
-        carbohydrates: data.carbohydrates,
-      },
-    };
-    openModal();
-  }, [data]);
+  const handleItemClick = () => {
+    setIngredient(data);
+  };
 
   const handleAddIngredientClick = () => {
     if (data.type === "bun") {
@@ -55,29 +52,34 @@ const BurgerIngredient = ({ data, openModal, modalComponent }) => {
   };
 
   return (
-    <li className={styles.li}>
-      <img
-        className={styles.img}
-        src={data.image}
-        alt={data.name}
-        onClick={handleAddIngredientClick}
-      />
-      {counter > 0 && <Counter count={counter} size="default" />}
-      <div className={styles.price}>
-        <p className={styles.digit}>{data.price}</p>
-        <CurrencyIcon />
-      </div>
-      <p className={styles.name} onClick={handleItemClick}>
-        {data.name}
-      </p>
-    </li>
+    <>
+      <li className={styles.li}>
+        <img
+          className={styles.img}
+          src={data.image}
+          alt={data.name}
+          onClick={handleAddIngredientClick}
+        />
+        {counter > 0 && <Counter count={counter} size="default" />}
+        <div className={styles.price}>
+          <p className={styles.digit}>{data.price}</p>
+          <CurrencyIcon />
+        </div>
+        <p className={styles.name} onClick={handleItemClick}>
+          {data.name}
+        </p>
+      </li>
+      {ingredient && (
+        <Modal closeModal={handleCloseModal}>
+          <IngredientDetails data={ingredient} />
+        </Modal>
+      )}
+    </>
   );
 };
 
 BurgerIngredient.propTypes = {
   data: ingredientPropType.isRequired,
-  openModal: PropTypes.func.isRequired,
-  modalComponent: PropTypes.object.isRequired,
 };
 
 export default BurgerIngredient;

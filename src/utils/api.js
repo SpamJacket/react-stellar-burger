@@ -24,11 +24,14 @@ const request = async (endpoint, options) => {
 
 const getData = async (endpoint, setData) => {
   setData((prevState) => ({ ...prevState, isLoading: true }));
-  const res = await request(endpoint);
-  setData({ data: res.data, isLoading: false });
+  return await request(endpoint);
 };
 
-const sendOrderData = async (endpoint, ingredients) => {
+const sendOrderData = async (endpoint, setOrder, ingredients) => {
+  setOrder((prevState) => ({
+    ...prevState,
+    isLoading: true,
+  }));
   return await request(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
