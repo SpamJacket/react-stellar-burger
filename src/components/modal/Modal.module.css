@@ -14,10 +14,10 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  background-color: #1C1C21;
+  background-color: #1c1c21;
   composes: p-10 from global;
   border-radius: 40px;
-  transition: opacity .3s linear;
+  transition: opacity 0.3s linear;
   opacity: 0;
 }
 
