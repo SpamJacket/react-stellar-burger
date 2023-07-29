@@ -5,6 +5,11 @@ const endpoints = {
   ordersUrl: "/orders",
 };
 
+const SET_INGREDIENTS_LIST = "SET_INGREDIENTS_LIST";
+const ADD_TO_CONSTRUCTOR_LIST = "ADD_TO_CONSTRUCTOR_LIST";
+const SET_INGREDIENT_INFO = "SET_INGREDIENT_INFO";
+const SET_ORDER_INFO = "SET_ORDER_INFO";
+
 const orderAcceptBackground = (
   <>
     <svg
@@ -100,4 +105,12 @@ const orderAcceptBackground = (
   </>
 );
 
-export { BASE_URL, endpoints, orderAcceptBackground };
+export {
+  BASE_URL,
+  endpoints,
+  SET_INGREDIENTS_LIST,
+  ADD_TO_CONSTRUCTOR_LIST,
+  SET_INGREDIENT_INFO,
+  SET_ORDER_INFO,
+  orderAcceptBackground,
+};
