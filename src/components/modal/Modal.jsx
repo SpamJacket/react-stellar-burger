@@ -13,13 +13,13 @@ const Modal = ({ children, closeModal }) => {
   const modalRef = React.useRef();
   const overlayRef = React.useRef();
 
-  const animateClosing = () => {
+  const animateClosing = React.useCallback(() => {
     modalRef.current.style = "opacity: 0";
     setTimeout(() => {
       overlayRef.current.style = "opacity: 0";
     }, 100);
     setTimeout(closeModal, 300);
-  };
+  }, [closeModal]);
 
   const handleEscClose = (e) => {
     if (e.key === "Escape") {

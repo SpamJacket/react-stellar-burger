@@ -5,9 +5,9 @@ import {
 } from "../../utils/constants.js";
 
 const initialState = {
-  data: [],
-  dataRequest: false,
-  dataFailed: false,
+  ingredients: [],
+  ingredientsRequest: false,
+  ingredientsFailed: false,
 };
 
 export const ingredientsReducer = (state = initialState, action) => {
@@ -15,20 +15,20 @@ export const ingredientsReducer = (state = initialState, action) => {
     case GET_INGREDIENTS_REQUEST:
       return {
         ...state,
-        dataRequest: true,
-        dataFailed: false,
+        ingredientsRequest: true,
+        ingredientsFailed: false,
       };
     case GET_INGREDIENTS_SUCCESS:
       return {
-        dataRequest: false,
-        dataFailed: false,
-        data: action.data,
+        ingredientsRequest: false,
+        ingredientsFailed: false,
+        ingredients: action.data,
       };
     case GET_INGREDIENTS_FAILED:
       return {
         ...state,
-        dataRequest: false,
-        dataFailed: true,
+        ingredientsRequest: false,
+        ingredientsFailed: true,
       };
     default:
       return state;

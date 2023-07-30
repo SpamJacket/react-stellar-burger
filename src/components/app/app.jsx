@@ -7,13 +7,7 @@ import AppHeader from "../app-header/app-header.jsx";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients.jsx";
 import BurgerConstructor from "../burger-constructor/burger-constructor.jsx";
 
-import { useDispatch } from "react-redux";
-import { getIngredients } from "../../services/actions/burger-ingredients.js";
-
-import {
-  ConstructorContext,
-  TotalPriceContext,
-} from "../../services/constructorContext.js";
+import { TotalPriceContext } from "../../services/constructorContext.js";
 
 const initialTotalPrice = { totalPrice: 0 };
 
@@ -33,52 +27,45 @@ const reducerTotalPrice = (totalPriceState, action) => {
 const App = ({ endpoints }) => {
   const { ordersUrl } = endpoints;
 
-  const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
-  const constructorList = React.useState({
-    bun: null,
-    filings: [],
-  });
-
   const [totalPriceState, dispatchTotalPrice] = React.useReducer(
     reducerTotalPrice,
     initialTotalPrice
   );
 
-  const handleAddIngredientPrice = (ingredientPrice) => {
-    dispatchTotalPrice({ type: "increment", value: ingredientPrice });
-  };
+  const handleAddIngredientPrice = React.useCallback(
+    (ingredientPrice) => {
+      dispatchTotalPrice({ type: "increment", value: ingredientPrice });
+    },
+    [dispatchTotalPrice]
+  );
 
-  const handleDeleteIngredientPrice = (ingredientPrice) => {
-    dispatchTotalPrice({ type: "decrement", value: ingredientPrice });
-  };
+  const handleDeleteIngredientPrice = React.useCallback(
+    (ingredientPrice) => {
+      dispatchTotalPrice({ type: "decrement", value: ingredientPrice });
+    },
+    [dispatchTotalPrice]
+  );
 
-  const handleResetIngredientPrice = () => {
+  const handleResetIngredientPrice = React.useCallback(() => {
     dispatchTotalPrice({ type: "reset" });
-  };
+  }, [dispatchTotalPrice]);
 
   return (
     <div className={styles.app}>
       <AppHeader />
       <main className={styles.main}>
         <h2 className={styles.title}>Соберите бургер</h2>
-        <ConstructorContext.Provider value={constructorList}>
-          <TotalPriceContext.Provider
-            value={{
-              totalPriceState,
-              handleAddIngredientPrice,
-              handleDeleteIngredientPrice,
-              handleResetIngredientPrice,
-            }}
-          >
-            <BurgerIngredients />
-            <BurgerConstructor ordersUrl={ordersUrl} />
-          </TotalPriceContext.Provider>
-        </ConstructorContext.Provider>
+        <TotalPriceContext.Provider
+          value={{
+            totalPriceState,
+            handleAddIngredientPrice,
+            handleDeleteIngredientPrice,
+            handleResetIngredientPrice,
+          }}
+        >
+          <BurgerIngredients />
+          <BurgerConstructor ordersUrl={ordersUrl} />
+        </TotalPriceContext.Provider>
       </main>
     </div>
   );

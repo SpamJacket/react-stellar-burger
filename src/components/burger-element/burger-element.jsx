@@ -9,28 +9,22 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import {
-  ConstructorContext,
-  TotalPriceContext,
-} from "../../services/constructorContext.js";
+import { TotalPriceContext } from "../../services/constructorContext.js";
 
-const BurgerElement = ({ data }) => {
-  const [constructorList, setConstructorList] =
-    React.useContext(ConstructorContext);
-
+const BurgerElement = ({ filing }) => {
   const { handleDeleteIngredientPrice } = React.useContext(TotalPriceContext);
 
   const handleDeleteIngredientClick = () => {
-    handleDeleteIngredientPrice(data.price);
+    handleDeleteIngredientPrice(filing.price);
   };
 
   return (
     <li className={styles.item}>
       <DragIcon />
       <ConstructorElement
-        text={data.name}
-        price={data.price}
-        thumbnail={data.image}
+        text={filing.name}
+        price={filing.price}
+        thumbnail={filing.image}
         extraClass={[styles.element_background_dark, styles.element]}
         handleClose={handleDeleteIngredientClick}
       />
@@ -38,6 +32,6 @@ const BurgerElement = ({ data }) => {
   );
 };
 
-BurgerElement.propTypes = { data: ingredientPropType.isRequired };
+BurgerElement.propTypes = { filing: ingredientPropType.isRequired };
 
 export default BurgerElement;

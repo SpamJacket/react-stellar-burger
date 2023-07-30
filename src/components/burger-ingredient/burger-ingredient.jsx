@@ -6,48 +6,45 @@ import styles from "./burger-ingredient.module.css";
 import Modal from "../modal/Modal.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 
+import { useSelector, useDispatch } from "react-redux";
+import { addToConstructorList } from "../../services/actions/burger-constructor.js";
+
 import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import {
-  ConstructorContext,
-  TotalPriceContext,
-} from "../../services/constructorContext.js";
+import { TotalPriceContext } from "../../services/constructorContext.js";
 
-const BurgerIngredient = ({ data }) => {
+const BurgerIngredient = ({ ingredientData }) => {
+  const dispatch = useDispatch();
+
   const [ingredient, setIngredient] = React.useState(null);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = React.useCallback(() => {
     setIngredient(null);
-  };
+  }, [setIngredient]);
 
   const [counter, setCounter] = React.useState(0);
 
-  const [constructorList, setConstructorList] =
-    React.useContext(ConstructorContext);
+  const bun = useSelector((store) => store.ingredientsList.bun);
 
   const { handleAddIngredientPrice, handleDeleteIngredientPrice } =
     React.useContext(TotalPriceContext);
 
   const handleItemClick = () => {
-    setIngredient(data);
+    setIngredient(ingredientData);
   };
 
   const handleAddIngredientClick = () => {
-    if (data.type === "bun") {
-      if (constructorList.bun) {
-        handleDeleteIngredientPrice(constructorList.bun.price * 2);
+    dispatch(addToConstructorList(ingredientData));
+    if (ingredientData.type === "bun") {
+      if (bun) {
+        handleDeleteIngredientPrice(bun.price * 2);
       }
-      setConstructorList((prevState) => ({ ...prevState, bun: data }));
-      handleAddIngredientPrice(data.price * 2);
+      handleAddIngredientPrice(ingredientData.price * 2);
     } else {
-      setConstructorList((prevState) => ({
-        ...prevState,
-        filings: [...prevState.filings, data],
-      }));
-      handleAddIngredientPrice(data.price);
+      handleAddIngredientPrice(ingredientData.price);
     }
   };
 
@@ -56,22 +53,22 @@ const BurgerIngredient = ({ data }) => {
       <li className={styles.li}>
         <img
           className={styles.img}
-          src={data.image}
-          alt={data.name}
+          src={ingredientData.image}
+          alt={ingredientData.name}
           onClick={handleAddIngredientClick}
         />
         {counter > 0 && <Counter count={counter} size="default" />}
         <div className={styles.price}>
-          <p className={styles.digit}>{data.price}</p>
+          <p className={styles.digit}>{ingredientData.price}</p>
           <CurrencyIcon />
         </div>
         <p className={styles.name} onClick={handleItemClick}>
-          {data.name}
+          {ingredientData.name}
         </p>
       </li>
       {ingredient && (
         <Modal closeModal={handleCloseModal}>
-          <IngredientDetails data={ingredient} />
+          <IngredientDetails ingredient={ingredient} />
         </Modal>
       )}
     </>
@@ -79,7 +76,7 @@ const BurgerIngredient = ({ data }) => {
 };
 
 BurgerIngredient.propTypes = {
-  data: ingredientPropType.isRequired,
+  ingredientData: ingredientPropType.isRequired,
 };
 
 export default BurgerIngredient;

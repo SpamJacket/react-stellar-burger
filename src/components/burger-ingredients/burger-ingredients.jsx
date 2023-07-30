@@ -5,11 +5,18 @@ import styles from "./burger-ingredients.module.css";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getIngredients } from "../../services/actions/burger-ingredients.js";
 
 const BurgerIngredients = () => {
-  const { data, dataRequest, dataFailed } = useSelector(
-    (store) => store.ingredients
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
+
+  const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(
+    (store) => store.ingredientsList
   );
 
   const [current, setCurrent] = React.useState("Buns");
@@ -30,7 +37,7 @@ const BurgerIngredients = () => {
   };
 
   const content = React.useMemo(() => {
-    return dataRequest ? (
+    return ingredientsRequest ? (
       <h2 className={styles.loadingTitle}>
         Подождите, идет загрузка ингредиентов
       </h2>
@@ -40,9 +47,11 @@ const BurgerIngredients = () => {
           Булки
         </h3>
         <ul className={styles.list}>
-          {data.map((ingredient, index) => {
+          {ingredients.map((ingredient, index) => {
             if (ingredient.type === "bun") {
-              return <BurgerIngredient key={index} data={ingredient} />;
+              return (
+                <BurgerIngredient key={index} ingredientData={ingredient} />
+              );
             }
           })}
         </ul>
@@ -51,9 +60,11 @@ const BurgerIngredients = () => {
           Соусы
         </h3>
         <ul className={styles.list}>
-          {data.map((ingredient, index) => {
+          {ingredients.map((ingredient, index) => {
             if (ingredient.type === "sauce") {
-              return <BurgerIngredient key={index} data={ingredient} />;
+              return (
+                <BurgerIngredient key={index} ingredientData={ingredient} />
+              );
             }
           })}
         </ul>
@@ -62,15 +73,17 @@ const BurgerIngredients = () => {
           Начинки
         </h3>
         <ul className={styles.list}>
-          {data.map((ingredient, index) => {
+          {ingredients.map((ingredient, index) => {
             if (ingredient.type === "main") {
-              return <BurgerIngredient key={index} data={ingredient} />;
+              return (
+                <BurgerIngredient key={index} ingredientData={ingredient} />
+              );
             }
           })}
         </ul>
       </>
     );
-  }, [data, dataRequest]);
+  }, [ingredients, ingredientsRequest]);
 
   return (
     <section className={styles.section}>
@@ -94,12 +107,12 @@ const BurgerIngredients = () => {
         </Tab>
       </div>
       <div className={styles.ingredients}>
-        {dataFailed && (
+        {ingredientsFailed && (
           <h2 className={styles.errorTitle}>
             Произошла ошибка! Перезагрузите страницу
           </h2>
         )}
-        {!dataFailed && content}
+        {!ingredientsFailed && content}
       </div>
     </section>
   );

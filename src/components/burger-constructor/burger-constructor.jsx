@@ -13,16 +13,18 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerElement from "../burger-element/burger-element.jsx";
 
-import {
-  ConstructorContext,
-  TotalPriceContext,
-} from "../../services/constructorContext.js";
+import { TotalPriceContext } from "../../services/constructorContext.js";
+
+import { useSelector, useDispatch } from "react-redux";
+
+import { cleanConstructorList } from "../../services/actions/burger-constructor.js";
 
 import { sendOrderData } from "../../utils/api.js";
 
 const BurgerConstructor = ({ ordersUrl }) => {
-  const [constructorList, setConstructorList] =
-    React.useContext(ConstructorContext);
+  const dispatch = useDispatch();
+
+  const { bun, filings } = useSelector((store) => store.constructorList);
 
   const { totalPriceState, handleResetIngredientPrice } =
     React.useContext(TotalPriceContext);
@@ -33,10 +35,9 @@ const BurgerConstructor = ({ ordersUrl }) => {
   });
 
   const handleOrderButtonClick = () => {
-    const ingredients = [constructorList.bun._id];
-    constructorList.filings.forEach((filing) => ingredients.push(filing._id));
-
-    sendOrderData(ordersUrl, setOrder, ingredients)
+    const ingredientsId = [bun._id];
+    filings.forEach((filing) => ingredientsId.push(filing._id));
+    sendOrderData(ordersUrl, setOrder, ingredientsId)
       .then((res) => {
         setOrder({
           data: {
@@ -48,34 +49,30 @@ const BurgerConstructor = ({ ordersUrl }) => {
         });
       })
       .catch((err) => console.log(err));
-
-    setConstructorList({
-      bun: null,
-      filings: [],
-    });
+    dispatch(cleanConstructorList());
     handleResetIngredientPrice();
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = React.useCallback(() => {
     setOrder({
       data: null,
       isLoading: false,
     });
-  };
+  }, [setOrder]);
 
   return (
     <section className={styles.section}>
       {!order.isLoading && (
         <>
           <div className={styles.container}>
-            {constructorList.bun && (
+            {bun && (
               <ConstructorElement
                 key={0}
                 type="top"
                 isLocked={true}
-                text={constructorList.bun.name + " (верх)"}
-                price={constructorList.bun.price}
-                thumbnail={constructorList.bun.image}
+                text={bun.name + " (верх)"}
+                price={bun.price}
+                thumbnail={bun.image}
                 extraClass={[
                   styles.element_background_dark,
                   styles.borderElement,
@@ -83,18 +80,18 @@ const BurgerConstructor = ({ ordersUrl }) => {
               />
             )}
             <ul className={styles.list}>
-              {constructorList.filings.map((el, index) => (
-                <BurgerElement key={index + 2} data={el} />
+              {filings.map((filing, index) => (
+                <BurgerElement key={index + 2} filing={filing} />
               ))}
             </ul>
-            {constructorList.bun && (
+            {bun && (
               <ConstructorElement
                 key={1}
                 type="bottom"
                 isLocked={true}
-                text={constructorList.bun.name + " (низ)"}
-                price={constructorList.bun.price}
-                thumbnail={constructorList.bun.image}
+                text={bun.name + " (низ)"}
+                price={bun.price}
+                thumbnail={bun.image}
                 extraClass={[
                   styles.element_background_dark,
                   styles.borderElement,
@@ -106,7 +103,7 @@ const BurgerConstructor = ({ ordersUrl }) => {
             <p className={styles.digit}>{totalPriceState.totalPrice}</p>
             <CurrencyIcon />
           </div>
-          {constructorList.bun && (
+          {bun && (
             <Button
               htmlType="button"
               type="primary"
@@ -117,7 +114,7 @@ const BurgerConstructor = ({ ordersUrl }) => {
               Оформить заказ
             </Button>
           )}
-          {!constructorList.bun && (
+          {!bun && (
             <Button
               disabled={true}
               htmlType="button"
