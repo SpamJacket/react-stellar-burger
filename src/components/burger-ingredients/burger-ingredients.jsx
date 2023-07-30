@@ -1,22 +1,18 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-ingredients.module.css";
 
 import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerIngredients = ({ data }) => {
-  const [current, setCurrent] = React.useState("Buns");
+import { useSelector } from "react-redux";
 
-  const renderIngredients = (type) => {
-    return data.map((ingredient, index) => {
-      if (ingredient.type === type) {
-        return <BurgerIngredient key={index} data={ingredient} />;
-      }
-    });
-  };
+const BurgerIngredients = () => {
+  const { data, dataRequest, dataFailed } = useSelector(
+    (store) => store.ingredients
+  );
+
+  const [current, setCurrent] = React.useState("Buns");
 
   const bunsHeaderRef = React.useRef();
   const saucesHeaderRef = React.useRef();
@@ -32,6 +28,49 @@ const BurgerIngredients = ({ data }) => {
       mainsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const content = React.useMemo(() => {
+    return dataRequest ? (
+      <h2 className={styles.loadingTitle}>
+        Подождите, идет загрузка ингредиентов
+      </h2>
+    ) : (
+      <>
+        <h3 className={styles.title} ref={bunsHeaderRef}>
+          Булки
+        </h3>
+        <ul className={styles.list}>
+          {data.map((ingredient, index) => {
+            if (ingredient.type === "bun") {
+              return <BurgerIngredient key={index} data={ingredient} />;
+            }
+          })}
+        </ul>
+
+        <h3 className={styles.title} ref={saucesHeaderRef}>
+          Соусы
+        </h3>
+        <ul className={styles.list}>
+          {data.map((ingredient, index) => {
+            if (ingredient.type === "sauce") {
+              return <BurgerIngredient key={index} data={ingredient} />;
+            }
+          })}
+        </ul>
+
+        <h3 className={styles.title} ref={mainsHeaderRef}>
+          Начинки
+        </h3>
+        <ul className={styles.list}>
+          {data.map((ingredient, index) => {
+            if (ingredient.type === "main") {
+              return <BurgerIngredient key={index} data={ingredient} />;
+            }
+          })}
+        </ul>
+      </>
+    );
+  }, [data, dataRequest]);
 
   return (
     <section className={styles.section}>
@@ -55,27 +94,15 @@ const BurgerIngredients = ({ data }) => {
         </Tab>
       </div>
       <div className={styles.ingredients}>
-        <h3 className={styles.title} ref={bunsHeaderRef}>
-          Булки
-        </h3>
-        <ul className={styles.list}>{renderIngredients("bun")}</ul>
-
-        <h3 className={styles.title} ref={saucesHeaderRef}>
-          Соусы
-        </h3>
-        <ul className={styles.list}>{renderIngredients("sauce")}</ul>
-
-        <h3 className={styles.title} ref={mainsHeaderRef}>
-          Начинки
-        </h3>
-        <ul className={styles.list}>{renderIngredients("main")}</ul>
+        {dataFailed && (
+          <h2 className={styles.errorTitle}>
+            Произошла ошибка! Перезагрузите страницу
+          </h2>
+        )}
+        {!dataFailed && content}
       </div>
     </section>
   );
-};
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingredientPropType).isRequired,
 };
 
 export default BurgerIngredients;

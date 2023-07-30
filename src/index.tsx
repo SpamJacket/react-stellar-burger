@@ -7,7 +7,7 @@ import { endpoints } from "./utils/constants.js";
 import { legacy_createStore as createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
-import rootReducer from "./services/reducers/root.js";
+import rootReducer from "./services/reducers/index.js";
 import thunk from "redux-thunk";
 
 const root = createRoot(document.getElementById("root") as HTMLElement);

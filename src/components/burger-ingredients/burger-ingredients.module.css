@@ -1,5 +1,6 @@
 .section {
   overflow: hidden;
+  position: relative;
 }
 
 .tabs {
@@ -29,4 +30,18 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 32px 24px;
+}
+
+.loadingTitle {
+  position: absolute;
+  top: calc(50% - 30px);
+  left: calc(50% - 265px);
+  composes: text text_type_main-medium from global;
+}
+
+.errorTitle {
+  position: absolute;
+  top: calc(50% - 30px);
+  left: calc(50% - 288px);
+  composes: text text_type_main-medium from global;
 }
