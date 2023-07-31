@@ -4,19 +4,21 @@ import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-element.module.css";
 
+import { useDispatch } from "react-redux";
+
+import { deleteFromConstructorList } from "../../services/actions/burger-constructor.js";
+
 import {
   ConstructorElement,
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { TotalPriceContext } from "../../services/constructorContext.js";
-
 const BurgerElement = ({ filing }) => {
-  const { handleDeleteIngredientPrice } = React.useContext(TotalPriceContext);
+  const dispatch = useDispatch();
 
-  const handleDeleteIngredientClick = () => {
-    handleDeleteIngredientPrice(filing.price);
-  };
+  const handleDeleteIngredientClick = React.useCallback(() => {
+    dispatch(deleteFromConstructorList(filing.constructorId));
+  }, [filing]);
 
   return (
     <li className={styles.item}>

@@ -25,16 +25,63 @@ const BurgerIngredients = () => {
   const saucesHeaderRef = React.useRef();
   const mainsHeaderRef = React.useRef();
 
-  const scrollIntoTitle = (tab) => {
-    setCurrent(tab);
-    if (tab === "Buns") {
-      bunsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
-    } else if (tab === "Sauces") {
-      saucesHeaderRef.current.scrollIntoView({ behavior: "smooth" });
-    } else {
-      mainsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+  const scrollIntoTitle = React.useCallback(
+    (tab) => {
+      setCurrent(tab);
+      if (tab === "Buns") {
+        bunsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+      } else if (tab === "Sauces") {
+        saucesHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+      } else {
+        mainsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    },
+    [setCurrent]
+  );
+
+  const { bun, filings } = useSelector((store) => store.constructorList);
+
+  const ingredientsId = React.useMemo(() => {
+    const ingredients = {};
+    if (bun) {
+      ingredients[bun._id] = 2;
     }
-  };
+    filings.forEach((filing) => {
+      if (ingredients.hasOwnProperty(filing._id)) {
+        ingredients[filing._id]++;
+      } else {
+        ingredients[filing._id] = 1;
+      }
+    });
+    return ingredients;
+  }, [bun, filings]);
+
+  const renderIngredients = React.useCallback(
+    (type) => {
+      return ingredients.map((ingredient, index) => {
+        if (ingredient.type === type) {
+          if (ingredientsId.hasOwnProperty(ingredient._id)) {
+            return (
+              <BurgerIngredient
+                key={index}
+                ingredientData={ingredient}
+                counter={ingredientsId[ingredient._id]}
+              />
+            );
+          } else {
+            return (
+              <BurgerIngredient
+                key={index}
+                ingredientData={ingredient}
+                counter={0}
+              />
+            );
+          }
+        }
+      });
+    },
+    [ingredients, bun, filings]
+  );
 
   const content = React.useMemo(() => {
     return ingredientsRequest ? (
@@ -46,44 +93,20 @@ const BurgerIngredients = () => {
         <h3 className={styles.title} ref={bunsHeaderRef}>
           Булки
         </h3>
-        <ul className={styles.list}>
-          {ingredients.map((ingredient, index) => {
-            if (ingredient.type === "bun") {
-              return (
-                <BurgerIngredient key={index} ingredientData={ingredient} />
-              );
-            }
-          })}
-        </ul>
+        <ul className={styles.list}>{renderIngredients("bun")}</ul>
 
         <h3 className={styles.title} ref={saucesHeaderRef}>
           Соусы
         </h3>
-        <ul className={styles.list}>
-          {ingredients.map((ingredient, index) => {
-            if (ingredient.type === "sauce") {
-              return (
-                <BurgerIngredient key={index} ingredientData={ingredient} />
-              );
-            }
-          })}
-        </ul>
+        <ul className={styles.list}>{renderIngredients("sauce")}</ul>
 
         <h3 className={styles.title} ref={mainsHeaderRef}>
           Начинки
         </h3>
-        <ul className={styles.list}>
-          {ingredients.map((ingredient, index) => {
-            if (ingredient.type === "main") {
-              return (
-                <BurgerIngredient key={index} ingredientData={ingredient} />
-              );
-            }
-          })}
-        </ul>
+        <ul className={styles.list}>{renderIngredients("main")}</ul>
       </>
     );
-  }, [ingredients, ingredientsRequest]);
+  }, [ingredients, ingredientsRequest, renderIngredients]);
 
   return (
     <section className={styles.section}>

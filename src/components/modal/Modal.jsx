@@ -21,11 +21,14 @@ const Modal = ({ children, closeModal }) => {
     setTimeout(closeModal, 300);
   }, [closeModal]);
 
-  const handleEscClose = (e) => {
-    if (e.key === "Escape") {
-      animateClosing();
-    }
-  };
+  const handleEscClose = React.useCallback(
+    (e) => {
+      if (e.key === "Escape") {
+        animateClosing();
+      }
+    },
+    [animateClosing]
+  );
 
   React.useEffect(() => {
     document.addEventListener("keydown", handleEscClose);
@@ -33,7 +36,7 @@ const Modal = ({ children, closeModal }) => {
     return () => {
       document.removeEventListener("keydown", handleEscClose);
     };
-  }, []);
+  }, [handleEscClose]);
 
   React.useEffect(() => {
     setTimeout(() => {

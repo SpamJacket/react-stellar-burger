@@ -13,8 +13,6 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import BurgerElement from "../burger-element/burger-element.jsx";
 
-import { TotalPriceContext } from "../../services/constructorContext.js";
-
 import { useSelector, useDispatch } from "react-redux";
 
 import { cleanConstructorList } from "../../services/actions/burger-constructor.js";
@@ -26,15 +24,22 @@ const BurgerConstructor = ({ ordersUrl }) => {
 
   const { bun, filings } = useSelector((store) => store.constructorList);
 
-  const { totalPriceState, handleResetIngredientPrice } =
-    React.useContext(TotalPriceContext);
-
   const [order, setOrder] = React.useState({
     data: null,
     isLoading: false,
   });
 
-  const handleOrderButtonClick = () => {
+  const totalPrice = React.useMemo(() => {
+    let price = 0;
+    if (bun) {
+      price += bun.price * 2;
+    }
+    return filings.reduce((currentPrice, filing) => {
+      return currentPrice + filing.price;
+    }, price);
+  }, [bun, filings]);
+
+  const handleOrderButtonClick = React.useCallback(() => {
     const ingredientsId = [bun._id];
     filings.forEach((filing) => ingredientsId.push(filing._id));
     sendOrderData(ordersUrl, setOrder, ingredientsId)
@@ -43,15 +48,14 @@ const BurgerConstructor = ({ ordersUrl }) => {
           data: {
             name: res.name,
             orderId: ("000000" + res.order.number).slice(-6),
-            price: totalPriceState.totalPrice,
+            price: totalPrice,
           },
           isLoading: false,
         });
       })
       .catch((err) => console.log(err));
     dispatch(cleanConstructorList());
-    handleResetIngredientPrice();
-  };
+  }, [bun, filings, ordersUrl, setOrder]);
 
   const handleCloseModal = React.useCallback(() => {
     setOrder({
@@ -67,7 +71,7 @@ const BurgerConstructor = ({ ordersUrl }) => {
           <div className={styles.container}>
             {bun && (
               <ConstructorElement
-                key={0}
+                key={bun.constructorId}
                 type="top"
                 isLocked={true}
                 text={bun.name + " (верх)"}
@@ -80,13 +84,13 @@ const BurgerConstructor = ({ ordersUrl }) => {
               />
             )}
             <ul className={styles.list}>
-              {filings.map((filing, index) => (
-                <BurgerElement key={index + 2} filing={filing} />
+              {filings.map((filing) => (
+                <BurgerElement key={filing.constructorId} filing={filing} />
               ))}
             </ul>
             {bun && (
               <ConstructorElement
-                key={1}
+                key={bun.constructorId + 1}
                 type="bottom"
                 isLocked={true}
                 text={bun.name + " (низ)"}
@@ -100,7 +104,7 @@ const BurgerConstructor = ({ ordersUrl }) => {
             )}
           </div>
           <div className={styles.price}>
-            <p className={styles.digit}>{totalPriceState.totalPrice}</p>
+            <p className={styles.digit}>{totalPrice}</p>
             <CurrencyIcon />
           </div>
           {bun && (

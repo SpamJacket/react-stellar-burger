@@ -14,9 +14,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { TotalPriceContext } from "../../services/constructorContext.js";
-
-const BurgerIngredient = ({ ingredientData }) => {
+const BurgerIngredient = ({ ingredientData, counter }) => {
   const dispatch = useDispatch();
 
   const [ingredient, setIngredient] = React.useState(null);
@@ -25,28 +23,13 @@ const BurgerIngredient = ({ ingredientData }) => {
     setIngredient(null);
   }, [setIngredient]);
 
-  const [counter, setCounter] = React.useState(0);
-
-  const bun = useSelector((store) => store.ingredientsList.bun);
-
-  const { handleAddIngredientPrice, handleDeleteIngredientPrice } =
-    React.useContext(TotalPriceContext);
-
-  const handleItemClick = () => {
+  const handleItemClick = React.useCallback(() => {
     setIngredient(ingredientData);
-  };
+  }, [setIngredient]);
 
-  const handleAddIngredientClick = () => {
+  const handleAddIngredientClick = React.useCallback(() => {
     dispatch(addToConstructorList(ingredientData));
-    if (ingredientData.type === "bun") {
-      if (bun) {
-        handleDeleteIngredientPrice(bun.price * 2);
-      }
-      handleAddIngredientPrice(ingredientData.price * 2);
-    } else {
-      handleAddIngredientPrice(ingredientData.price);
-    }
-  };
+  }, [ingredientData]);
 
   return (
     <>

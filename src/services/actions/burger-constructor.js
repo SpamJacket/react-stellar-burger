@@ -1,5 +1,6 @@
 import {
   ADD_TO_CONSTRUCTOR_LIST,
+  DELETE_FROM_CONSTRUCTOR_LIST,
   CLEAN_CONSTRUCTOR_LIST,
 } from "../../utils/constants.js";
 
@@ -10,8 +11,15 @@ export const addToConstructorList = (ingredient) => {
     type: ADD_TO_CONSTRUCTOR_LIST,
     ingredient: {
       ...ingredient,
-      uuid: uuidv4(),
+      constructorId: uuidv4(),
     },
+  };
+};
+
+export const deleteFromConstructorList = (id) => {
+  return {
+    type: DELETE_FROM_CONSTRUCTOR_LIST,
+    id,
   };
 };
 

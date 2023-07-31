@@ -1,5 +1,6 @@
 import {
   ADD_TO_CONSTRUCTOR_LIST,
+  DELETE_FROM_CONSTRUCTOR_LIST,
   CLEAN_CONSTRUCTOR_LIST,
 } from "../../utils/constants.js";
 
@@ -14,6 +15,13 @@ export const constructorReducer = (state = initialState, action) => {
       return action.ingredient.type === "bun"
         ? { ...state, bun: action.ingredient }
         : { ...state, filings: [...state.filings, action.ingredient] };
+    case DELETE_FROM_CONSTRUCTOR_LIST:
+      return {
+        ...state,
+        filings: state.filings.filter(
+          (filing) => filing.constructorId !== action.id
+        ),
+      };
     case CLEAN_CONSTRUCTOR_LIST:
       return {
         bun: null,
