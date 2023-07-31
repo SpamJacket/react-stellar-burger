@@ -23,6 +23,7 @@ const BurgerIngredients = () => {
 
   const [current, setCurrent] = React.useState("Buns");
 
+  const containerRef = React.useRef();
   const bunsHeaderRef = React.useRef();
   const saucesHeaderRef = React.useRef();
   const mainsHeaderRef = React.useRef();
@@ -40,6 +41,28 @@ const BurgerIngredients = () => {
     },
     [setCurrent]
   );
+
+  const updateTab = React.useCallback(() => {
+    const bunsRect = bunsHeaderRef.current.getBoundingClientRect();
+    const saucesRect = saucesHeaderRef.current.getBoundingClientRect();
+    const mainsRect = mainsHeaderRef.current.getBoundingClientRect();
+
+    if (mainsRect.top < 400) {
+      setCurrent("Mains");
+    } else if (saucesRect.top < 400) {
+      setCurrent("Sauces");
+    } else if (bunsRect.top < 400) {
+      setCurrent("Buns");
+    }
+  }, [setCurrent]);
+
+  React.useEffect(() => {
+    containerRef.current.addEventListener("scroll", updateTab);
+
+    return () => {
+      containerRef.current.removeEventListener("scroll", updateTab);
+    };
+  }, [updateTab]);
 
   const ingredientsId = React.useMemo(() => {
     const ingredients = {};
@@ -129,7 +152,7 @@ const BurgerIngredients = () => {
           Начинки
         </Tab>
       </div>
-      <div className={styles.ingredients}>
+      <div ref={containerRef} className={styles.ingredients}>
         {ingredientsFailed && (
           <h2 className={styles.errorTitle}>
             Произошла ошибка! Перезагрузите страницу
