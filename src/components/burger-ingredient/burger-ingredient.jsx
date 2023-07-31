@@ -10,6 +10,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { addToConstructorList } from "../../services/actions/burger-constructor.js";
 
 import {
+  setIngredientInfo,
+  cleanIngredientInfo,
+} from "../../services/actions/ingredient-details.js";
+
+import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -17,15 +22,15 @@ import {
 const BurgerIngredient = ({ ingredientData, counter }) => {
   const dispatch = useDispatch();
 
-  const [ingredient, setIngredient] = React.useState(null);
+  const { ingredient } = useSelector((store) => store.ingredientDetails);
 
   const handleCloseModal = React.useCallback(() => {
-    setIngredient(null);
-  }, [setIngredient]);
+    dispatch(cleanIngredientInfo());
+  }, [ingredientData]);
 
   const handleItemClick = React.useCallback(() => {
-    setIngredient(ingredientData);
-  }, [setIngredient]);
+    dispatch(setIngredientInfo(ingredientData));
+  }, [ingredientData]);
 
   const handleAddIngredientClick = React.useCallback(() => {
     dispatch(addToConstructorList(ingredientData));
@@ -49,9 +54,9 @@ const BurgerIngredient = ({ ingredientData, counter }) => {
           {ingredientData.name}
         </p>
       </li>
-      {ingredient && (
+      {ingredient && ingredient._id === ingredientData._id && (
         <Modal closeModal={handleCloseModal}>
-          <IngredientDetails ingredient={ingredient} />
+          <IngredientDetails />
         </Modal>
       )}
     </>
