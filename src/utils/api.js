@@ -22,17 +22,4 @@ const request = async (endpoint, options) => {
     .then(checkSuccess);
 };
 
-const sendOrderData = async (endpoint, setOrder, ingredients) => {
-  setOrder((prevState) => ({
-    ...prevState,
-    isLoading: true,
-  }));
-  return await request(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ingredients }),
-  });
-};
-
 export default request;
-export { sendOrderData };

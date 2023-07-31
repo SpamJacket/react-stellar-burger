@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
-import { endpoints } from "./utils/constants.js";
 import { legacy_createStore as createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
@@ -19,7 +18,7 @@ const store = createStore(rootReducer, enhancer);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App endpoints={endpoints} />
+      <App />
     </Provider>
   </React.StrictMode>
 );

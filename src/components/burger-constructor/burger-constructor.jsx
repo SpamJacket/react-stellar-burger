@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import styles from "./burger-constructor.module.css";
 
@@ -16,18 +15,18 @@ import BurgerElement from "../burger-element/burger-element.jsx";
 import { useSelector, useDispatch } from "react-redux";
 
 import { cleanConstructorList } from "../../services/actions/burger-constructor.js";
+import { placeOrder } from "../../services/actions/order-details.js";
 
-import { sendOrderData } from "../../utils/api.js";
-
-const BurgerConstructor = ({ ordersUrl }) => {
+const BurgerConstructor = () => {
   const dispatch = useDispatch();
 
   const { bun, filings } = useSelector((store) => store.constructorList);
 
-  const [order, setOrder] = React.useState({
-    data: null,
-    isLoading: false,
-  });
+  const { orderRequest, orderFailed } = useSelector(
+    (store) => store.orderDetails
+  );
+
+  const [isModalOpened, setIsModalOpened] = React.useState(false);
 
   const totalPrice = React.useMemo(() => {
     let price = 0;
@@ -42,112 +41,108 @@ const BurgerConstructor = ({ ordersUrl }) => {
   const handleOrderButtonClick = React.useCallback(() => {
     const ingredientsId = [bun._id];
     filings.forEach((filing) => ingredientsId.push(filing._id));
-    sendOrderData(ordersUrl, setOrder, ingredientsId)
-      .then((res) => {
-        setOrder({
-          data: {
-            name: res.name,
-            orderId: ("000000" + res.order.number).slice(-6),
-            price: totalPrice,
-          },
-          isLoading: false,
-        });
-      })
-      .catch((err) => console.log(err));
+    dispatch(placeOrder(ingredientsId));
+    setIsModalOpened(true);
     dispatch(cleanConstructorList());
-  }, [bun, filings, ordersUrl, setOrder]);
+  }, [bun, filings]);
 
   const handleCloseModal = React.useCallback(() => {
-    setOrder({
-      data: null,
-      isLoading: false,
-    });
-  }, [setOrder]);
+    setIsModalOpened(false);
+  }, [setIsModalOpened]);
+
+  const content = React.useMemo(() => {
+    return orderRequest ? (
+      <h2 className={styles.loadingTitle}>Идет оформление заказа, подождите</h2>
+    ) : (
+      <>
+        <div className={styles.container}>
+          {bun && (
+            <ConstructorElement
+              key={bun.constructorId}
+              type="top"
+              isLocked={true}
+              text={bun.name + " (верх)"}
+              price={bun.price}
+              thumbnail={bun.image}
+              extraClass={[
+                styles.element_background_dark,
+                styles.borderElement,
+              ]}
+            />
+          )}
+          <ul className={styles.list}>
+            {filings.map((filing) => (
+              <BurgerElement key={filing.constructorId} filing={filing} />
+            ))}
+          </ul>
+          {bun && (
+            <ConstructorElement
+              key={bun.constructorId + 1}
+              type="bottom"
+              isLocked={true}
+              text={bun.name + " (низ)"}
+              price={bun.price}
+              thumbnail={bun.image}
+              extraClass={[
+                styles.element_background_dark,
+                styles.borderElement,
+              ]}
+            />
+          )}
+        </div>
+        <div className={styles.price}>
+          <p className={styles.digit}>{totalPrice}</p>
+          <CurrencyIcon />
+        </div>
+        {bun && (
+          <Button
+            htmlType="button"
+            type="primary"
+            size="large"
+            extraClass={styles.btn}
+            onClick={handleOrderButtonClick}
+          >
+            Оформить заказ
+          </Button>
+        )}
+        {!bun && (
+          <Button
+            disabled={true}
+            htmlType="button"
+            type="primary"
+            size="large"
+            extraClass={styles.btn}
+            onClick={handleOrderButtonClick}
+          >
+            Оформить заказ
+          </Button>
+        )}
+        {isModalOpened && (
+          <Modal closeModal={handleCloseModal}>
+            <OrderDetails />
+          </Modal>
+        )}
+      </>
+    );
+  }, [
+    orderRequest,
+    isModalOpened,
+    bun,
+    filings,
+    handleOrderButtonClick,
+    handleCloseModal,
+  ]);
 
   return (
     <section className={styles.section}>
-      {!order.isLoading && (
-        <>
-          <div className={styles.container}>
-            {bun && (
-              <ConstructorElement
-                key={bun.constructorId}
-                type="top"
-                isLocked={true}
-                text={bun.name + " (верх)"}
-                price={bun.price}
-                thumbnail={bun.image}
-                extraClass={[
-                  styles.element_background_dark,
-                  styles.borderElement,
-                ]}
-              />
-            )}
-            <ul className={styles.list}>
-              {filings.map((filing) => (
-                <BurgerElement key={filing.constructorId} filing={filing} />
-              ))}
-            </ul>
-            {bun && (
-              <ConstructorElement
-                key={bun.constructorId + 1}
-                type="bottom"
-                isLocked={true}
-                text={bun.name + " (низ)"}
-                price={bun.price}
-                thumbnail={bun.image}
-                extraClass={[
-                  styles.element_background_dark,
-                  styles.borderElement,
-                ]}
-              />
-            )}
-          </div>
-          <div className={styles.price}>
-            <p className={styles.digit}>{totalPrice}</p>
-            <CurrencyIcon />
-          </div>
-          {bun && (
-            <Button
-              htmlType="button"
-              type="primary"
-              size="large"
-              extraClass={styles.btn}
-              onClick={handleOrderButtonClick}
-            >
-              Оформить заказ
-            </Button>
-          )}
-          {!bun && (
-            <Button
-              disabled={true}
-              htmlType="button"
-              type="primary"
-              size="large"
-              extraClass={styles.btn}
-              onClick={handleOrderButtonClick}
-            >
-              Оформить заказ
-            </Button>
-          )}
-        </>
-      )}
-      {order.isLoading && (
-        <h2 className={styles.loadingTitle}>
-          Идет оформление заказа, подождите
+      {orderFailed && (
+        <h2 className={styles.errorTitle}>
+          Произошла ошибка! Перезагрузите страницу
         </h2>
       )}
-      {!order.isLoading && order.data && (
-        <Modal closeModal={handleCloseModal}>
-          <OrderDetails data={order.data} />
-        </Modal>
-      )}
+      {!orderFailed && content}
     </section>
   );
-};
-
-BurgerConstructor.propTypes = {
-  ordersUrl: PropTypes.string.isRequired,
 };
 
 export default BurgerConstructor;

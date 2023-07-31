@@ -53,3 +53,10 @@
   left: calc(50% - 238px);
   composes: text text_type_main-medium from global;
 }
+
+.errorTitle {
+  position: absolute;
+  top: calc(50% - 30px);
+  left: calc(50% - 288px);
+  composes: text text_type_main-medium from global;
+}
