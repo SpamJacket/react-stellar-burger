@@ -1,6 +1,6 @@
-import styles from "./ingredient-details.module.css";
-
 import { useSelector } from "react-redux";
+
+import styles from "./ingredient-details.module.css";
 
 const IngredientDetails = () => {
   const { ingredient } = useSelector((store) => store.ingredientDetails);

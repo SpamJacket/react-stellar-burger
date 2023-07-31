@@ -1,21 +1,20 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { cleanConstructorList } from "../../services/actions/burger-constructor.js";
+import { placeOrder } from "../../services/actions/order-details.js";
 
 import styles from "./burger-constructor.module.css";
 
 import Modal from "../modal/Modal.jsx";
 import OrderDetails from "../order-details/order-details.jsx";
+import BurgerElement from "../burger-element/burger-element.jsx";
 
 import {
   ConstructorElement,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import BurgerElement from "../burger-element/burger-element.jsx";
-
-import { useSelector, useDispatch } from "react-redux";
-
-import { cleanConstructorList } from "../../services/actions/burger-constructor.js";
-import { placeOrder } from "../../services/actions/order-details.js";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
@@ -28,16 +27,6 @@ const BurgerConstructor = () => {
 
   const [isModalOpened, setIsModalOpened] = React.useState(false);
 
-  const totalPrice = React.useMemo(() => {
-    let price = 0;
-    if (bun) {
-      price += bun.price * 2;
-    }
-    return filings.reduce((currentPrice, filing) => {
-      return currentPrice + filing.price;
-    }, price);
-  }, [bun, filings]);
-
   const handleOrderButtonClick = React.useCallback(() => {
     const ingredientsId = [bun._id];
     filings.forEach((filing) => ingredientsId.push(filing._id));
@@ -49,6 +38,16 @@ const BurgerConstructor = () => {
   const handleCloseModal = React.useCallback(() => {
     setIsModalOpened(false);
   }, [setIsModalOpened]);
+
+  const totalPrice = React.useMemo(() => {
+    let price = 0;
+    if (bun) {
+      price += bun.price * 2;
+    }
+    return filings.reduce((currentPrice, filing) => {
+      return currentPrice + filing.price;
+    }, price);
+  }, [bun, filings]);
 
   const content = React.useMemo(() => {
     return orderRequest ? (

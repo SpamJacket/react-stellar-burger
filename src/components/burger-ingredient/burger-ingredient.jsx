@@ -1,18 +1,19 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import PropTypes from "prop-types";
+
+import { addToConstructorList } from "../../services/actions/burger-constructor.js";
+import {
+  setIngredientInfo,
+  cleanIngredientInfo,
+} from "../../services/actions/ingredient-details.js";
+
 import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-ingredient.module.css";
 
 import Modal from "../modal/Modal.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
-
-import { useSelector, useDispatch } from "react-redux";
-import { addToConstructorList } from "../../services/actions/burger-constructor.js";
-
-import {
-  setIngredientInfo,
-  cleanIngredientInfo,
-} from "../../services/actions/ingredient-details.js";
 
 import {
   Counter,
@@ -24,16 +25,16 @@ const BurgerIngredient = ({ ingredientData, counter }) => {
 
   const { ingredient } = useSelector((store) => store.ingredientDetails);
 
-  const handleCloseModal = React.useCallback(() => {
-    dispatch(cleanIngredientInfo());
-  }, [ingredientData]);
-
   const handleItemClick = React.useCallback(() => {
     dispatch(setIngredientInfo(ingredientData));
   }, [ingredientData]);
 
   const handleAddIngredientClick = React.useCallback(() => {
     dispatch(addToConstructorList(ingredientData));
+  }, [ingredientData]);
+
+  const handleCloseModal = React.useCallback(() => {
+    dispatch(cleanIngredientInfo());
   }, [ingredientData]);
 
   return (
@@ -65,6 +66,7 @@ const BurgerIngredient = ({ ingredientData, counter }) => {
 
 BurgerIngredient.propTypes = {
   ingredientData: ingredientPropType.isRequired,
+  counter: PropTypes.number.isRequired,
 };
 
 export default BurgerIngredient;

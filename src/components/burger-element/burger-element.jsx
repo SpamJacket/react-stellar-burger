@@ -1,12 +1,11 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+
+import { deleteFromConstructorList } from "../../services/actions/burger-constructor.js";
 
 import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-element.module.css";
-
-import { useDispatch } from "react-redux";
-
-import { deleteFromConstructorList } from "../../services/actions/burger-constructor.js";
 
 import {
   ConstructorElement,

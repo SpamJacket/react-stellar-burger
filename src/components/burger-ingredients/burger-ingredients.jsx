@@ -1,23 +1,25 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { getIngredients } from "../../services/actions/burger-ingredients.js";
 
 import styles from "./burger-ingredients.module.css";
 
 import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { useSelector, useDispatch } from "react-redux";
-import { getIngredients } from "../../services/actions/burger-ingredients.js";
-
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
-
-  React.useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
 
   const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(
     (store) => store.ingredientsList
   );
+
+  const { bun, filings } = useSelector((store) => store.constructorList);
+
+  React.useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   const [current, setCurrent] = React.useState("Buns");
 
@@ -38,8 +40,6 @@ const BurgerIngredients = () => {
     },
     [setCurrent]
   );
-
-  const { bun, filings } = useSelector((store) => store.constructorList);
 
   const ingredientsId = React.useMemo(() => {
     const ingredients = {};
