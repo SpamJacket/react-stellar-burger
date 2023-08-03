@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
 
 import { cleanConstructorList } from "../../services/actions/burger-constructor.js";
 import { placeOrder } from "../../services/actions/order-details.js";
@@ -16,7 +17,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerConstructor = () => {
+const BurgerConstructor = ({ onDropHandler }) => {
   const dispatch = useDispatch();
 
   const { bun, filings } = useSelector((store) => store.constructorList);
@@ -24,6 +25,13 @@ const BurgerConstructor = () => {
   const { orderRequest, orderFailed } = useSelector(
     (store) => store.orderDetails
   );
+
+  const [{}, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(item) {
+      onDropHandler(item);
+    },
+  });
 
   const [isModalOpened, setIsModalOpened] = React.useState(false);
 
@@ -133,7 +141,7 @@ const BurgerConstructor = () => {
   ]);
 
   return (
-    <section className={styles.section}>
+    <section ref={dropTarget} className={styles.section}>
       {orderFailed && (
         <h2 className={styles.errorTitle}>
           Произошла ошибка! Перезагрузите страницу
