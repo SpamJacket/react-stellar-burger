@@ -1,8 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 
-import { cleanConstructorList } from "../../services/actions/burger-constructor.js";
+import {
+  cleanConstructorList,
+  setFilings,
+} from "../../services/actions/burger-constructor.js";
 import { placeOrder } from "../../services/actions/order-details.js";
 
 import styles from "./burger-constructor.module.css";
@@ -33,6 +37,17 @@ const BurgerConstructor = ({ onDropHandler }) => {
     },
   });
 
+  const sortIngredients = React.useCallback(
+    (fromIndex, toIndex) => {
+      const dragFiling = filings[fromIndex];
+      const newFilings = [...filings];
+      newFilings.splice(fromIndex, 1);
+      newFilings.splice(toIndex, 0, dragFiling);
+      dispatch(setFilings(newFilings));
+    },
+    [dispatch, filings]
+  );
+
   const [isModalOpened, setIsModalOpened] = React.useState(false);
 
   const handleOrderButtonClick = React.useCallback(() => {
@@ -41,7 +56,7 @@ const BurgerConstructor = ({ onDropHandler }) => {
     dispatch(placeOrder(ingredientsId));
     setIsModalOpened(true);
     dispatch(cleanConstructorList());
-  }, [bun, filings]);
+  }, [dispatch, bun, filings, setIsModalOpened]);
 
   const handleCloseModal = React.useCallback(() => {
     setIsModalOpened(false);
@@ -79,7 +94,11 @@ const BurgerConstructor = ({ onDropHandler }) => {
           )}
           <ul className={styles.list}>
             {filings.map((filing) => (
-              <BurgerElement key={filing.constructorId} filing={filing} />
+              <BurgerElement
+                key={filing.constructorId}
+                filing={filing}
+                sortIngredients={sortIngredients}
+              />
             ))}
           </ul>
           {bun && (
@@ -138,6 +157,7 @@ const BurgerConstructor = ({ onDropHandler }) => {
     filings,
     handleOrderButtonClick,
     handleCloseModal,
+    sortIngredients,
   ]);
 
   return (
@@ -150,6 +170,10 @@ const BurgerConstructor = ({ onDropHandler }) => {
       {!orderFailed && content}
     </section>
   );
+};
+
+BurgerConstructor.propTypes = {
+  onDropHandler: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

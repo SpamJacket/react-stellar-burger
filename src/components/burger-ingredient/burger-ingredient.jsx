@@ -27,18 +27,18 @@ const BurgerIngredient = ({ ingredientData, counter }) => {
 
   const { ingredient } = useSelector((store) => store.ingredientDetails);
 
-  const [{}, dragRef] = useDrag({
+  const [, dragRef] = useDrag({
     type: "ingredient",
     item: ingredientData,
   });
 
   const handleItemClick = React.useCallback(() => {
     dispatch(setIngredientInfo(ingredientData));
-  }, [ingredientData]);
+  }, [dispatch, ingredientData]);
 
   const handleCloseModal = React.useCallback(() => {
     dispatch(cleanIngredientInfo());
-  }, [ingredientData]);
+  }, [dispatch]);
 
   const content = React.useMemo(() => {
     return (

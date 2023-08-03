@@ -1,5 +1,7 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrag, useDrop } from "react-dnd";
 
 import { deleteFromConstructorList } from "../../services/actions/burger-constructor.js";
 
@@ -12,16 +14,51 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerElement = ({ filing }) => {
+const BurgerElement = ({ filing, sortIngredients }) => {
   const dispatch = useDispatch();
+  const { filings } = useSelector((store) => store.constructorList);
+
+  const dragDropRef = React.useRef(null);
+
+  const [{ isDrag }, dragRef] = useDrag({
+    type: "sortedIngredient",
+    item: {
+      id: filing.constructorId,
+    },
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
+
+  const [, dropTarget] = useDrop({
+    accept: "sortedIngredient",
+    hover(item) {
+      const dragIndex = filings.findIndex((el) => el.constructorId === item.id);
+      const hoverIndex = filings.findIndex(
+        (el) => el.constructorId === filing.constructorId
+      );
+
+      sortIngredients(dragIndex, hoverIndex);
+    },
+  });
+
+  const opacity = isDrag ? 0 : 1;
+
+  dragRef(dropTarget(dragDropRef));
 
   const handleDeleteIngredientClick = React.useCallback(() => {
     dispatch(deleteFromConstructorList(filing.constructorId));
-  }, [filing]);
+  }, [dispatch, filing]);
 
   return (
-    <li className={styles.item}>
-      <DragIcon />
+    <li ref={dragDropRef} className={styles.item} style={{ opacity }}>
+      <button
+        type="button"
+        aria-label="Значок перетаскивания"
+        className={styles.dragIcon}
+      >
+        <DragIcon />
+      </button>
       <ConstructorElement
         text={filing.name}
         price={filing.price}
@@ -33,6 +70,9 @@ const BurgerElement = ({ filing }) => {
   );
 };
 
-BurgerElement.propTypes = { filing: ingredientPropType.isRequired };
+BurgerElement.propTypes = {
+  filing: ingredientPropType.isRequired,
+  sortIngredients: PropTypes.func.isRequired,
+};
 
 export default BurgerElement;

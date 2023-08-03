@@ -10,3 +10,11 @@
 .element {
   composes: ml-2 from global;
 }
+
+.dragIcon {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  height: 24px;
+}

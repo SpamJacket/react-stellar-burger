@@ -1,3 +1,4 @@
+import React from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -14,9 +15,12 @@ import BurgerConstructor from "../burger-constructor/burger-constructor.jsx";
 const App = () => {
   const dispatch = useDispatch();
 
-  const handleDrop = (ingredient) => {
-    dispatch(addToConstructorList(ingredient));
-  };
+  const handleDrop = React.useCallback(
+    (ingredient) => {
+      dispatch(addToConstructorList(ingredient));
+    },
+    [dispatch]
+  );
 
   return (
     <div className={styles.app}>

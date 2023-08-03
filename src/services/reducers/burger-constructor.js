@@ -2,6 +2,7 @@ import {
   ADD_TO_CONSTRUCTOR_LIST,
   DELETE_FROM_CONSTRUCTOR_LIST,
   CLEAN_CONSTRUCTOR_LIST,
+  SET_FILINGS,
 } from "../../utils/constants.js";
 
 const initialState = {
@@ -26,6 +27,11 @@ export const constructorReducer = (state = initialState, action) => {
       return {
         bun: null,
         filings: [],
+      };
+    case SET_FILINGS:
+      return {
+        ...state,
+        filings: action.filings,
       };
     default:
       return state;

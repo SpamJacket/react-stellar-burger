@@ -129,7 +129,7 @@ const BurgerIngredients = () => {
         <ul className={styles.list}>{renderIngredients("main")}</ul>
       </>
     );
-  }, [ingredients, ingredientsRequest, renderIngredients]);
+  }, [ingredientsRequest, renderIngredients]);
 
   return (
     <section className={styles.section}>

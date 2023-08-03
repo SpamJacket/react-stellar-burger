@@ -2,6 +2,7 @@ import {
   ADD_TO_CONSTRUCTOR_LIST,
   DELETE_FROM_CONSTRUCTOR_LIST,
   CLEAN_CONSTRUCTOR_LIST,
+  SET_FILINGS,
 } from "../../utils/constants.js";
 
 import { v4 as uuidv4 } from "uuid";
@@ -26,5 +27,12 @@ export const deleteFromConstructorList = (id) => {
 export const cleanConstructorList = () => {
   return {
     type: CLEAN_CONSTRUCTOR_LIST,
+  };
+};
+
+export const setFilings = (filings) => {
+  return {
+    type: SET_FILINGS,
+    filings,
   };
 };
