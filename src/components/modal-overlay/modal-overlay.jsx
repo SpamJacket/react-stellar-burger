@@ -4,14 +4,11 @@ import PropTypes from "prop-types";
 import styles from "./modal-overlay.module.css";
 
 const ModalOverlay = React.forwardRef(({ closeModal }, overlayRef) => {
-  const handleOverlayClick = React.useCallback(
-    (e) => {
-      if (e.target === e.currentTarget) {
-        closeModal();
-      }
-    },
-    [closeModal]
-  );
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      closeModal();
+    }
+  };
 
   return (
     <div

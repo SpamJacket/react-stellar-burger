@@ -28,21 +28,18 @@ const BurgerIngredients = () => {
   const saucesHeaderRef = React.useRef();
   const mainsHeaderRef = React.useRef();
 
-  const scrollIntoTitle = React.useCallback(
-    (tab) => {
-      setCurrent(tab);
-      if (tab === "Buns") {
-        bunsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
-      } else if (tab === "Sauces") {
-        saucesHeaderRef.current.scrollIntoView({ behavior: "smooth" });
-      } else {
-        mainsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    },
-    [setCurrent]
-  );
+  const scrollIntoTitle = (tab) => {
+    setCurrent(tab);
+    if (tab === "Buns") {
+      bunsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+    } else if (tab === "Sauces") {
+      saucesHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      mainsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-  const updateTab = React.useCallback(() => {
+  const updateTab = () => {
     const bunsRect = bunsHeaderRef.current.getBoundingClientRect();
     const saucesRect = saucesHeaderRef.current.getBoundingClientRect();
     const mainsRect = mainsHeaderRef.current.getBoundingClientRect();
@@ -54,7 +51,7 @@ const BurgerIngredients = () => {
     } else if (bunsRect.top < 400) {
       setCurrent("Buns");
     }
-  }, [setCurrent]);
+  };
 
   React.useEffect(() => {
     containerRef.current.addEventListener("scroll", updateTab);
@@ -62,7 +59,7 @@ const BurgerIngredients = () => {
     return () => {
       containerRef.current.removeEventListener("scroll", updateTab);
     };
-  }, [updateTab]);
+  }, []);
 
   const ingredientsId = React.useMemo(() => {
     const ingredients = {};
@@ -70,8 +67,8 @@ const BurgerIngredients = () => {
       ingredients[bun._id] = 2;
     }
     filings.forEach((filing) => {
-      if (ingredients.hasOwnProperty(filing._id)) {
-        ingredients[filing._id]++;
+      if (ingredients[filing._id]) {
+        ingredients[filing._id] += 1;
       } else {
         ingredients[filing._id] = 1;
       }
@@ -83,27 +80,17 @@ const BurgerIngredients = () => {
     (type) => {
       return ingredients.map((ingredient, index) => {
         if (ingredient.type === type) {
-          if (ingredientsId.hasOwnProperty(ingredient._id)) {
-            return (
-              <BurgerIngredient
-                key={index}
-                ingredientData={ingredient}
-                counter={ingredientsId[ingredient._id]}
-              />
-            );
-          } else {
-            return (
-              <BurgerIngredient
-                key={index}
-                ingredientData={ingredient}
-                counter={0}
-              />
-            );
-          }
+          return (
+            <BurgerIngredient
+              key={index}
+              ingredientData={ingredient}
+              counter={ingredientsId[ingredient._id] ?? 0}
+            />
+          );
         }
       });
     },
-    [ingredients, bun, filings]
+    [ingredients, ingredientsId]
   );
 
   const content = React.useMemo(() => {
@@ -153,12 +140,13 @@ const BurgerIngredients = () => {
         </Tab>
       </div>
       <div ref={containerRef} className={styles.ingredients}>
-        {ingredientsFailed && (
+        {ingredientsFailed ? (
           <h2 className={styles.errorTitle}>
             Произошла ошибка! Перезагрузите страницу
           </h2>
+        ) : (
+          content
         )}
-        {!ingredientsFailed && content}
       </div>
     </section>
   );

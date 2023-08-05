@@ -14,22 +14,19 @@ const Modal = ({ children, closeModal }) => {
   const modalRef = React.useRef();
   const overlayRef = React.useRef();
 
-  const animateClosing = React.useCallback(() => {
+  const animateClosing = () => {
     modalRef.current.style = "opacity: 0";
     setTimeout(() => {
       overlayRef.current.style = "opacity: 0";
     }, 100);
     setTimeout(closeModal, 300);
-  }, [closeModal]);
+  };
 
-  const handleEscClose = React.useCallback(
-    (e) => {
-      if (e.key === "Escape") {
-        animateClosing();
-      }
-    },
-    [animateClosing]
-  );
+  const handleEscClose = (e) => {
+    if (e.key === "Escape") {
+      animateClosing();
+    }
+  };
 
   React.useEffect(() => {
     document.addEventListener("keydown", handleEscClose);
@@ -37,7 +34,7 @@ const Modal = ({ children, closeModal }) => {
     return () => {
       document.removeEventListener("keydown", handleEscClose);
     };
-  }, [handleEscClose]);
+  }, []);
 
   React.useEffect(() => {
     setTimeout(() => {

@@ -14,8 +14,9 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerElement = ({ filing, sortIngredients }) => {
+const BurgerElement = React.memo(({ filing, sortIngredients }) => {
   const dispatch = useDispatch();
+
   const { filings } = useSelector((store) => store.constructorList);
 
   const dragDropRef = React.useRef(null);
@@ -46,9 +47,9 @@ const BurgerElement = ({ filing, sortIngredients }) => {
 
   dragRef(dropTarget(dragDropRef));
 
-  const handleDeleteIngredientClick = React.useCallback(() => {
+  const handleDeleteIngredientClick = () => {
     dispatch(deleteFromConstructorList(filing.constructorId));
-  }, [dispatch, filing]);
+  };
 
   return (
     <li ref={dragDropRef} className={styles.item} style={{ opacity }}>
@@ -68,7 +69,7 @@ const BurgerElement = ({ filing, sortIngredients }) => {
       />
     </li>
   );
-};
+});
 
 BurgerElement.propTypes = {
   filing: ingredientPropType.isRequired,

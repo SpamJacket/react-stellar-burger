@@ -20,7 +20,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerIngredient = ({ ingredientData, counter }) => {
+const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
   const dispatch = useDispatch();
 
   const { bun } = useSelector((store) => store.constructorList);
@@ -32,13 +32,13 @@ const BurgerIngredient = ({ ingredientData, counter }) => {
     item: ingredientData,
   });
 
-  const handleItemClick = React.useCallback(() => {
+  const handleItemClick = () => {
     dispatch(setIngredientInfo(ingredientData));
-  }, [dispatch, ingredientData]);
+  };
 
-  const handleCloseModal = React.useCallback(() => {
+  const handleCloseModal = () => {
     dispatch(cleanIngredientInfo());
-  }, [dispatch]);
+  };
 
   const content = React.useMemo(() => {
     return (
@@ -60,9 +60,7 @@ const BurgerIngredient = ({ ingredientData, counter }) => {
 
   return (
     <>
-      {ingredientData.type === "bun" &&
-      bun &&
-      bun._id === ingredientData._id ? (
+      {ingredientData.type === "bun" && bun?._id === ingredientData._id ? (
         <li className={styles.li} onClick={handleItemClick}>
           {content}
         </li>
@@ -71,14 +69,14 @@ const BurgerIngredient = ({ ingredientData, counter }) => {
           {content}
         </li>
       )}
-      {ingredient && ingredient._id === ingredientData._id && (
+      {ingredient?._id === ingredientData._id && (
         <Modal closeModal={handleCloseModal}>
           <IngredientDetails />
         </Modal>
       )}
     </>
   );
-};
+});
 
 BurgerIngredient.propTypes = {
   ingredientData: ingredientPropType.isRequired,

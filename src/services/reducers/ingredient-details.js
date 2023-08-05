@@ -10,7 +10,7 @@ export const ingredientDetails = (state = initialState, action) => {
     case SET_INGREDIENT_INFO:
       return { ingredient: action.ingredient };
     case CLEAN_INGREDIENT_INFO:
-      return { ingredient: null };
+      return { ...initialState };
     default:
       return state;
   }

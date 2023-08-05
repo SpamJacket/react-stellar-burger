@@ -25,8 +25,7 @@ export const constructorReducer = (state = initialState, action) => {
       };
     case CLEAN_CONSTRUCTOR_LIST:
       return {
-        bun: null,
-        filings: [],
+        ...initialState,
       };
     case SET_FILINGS:
       return {

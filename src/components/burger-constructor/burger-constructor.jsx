@@ -1,9 +1,9 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 
 import {
+  addToConstructorList,
   cleanConstructorList,
   setFilings,
 } from "../../services/actions/burger-constructor.js";
@@ -21,7 +21,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerConstructor = ({ onDropHandler }) => {
+const BurgerConstructor = () => {
   const dispatch = useDispatch();
 
   const { bun, filings } = useSelector((store) => store.constructorList);
@@ -33,7 +33,7 @@ const BurgerConstructor = ({ onDropHandler }) => {
   const [{}, dropTarget] = useDrop({
     accept: "ingredient",
     drop(item) {
-      onDropHandler(item);
+      dispatch(addToConstructorList(item));
     },
   });
 
@@ -50,17 +50,17 @@ const BurgerConstructor = ({ onDropHandler }) => {
 
   const [isModalOpened, setIsModalOpened] = React.useState(false);
 
-  const handleOrderButtonClick = React.useCallback(() => {
+  const handleOrderButtonClick = () => {
     const ingredientsId = [bun._id];
     filings.forEach((filing) => ingredientsId.push(filing._id));
     dispatch(placeOrder(ingredientsId));
     setIsModalOpened(true);
     dispatch(cleanConstructorList());
-  }, [dispatch, bun, filings, setIsModalOpened]);
+  };
 
-  const handleCloseModal = React.useCallback(() => {
+  const handleCloseModal = () => {
     setIsModalOpened(false);
-  }, [setIsModalOpened]);
+  };
 
   const totalPrice = React.useMemo(() => {
     let price = 0;
@@ -120,29 +120,16 @@ const BurgerConstructor = ({ onDropHandler }) => {
           <p className={styles.digit}>{totalPrice}</p>
           <CurrencyIcon />
         </div>
-        {bun && (
-          <Button
-            htmlType="button"
-            type="primary"
-            size="large"
-            extraClass={styles.btn}
-            onClick={handleOrderButtonClick}
-          >
-            Оформить заказ
-          </Button>
-        )}
-        {!bun && (
-          <Button
-            disabled={true}
-            htmlType="button"
-            type="primary"
-            size="large"
-            extraClass={styles.btn}
-            onClick={handleOrderButtonClick}
-          >
-            Оформить заказ
-          </Button>
-        )}
+        <Button
+          disabled={bun ? false : true}
+          htmlType="button"
+          type="primary"
+          size="large"
+          extraClass={styles.btn}
+          onClick={handleOrderButtonClick}
+        >
+          Оформить заказ
+        </Button>
         {isModalOpened && (
           <Modal closeModal={handleCloseModal}>
             <OrderDetails />
@@ -150,30 +137,19 @@ const BurgerConstructor = ({ onDropHandler }) => {
         )}
       </>
     );
-  }, [
-    orderRequest,
-    isModalOpened,
-    bun,
-    filings,
-    handleOrderButtonClick,
-    handleCloseModal,
-    sortIngredients,
-  ]);
+  }, [orderRequest, isModalOpened, bun, filings, sortIngredients]);
 
   return (
     <section ref={dropTarget} className={styles.section}>
-      {orderFailed && (
+      {orderFailed ? (
         <h2 className={styles.errorTitle}>
           Произошла ошибка! Перезагрузите страницу
         </h2>
+      ) : (
+        content
       )}
-      {!orderFailed && content}
     </section>
   );
-};
-
-BurgerConstructor.propTypes = {
-  onDropHandler: PropTypes.func.isRequired,
 };
 
 export default BurgerConstructor;

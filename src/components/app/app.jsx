@@ -1,10 +1,5 @@
-import React from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
-import { useDispatch } from "react-redux";
-
-import { addToConstructorList } from "../../services/actions/burger-constructor.js";
 
 import styles from "./app.module.css";
 
@@ -13,15 +8,6 @@ import BurgerIngredients from "../burger-ingredients/burger-ingredients.jsx";
 import BurgerConstructor from "../burger-constructor/burger-constructor.jsx";
 
 const App = () => {
-  const dispatch = useDispatch();
-
-  const handleDrop = React.useCallback(
-    (ingredient) => {
-      dispatch(addToConstructorList(ingredient));
-    },
-    [dispatch]
-  );
-
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -29,7 +15,7 @@ const App = () => {
         <h2 className={styles.title}>Соберите бургер</h2>
         <DndProvider backend={HTML5Backend}>
           <BurgerIngredients />
-          <BurgerConstructor onDropHandler={handleDrop} />
+          <BurgerConstructor />
         </DndProvider>
       </main>
     </div>

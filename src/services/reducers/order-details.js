@@ -20,14 +20,14 @@ export const orderDetails = (state = initialState, action) => {
       };
     case PLACE_ORDER_SUCCESS:
       return {
+        ...state,
         orderRequest: false,
         orderFailed: false,
         order: action.order,
       };
     case PLACE_ORDER_FAILED:
       return {
-        ...state,
-        orderRequest: false,
+        ...initialState,
         orderFailed: true,
       };
     default:
