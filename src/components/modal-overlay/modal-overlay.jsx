@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styles from "./modal-overlay.module.css";
 
 const ModalOverlay = React.forwardRef(({ closeModal }, overlayRef) => {
-  const handleCloseButtonClick = (e) => {
+  const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       closeModal();
     }
@@ -13,7 +13,7 @@ const ModalOverlay = React.forwardRef(({ closeModal }, overlayRef) => {
   return (
     <div
       className={styles.overlay}
-      onClick={handleCloseButtonClick}
+      onClick={handleOverlayClick}
       ref={overlayRef}
     />
   );

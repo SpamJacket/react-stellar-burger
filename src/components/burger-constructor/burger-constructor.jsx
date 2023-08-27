@@ -1,152 +1,155 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrop } from "react-dnd";
+
+import {
+  addToConstructorList,
+  cleanConstructorList,
+  setFilings,
+} from "../../services/actions/burger-constructor.js";
+import { placeOrder } from "../../services/actions/order-details.js";
 
 import styles from "./burger-constructor.module.css";
 
 import Modal from "../modal/Modal.jsx";
 import OrderDetails from "../order-details/order-details.jsx";
+import BurgerElement from "../burger-element/burger-element.jsx";
 
 import {
   ConstructorElement,
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import BurgerElement from "../burger-element/burger-element.jsx";
 
-import {
-  ConstructorContext,
-  TotalPriceContext,
-} from "../../services/constructorContext.js";
+const BurgerConstructor = () => {
+  const dispatch = useDispatch();
 
-import { sendOrderData } from "../../utils/api.js";
+  const { bun, filings } = useSelector((store) => store.constructorList);
 
-const BurgerConstructor = ({ ordersUrl }) => {
-  const [constructorList, setConstructorList] =
-    React.useContext(ConstructorContext);
+  const { orderRequest, orderFailed } = useSelector(
+    (store) => store.orderDetails
+  );
 
-  const { totalPriceState, handleResetIngredientPrice } =
-    React.useContext(TotalPriceContext);
-
-  const [order, setOrder] = React.useState({
-    data: null,
-    isLoading: false,
+  const [{}, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(item) {
+      dispatch(addToConstructorList(item));
+    },
   });
 
+  const sortIngredients = React.useCallback(
+    (fromIndex, toIndex) => {
+      const dragFiling = filings[fromIndex];
+      const newFilings = [...filings];
+      newFilings.splice(fromIndex, 1);
+      newFilings.splice(toIndex, 0, dragFiling);
+      dispatch(setFilings(newFilings));
+    },
+    [dispatch, filings]
+  );
+
+  const [isModalOpened, setIsModalOpened] = React.useState(false);
+
   const handleOrderButtonClick = () => {
-    const ingredients = [constructorList.bun._id];
-    constructorList.filings.forEach((filing) => ingredients.push(filing._id));
-
-    sendOrderData(ordersUrl, setOrder, ingredients)
-      .then((res) => {
-        setOrder({
-          data: {
-            name: res.name,
-            orderId: ("000000" + res.order.number).slice(-6),
-            price: totalPriceState.totalPrice,
-          },
-          isLoading: false,
-        });
-      })
-      .catch((err) => console.log(err));
-
-    setConstructorList({
-      bun: null,
-      filings: [],
-    });
-    handleResetIngredientPrice();
+    const ingredientsId = [bun._id];
+    filings.forEach((filing) => ingredientsId.push(filing._id));
+    dispatch(placeOrder(ingredientsId));
+    setIsModalOpened(true);
+    dispatch(cleanConstructorList());
   };
 
   const handleCloseModal = () => {
-    setOrder({
-      data: null,
-      isLoading: false,
-    });
+    setIsModalOpened(false);
   };
 
+  const totalPrice = React.useMemo(() => {
+    let price = 0;
+    if (bun) {
+      price += bun.price * 2;
+    }
+    return filings.reduce((currentPrice, filing) => {
+      return currentPrice + filing.price;
+    }, price);
+  }, [bun, filings]);
+
+  const content = React.useMemo(() => {
+    return orderRequest ? (
+      <h2 className={styles.loadingTitle}>Идет оформление заказа, подождите</h2>
+    ) : (
+      <>
+        <div className={styles.container}>
+          {bun && (
+            <ConstructorElement
+              key={bun.constructorId}
+              type="top"
+              isLocked={true}
+              text={bun.name + " (верх)"}
+              price={bun.price}
+              thumbnail={bun.image}
+              extraClass={[
+                styles.element_background_dark,
+                styles.borderElement,
+              ]}
+            />
+          )}
+          <ul className={styles.list}>
+            {filings.map((filing) => (
+              <BurgerElement
+                key={filing.constructorId}
+                filing={filing}
+                sortIngredients={sortIngredients}
+              />
+            ))}
+          </ul>
+          {bun && (
+            <ConstructorElement
+              key={bun.constructorId + 1}
+              type="bottom"
+              isLocked={true}
+              text={bun.name + " (низ)"}
+              price={bun.price}
+              thumbnail={bun.image}
+              extraClass={[
+                styles.element_background_dark,
+                styles.borderElement,
+              ]}
+            />
+          )}
+        </div>
+        <div className={styles.price}>
+          <p className={styles.digit}>{totalPrice}</p>
+          <CurrencyIcon />
+        </div>
+        <Button
+          disabled={bun ? false : true}
+          htmlType="button"
+          type="primary"
+          size="large"
+          extraClass={styles.btn}
+          onClick={handleOrderButtonClick}
+        >
+          Оформить заказ
+        </Button>
+        {isModalOpened && (
+          <Modal closeModal={handleCloseModal}>
+            <OrderDetails />
+          </Modal>
+        )}
+      </>
+    );
+  }, [orderRequest, isModalOpened, bun, filings, sortIngredients]);
+
   return (
-    <section className={styles.section}>
-      {!order.isLoading && (
-        <>
-          <div className={styles.container}>
-            {constructorList.bun && (
-              <ConstructorElement
-                key={0}
-                type="top"
-                isLocked={true}
-                text={constructorList.bun.name + " (верх)"}
-                price={constructorList.bun.price}
-                thumbnail={constructorList.bun.image}
-                extraClass={[
-                  styles.element_background_dark,
-                  styles.borderElement,
-                ]}
-              />
-            )}
-            <ul className={styles.list}>
-              {constructorList.filings.map((el, index) => (
-                <BurgerElement key={index + 2} data={el} />
-              ))}
-            </ul>
-            {constructorList.bun && (
-              <ConstructorElement
-                key={1}
-                type="bottom"
-                isLocked={true}
-                text={constructorList.bun.name + " (низ)"}
-                price={constructorList.bun.price}
-                thumbnail={constructorList.bun.image}
-                extraClass={[
-                  styles.element_background_dark,
-                  styles.borderElement,
-                ]}
-              />
-            )}
-          </div>
-          <div className={styles.price}>
-            <p className={styles.digit}>{totalPriceState.totalPrice}</p>
-            <CurrencyIcon />
-          </div>
-          {constructorList.bun && (
-            <Button
-              htmlType="button"
-              type="primary"
-              size="large"
-              extraClass={styles.btn}
-              onClick={handleOrderButtonClick}
-            >
-              Оформить заказ
-            </Button>
-          )}
-          {!constructorList.bun && (
-            <Button
-              disabled={true}
-              htmlType="button"
-              type="primary"
-              size="large"
-              extraClass={styles.btn}
-              onClick={handleOrderButtonClick}
-            >
-              Оформить заказ
-            </Button>
-          )}
-        </>
-      )}
-      {order.isLoading && (
-        <h2 className={styles.loadingTitle}>
-          Идет оформление заказа, подождите
+    <section ref={dropTarget} className={styles.section}>
+      {orderFailed ? (
+        <h2 className={styles.errorTitle}>
+          Произошла ошибка! Перезагрузите страницу
         </h2>
-      )}
-      {!order.isLoading && order.data && (
-        <Modal closeModal={handleCloseModal}>
-          <OrderDetails data={order.data} />
-        </Modal>
+      ) : (
+        content
       )}
     </section>
   );
-};
-
-BurgerConstructor.propTypes = {
-  ordersUrl: PropTypes.string.isRequired,
 };
 
 export default BurgerConstructor;

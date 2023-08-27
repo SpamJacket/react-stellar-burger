@@ -13,7 +13,7 @@ const checkSuccess = (res) => {
     return res;
   }
 
-  return Promise.reject(`Ответ не success: ${res}`);
+  return Promise.reject(`Ответ не success: ${res.message}`);
 };
 
 const request = async (endpoint, options) => {
@@ -22,22 +22,4 @@ const request = async (endpoint, options) => {
     .then(checkSuccess);
 };
 
-const getData = async (endpoint, setData) => {
-  setData((prevState) => ({ ...prevState, isLoading: true }));
-  return await request(endpoint);
-};
-
-const sendOrderData = async (endpoint, setOrder, ingredients) => {
-  setOrder((prevState) => ({
-    ...prevState,
-    isLoading: true,
-  }));
-  return await request(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ingredients }),
-  });
-};
-
-export default getData;
-export { sendOrderData };
+export default request;

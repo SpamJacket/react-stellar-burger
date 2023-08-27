@@ -1,4 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrag, useDrop } from "react-dnd";
+
+import { deleteFromConstructorList } from "../../services/actions/burger-constructor.js";
 
 import { ingredientPropType } from "../../utils/prop-types.js";
 
@@ -9,35 +14,66 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import {
-  ConstructorContext,
-  TotalPriceContext,
-} from "../../services/constructorContext.js";
+const BurgerElement = React.memo(({ filing, sortIngredients }) => {
+  const dispatch = useDispatch();
 
-const BurgerElement = ({ data }) => {
-  const [constructorList, setConstructorList] =
-    React.useContext(ConstructorContext);
+  const { filings } = useSelector((store) => store.constructorList);
 
-  const { handleDeleteIngredientPrice } = React.useContext(TotalPriceContext);
+  const dragDropRef = React.useRef(null);
+
+  const [{ isDrag }, dragRef] = useDrag({
+    type: "sortedIngredient",
+    item: {
+      id: filing.constructorId,
+    },
+    collect: (monitor) => ({
+      isDrag: monitor.isDragging(),
+    }),
+  });
+
+  const [, dropTarget] = useDrop({
+    accept: "sortedIngredient",
+    hover(item) {
+      const dragIndex = filings.findIndex((el) => el.constructorId === item.id);
+      const hoverIndex = filings.findIndex(
+        (el) => el.constructorId === filing.constructorId
+      );
+
+      sortIngredients(dragIndex, hoverIndex);
+    },
+  });
+
+  const opacity = isDrag ? 0 : 1;
+
+  dragRef(dropTarget(dragDropRef));
 
   const handleDeleteIngredientClick = () => {
-    handleDeleteIngredientPrice(data.price);
+    dispatch(deleteFromConstructorList(filing.constructorId));
   };
 
   return (
-    <li className={styles.item}>
-      <DragIcon />
+    <li ref={dragDropRef} className={styles.item} style={{ opacity }}>
+      <button
+        type="button"
+        aria-label="Значок перетаскивания"
+        className={styles.dragIcon}
+      >
+        <DragIcon />
+      </button>
       <ConstructorElement
-        text={data.name}
-        price={data.price}
-        thumbnail={data.image}
+        text={filing.name}
+        price={filing.price}
+        thumbnail={filing.image}
         extraClass={[styles.element_background_dark, styles.element]}
         handleClose={handleDeleteIngredientClick}
       />
     </li>
   );
-};
+});
 
-BurgerElement.propTypes = { data: ingredientPropType.isRequired };
+BurgerElement.propTypes = {
+  filing: ingredientPropType.isRequired,
+  sortIngredients: PropTypes.func.isRequired,
+};
 
 export default BurgerElement;

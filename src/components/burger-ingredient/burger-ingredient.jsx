@@ -1,4 +1,13 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrag } from "react-dnd";
+import PropTypes from "prop-types";
+
+import {
+  setIngredientInfo,
+  cleanIngredientInfo,
+} from "../../services/actions/ingredient-details.js";
+
 import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-ingredient.module.css";
@@ -11,75 +20,67 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import {
-  ConstructorContext,
-  TotalPriceContext,
-} from "../../services/constructorContext.js";
+const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
+  const dispatch = useDispatch();
 
-const BurgerIngredient = ({ data }) => {
-  const [ingredient, setIngredient] = React.useState(null);
+  const { bun } = useSelector((store) => store.constructorList);
 
-  const handleCloseModal = () => {
-    setIngredient(null);
-  };
+  const { ingredient } = useSelector((store) => store.ingredientDetails);
 
-  const [counter, setCounter] = React.useState(0);
-
-  const [constructorList, setConstructorList] =
-    React.useContext(ConstructorContext);
-
-  const { handleAddIngredientPrice, handleDeleteIngredientPrice } =
-    React.useContext(TotalPriceContext);
+  const [, dragRef] = useDrag({
+    type: "ingredient",
+    item: ingredientData,
+  });
 
   const handleItemClick = () => {
-    setIngredient(data);
+    dispatch(setIngredientInfo(ingredientData));
   };
 
-  const handleAddIngredientClick = () => {
-    if (data.type === "bun") {
-      if (constructorList.bun) {
-        handleDeleteIngredientPrice(constructorList.bun.price * 2);
-      }
-      setConstructorList((prevState) => ({ ...prevState, bun: data }));
-      handleAddIngredientPrice(data.price * 2);
-    } else {
-      setConstructorList((prevState) => ({
-        ...prevState,
-        filings: [...prevState.filings, data],
-      }));
-      handleAddIngredientPrice(data.price);
-    }
+  const handleCloseModal = () => {
+    dispatch(cleanIngredientInfo());
   };
 
-  return (
-    <>
-      <li className={styles.li}>
+  const content = React.useMemo(() => {
+    return (
+      <>
         <img
           className={styles.img}
-          src={data.image}
-          alt={data.name}
-          onClick={handleAddIngredientClick}
+          src={ingredientData.image}
+          alt={ingredientData.name}
         />
         {counter > 0 && <Counter count={counter} size="default" />}
         <div className={styles.price}>
-          <p className={styles.digit}>{data.price}</p>
+          <p className={styles.digit}>{ingredientData.price}</p>
           <CurrencyIcon />
         </div>
-        <p className={styles.name} onClick={handleItemClick}>
-          {data.name}
-        </p>
-      </li>
-      {ingredient && (
+        <p className={styles.name}>{ingredientData.name}</p>
+      </>
+    );
+  }, [ingredientData, counter]);
+
+  return (
+    <>
+      {ingredientData.type === "bun" && bun?._id === ingredientData._id ? (
+        <li className={styles.li} onClick={handleItemClick}>
+          {content}
+        </li>
+      ) : (
+        <li ref={dragRef} className={styles.li} onClick={handleItemClick}>
+          {content}
+        </li>
+      )}
+      {ingredient?._id === ingredientData._id && (
         <Modal closeModal={handleCloseModal}>
-          <IngredientDetails data={ingredient} />
+          <IngredientDetails />
         </Modal>
       )}
     </>
   );
-};
+});
 
 BurgerIngredient.propTypes = {
-  data: ingredientPropType.isRequired,
+  ingredientData: ingredientPropType.isRequired,
+  counter: PropTypes.number.isRequired,
 };
 
 export default BurgerIngredient;
