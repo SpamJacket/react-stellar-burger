@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
-import styles from "./Modal.module.css";
+import styles from "./modal.module.css";
 
 import ModalOverlay from "../modal-overlay/modal-overlay";
 

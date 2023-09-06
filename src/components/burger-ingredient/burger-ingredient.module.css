@@ -1,12 +1,3 @@
-.li {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 8px;
-  cursor: pointer;
-}
-
 .img {
   composes: ml-4 mr-4 from global;
 }
@@ -31,4 +22,15 @@
   text-align: center;
   composes: text text_type_main-default from global;
   height: 48px;
+}
+
+.link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 8px;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
 }

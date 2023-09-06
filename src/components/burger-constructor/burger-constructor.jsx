@@ -11,7 +11,7 @@ import { placeOrder } from "../../services/actions/order-details.js";
 
 import styles from "./burger-constructor.module.css";
 
-import Modal from "../modal/Modal.jsx";
+import Modal from "../modal/modal.jsx";
 import OrderDetails from "../order-details/order-details.jsx";
 import BurgerElement from "../burger-element/burger-element.jsx";
 
