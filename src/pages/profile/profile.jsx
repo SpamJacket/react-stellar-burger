@@ -1,5 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import styles from "./profile.module.css";
 
@@ -9,7 +10,13 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import { fetchWithRefresh } from "../../utils/api";
+import { deleteUser } from "../../services/actions/user";
+
 const Profile = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [nameValue, setNameValue] = React.useState("");
   const [isNameDisabled, setIsNameDisabled] = React.useState(true);
   const [emailValue, setEmailValue] = React.useState("");
@@ -34,9 +41,28 @@ const Profile = () => {
     setPasswordValue(e.target.value);
   };
 
+  const handleLogout = (e) => {
+    fetchWithRefresh("/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: localStorage.getItem("refreshToken"),
+      }),
+    })
+      .then(() => {
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        dispatch(deleteUser());
+        navigate("/login");
+      })
+      .catch((err) => Promise.reject(err));
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.links}>
+      <nav className={styles.links}>
         <NavLink
           to={"/profile"}
           className={({ isActive }) =>
@@ -53,18 +79,13 @@ const Profile = () => {
         >
           История заказов
         </NavLink>
-        <NavLink
-          to={"/profile/orders/:orderId"}
-          className={({ isActive }) =>
-            isActive ? styles.activeLink : styles.link
-          }
-        >
+        <NavLink className={styles.link} onClick={handleLogout}>
           Выход
         </NavLink>
         <p className={styles.text}>
           В этом разделе вы можете изменить свои персональные данные
         </p>
-      </div>
+      </nav>
       <form className={styles.form}>
         <Input
           type={"text"}

@@ -1,6 +1,11 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./login.module.css";
+
+import request from "../../utils/api.js";
+import { addUser } from "../../services/actions/user.js";
 
 import {
   Button,
@@ -9,6 +14,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
 
@@ -18,6 +26,30 @@ const Login = () => {
 
   const onPasswordChange = (e) => {
     setPasswordValue(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    request("/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailValue,
+        password: passwordValue,
+      }),
+    })
+      .then((res) => {
+        dispatch(addUser(res.user));
+        localStorage.setItem("refreshToken", res.refreshToken);
+        localStorage.setItem("accessToken", res.accessToken);
+      })
+      .then(() => {
+        navigate("/profile");
+      })
+      .catch((err) => Promise.reject(err));
   };
 
   return (
@@ -42,6 +74,8 @@ const Login = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
+          onClick={onSubmit}
+          disabled={!emailValue || !passwordValue}
         >
           Войти
         </Button>
@@ -53,6 +87,9 @@ const Login = () => {
           type="secondary"
           size="medium"
           extraClass={styles.link}
+          onClick={() => {
+            navigate("/register");
+          }}
         >
           Зарегистрироваться
         </Button>
@@ -64,6 +101,9 @@ const Login = () => {
           type="secondary"
           size="medium"
           extraClass={styles.link}
+          onClick={() => {
+            navigate("/forgot-password");
+          }}
         >
           Восстановить пароль
         </Button>

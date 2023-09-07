@@ -21,6 +21,9 @@ const PLACE_ORDER_REQUEST = "PLACE_ORDER_REQUEST";
 const PLACE_ORDER_SUCCESS = "PLACE_ORDER_SUCCESS";
 const PLACE_ORDER_FAILED = "PLACE_ORDER_FAILED";
 
+const ADD_USER = "ADD_USER";
+const DELETE_USER = "DELETE_USER";
+
 const orderAcceptBackground = (
   <>
     <svg
@@ -131,5 +134,7 @@ export {
   PLACE_ORDER_REQUEST,
   PLACE_ORDER_SUCCESS,
   PLACE_ORDER_FAILED,
+  ADD_USER,
+  DELETE_USER,
   orderAcceptBackground,
 };

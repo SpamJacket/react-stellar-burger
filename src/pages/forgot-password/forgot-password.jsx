@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./forgot-password.module.css";
 
@@ -7,11 +8,31 @@ import {
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import request from "../../utils/api.js";
+
 const ForgotPassword = () => {
+  const navigate = useNavigate();
   const [emailValue, setEmailValue] = React.useState("");
 
   const onEmailChange = (e) => {
     setEmailValue(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    request("/password-reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailValue,
+      }),
+    }).then(() => {
+      localStorage.setItem("resetFlag", true);
+      navigate("/reset-password");
+    });
   };
 
   return (
@@ -31,6 +52,8 @@ const ForgotPassword = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
+          onClick={onSubmit}
+          disabled={!emailValue}
         >
           Восстановить
         </Button>
@@ -42,6 +65,7 @@ const ForgotPassword = () => {
           type="secondary"
           size="medium"
           extraClass={styles.link}
+          onClick={() => navigate("/login")}
         >
           Войти
         </Button>

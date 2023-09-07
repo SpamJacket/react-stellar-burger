@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./register.module.css";
 
@@ -9,7 +11,13 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import { addUser } from "../../services/actions/user.js";
+import request from "../../utils/api.js";
+
 const Register = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [nameValue, setNameValue] = React.useState("");
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
@@ -24,6 +32,31 @@ const Register = () => {
 
   const onPasswordChange = (e) => {
     setPasswordValue(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    request("/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailValue,
+        password: passwordValue,
+        name: nameValue,
+      }),
+    })
+      .then((res) => {
+        dispatch(addUser(res.user));
+        localStorage.setItem("refreshToken", res.refreshToken);
+        localStorage.setItem("accessToken", res.accessToken);
+      })
+      .then(() => {
+        navigate("/profile");
+      })
+      .catch((err) => Promise.reject(err));
   };
 
   return (
@@ -57,6 +90,8 @@ const Register = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
+          onClick={onSubmit}
+          disabled={!nameValue || !emailValue || !passwordValue}
         >
           Зарегистрироваться
         </Button>
@@ -68,6 +103,9 @@ const Register = () => {
           type="secondary"
           size="medium"
           extraClass={styles.link}
+          onClick={() => {
+            navigate("/login");
+          }}
         >
           Войти
         </Button>

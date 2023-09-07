@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import styles from "./reset-password.module.css";
 
@@ -8,7 +9,11 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import request, { fetchWithRefresh } from "../../utils/api.js";
+
 const ResetPassword = () => {
+  const navigate = useNavigate();
+
   const [passwordValue, setPasswordValue] = React.useState("");
   const [codeValue, setCodeValue] = React.useState("");
 
@@ -19,6 +24,30 @@ const ResetPassword = () => {
   const onCodeChange = (e) => {
     setCodeValue(e.target.value);
   };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    fetchWithRefresh("/password-reset/reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: passwordValue,
+        token: codeValue,
+      }),
+    })
+      .then(() => {
+        localStorage.removeItem("resetFlag");
+        navigate("/login");
+      })
+      .catch((err) => Promise.reject(err));
+  };
+
+  if (!localStorage.getItem("resetFlag")) {
+    return <Navigate to="/" replace={true} />;
+  }
 
   return (
     <div className={styles.container}>
@@ -45,6 +74,7 @@ const ResetPassword = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
+          onClick={onSubmit}
         >
           Сохранить
         </Button>
@@ -56,6 +86,10 @@ const ResetPassword = () => {
           type="secondary"
           size="medium"
           extraClass={styles.link}
+          onClick={() => {
+            localStorage.removeItem("resetFlag");
+            navigate("/login");
+          }}
         >
           Войти
         </Button>
