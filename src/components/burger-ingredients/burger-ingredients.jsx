@@ -23,7 +23,6 @@ const BurgerIngredients = () => {
 
   const [current, setCurrent] = React.useState("Buns");
 
-  const containerRef = React.useRef();
   const bunsHeaderRef = React.useRef();
   const saucesHeaderRef = React.useRef();
   const mainsHeaderRef = React.useRef();
@@ -52,14 +51,6 @@ const BurgerIngredients = () => {
       setCurrent("Buns");
     }
   };
-
-  React.useEffect(() => {
-    containerRef.current.addEventListener("scroll", updateTab);
-
-    return () => {
-      containerRef.current.removeEventListener("scroll", updateTab);
-    };
-  }, []);
 
   const ingredientsId = React.useMemo(() => {
     const ingredients = {};
@@ -139,7 +130,7 @@ const BurgerIngredients = () => {
           Начинки
         </Tab>
       </div>
-      <div ref={containerRef} className={styles.ingredients}>
+      <div onScroll={updateTab} className={styles.ingredients}>
         {ingredientsFailed ? (
           <h2 className={styles.errorTitle}>
             Произошла ошибка! Перезагрузите страницу

@@ -20,7 +20,7 @@
   margin-left: 288px;
 }
 
-.button {
+/* .button {
   cursor: pointer;
   background-color: transparent;
   border: none;
@@ -35,6 +35,26 @@
 }
 
 .link_inactive {
+  composes: link;
+  composes: text_color_inactive from global;
+} */
+
+.link {
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  display: flex;
+  align-items: center;
+  composes: pl-5 pr-5 pt-4 pb-4 from global;
+}
+
+.text {
+  composes: pl-2 text text_type_main-default from global;
+}
+
+.inactiveLink {
   composes: link;
   composes: text_color_inactive from global;
 }

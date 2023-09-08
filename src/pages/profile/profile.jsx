@@ -8,6 +8,7 @@ import {
   Input,
   EmailInput,
   PasswordInput,
+  Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { fetchWithRefresh } from "../../utils/api";
@@ -99,7 +100,6 @@ const Profile = () => {
           value={nameValue}
           name={"name"}
           size={"default"}
-          extraClass={styles.fromChild}
         />
         <EmailInput
           placeholder="Логин"
@@ -107,7 +107,6 @@ const Profile = () => {
           isIcon={true}
           value={emailValue}
           name={"email"}
-          extraClass={styles.fromChild}
         />
         <PasswordInput
           placeholder="Пароль"
@@ -115,8 +114,20 @@ const Profile = () => {
           value={passwordValue}
           name={"password"}
           icon="EditIcon"
-          extraClass={styles.fromChild}
         />
+        <div className={styles.buttons}>
+          <Button
+            htmlType="button"
+            type="secondary"
+            size="medium"
+            extraClass={styles.cancelButton}
+          >
+            Отмена
+          </Button>
+          <Button htmlType="button" type="primary" size="medium">
+            Сохранить
+          </Button>
+        </div>
       </form>
     </div>
   );

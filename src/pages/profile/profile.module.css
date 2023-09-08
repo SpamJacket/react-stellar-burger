@@ -19,11 +19,8 @@
 }
 
 .activeLink {
+  composes: link;
   color: inherit;
-  text-decoration: none;
-  display: block;
-  padding: 17px 0;
-  composes: text text_type_main-medium from global;
 }
 
 .text {
@@ -37,5 +34,12 @@
   row-gap: 24px;
 }
 
-.formChild {
+.buttons {
+  align-self: end;
+  display: flex;
+  column-gap: 20px;
+}
+
+.cancelButton {
+  padding: 16px 8px;
 }
