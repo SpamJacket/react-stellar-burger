@@ -18,11 +18,11 @@ const store = createStore(rootReducer, enhancer);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <Router>
+    <Router>
+      <Provider store={store}>
         <App />
-      </Router>
-    </Provider>
+      </Provider>
+    </Router>
   </React.StrictMode>
 );
 

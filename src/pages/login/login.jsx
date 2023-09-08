@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./login.module.css";
 
 import request from "../../utils/api.js";
-import { addUser } from "../../services/actions/user.js";
+import { setUser } from "../../services/actions/user.js";
 
 import {
   Button,
@@ -42,13 +42,13 @@ const Login = () => {
       }),
     })
       .then((res) => {
-        dispatch(addUser(res.user));
+        dispatch(setUser(res.user));
         localStorage.setItem("refreshToken", res.refreshToken);
         localStorage.setItem("accessToken", res.accessToken);
       })
-      .then(() => {
-        navigate("/profile");
-      })
+      // .then(() => {
+      //   navigate("/profile");
+      // })
       .catch((err) => Promise.reject(err));
   };
 

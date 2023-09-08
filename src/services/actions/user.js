@@ -1,14 +1,15 @@
-import { ADD_USER, DELETE_USER } from "../../utils/constants.js";
+import { SET_USER, SET_AUTH_CHECKED } from "../../utils/constants.js";
 
-export const addUser = (user) => {
+export const setUser = (user) => {
   return {
-    type: ADD_USER,
+    type: SET_USER,
     user,
   };
 };
 
-export const deleteUser = () => {
+export const setAuthChecked = (value) => {
   return {
-    type: DELETE_USER,
+    type: SET_AUTH_CHECKED,
+    payload: value,
   };
 };

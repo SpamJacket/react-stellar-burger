@@ -11,7 +11,7 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { addUser } from "../../services/actions/user.js";
+import { setUser } from "../../services/actions/user.js";
 import request from "../../utils/api.js";
 
 const Register = () => {
@@ -49,13 +49,13 @@ const Register = () => {
       }),
     })
       .then((res) => {
-        dispatch(addUser(res.user));
+        dispatch(setUser(res.user));
         localStorage.setItem("refreshToken", res.refreshToken);
         localStorage.setItem("accessToken", res.accessToken);
       })
-      .then(() => {
-        navigate("/profile");
-      })
+      // .then(() => {
+      //   navigate("/profile");
+      // })
       .catch((err) => Promise.reject(err));
   };
 

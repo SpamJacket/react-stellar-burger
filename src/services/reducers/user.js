@@ -1,19 +1,22 @@
-import { ADD_USER, DELETE_USER } from "../../utils/constants.js";
+import { SET_USER, SET_AUTH_CHECKED } from "../../utils/constants.js";
 
 const initialState = {
-  name: null,
-  email: null,
+  user: null,
+  isAuthChecked: false,
 };
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_USER:
+    case SET_USER:
       return {
-        name: action.user.name,
-        email: action.user.email,
+        ...state,
+        user: action.user,
       };
-    case DELETE_USER:
-      return initialState;
+    case SET_AUTH_CHECKED:
+      return {
+        ...state,
+        isAuthChecked: action.payload,
+      };
     default:
       return state;
   }

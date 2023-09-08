@@ -12,7 +12,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { fetchWithRefresh } from "../../utils/api";
-import { deleteUser } from "../../services/actions/user";
+import { setUser } from "../../services/actions/user";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -55,8 +55,8 @@ const Profile = () => {
       .then(() => {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("accessToken");
-        dispatch(deleteUser());
-        navigate("/login");
+        dispatch(setUser(null));
+        // navigate("/login");
       })
       .catch((err) => Promise.reject(err));
   };
