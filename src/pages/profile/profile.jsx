@@ -1,6 +1,6 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 import styles from "./profile.module.css";
 
@@ -16,7 +16,7 @@ import { setUser } from "../../services/actions/user";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { user } = useSelector((store) => store.user);
 
   const [nameValue, setNameValue] = React.useState("");
   const [isNameDisabled, setIsNameDisabled] = React.useState(true);
@@ -56,10 +56,46 @@ const Profile = () => {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("accessToken");
         dispatch(setUser(null));
-        // navigate("/login");
       })
       .catch((err) => Promise.reject(err));
   };
+
+  const cancelChanges = () => {
+    setNameValue(user.name);
+    setEmailValue(user.email);
+    setPasswordValue("");
+  };
+
+  const saveChanges = (e) => {
+    e.preventDefault();
+
+    const body =
+      passwordValue === ""
+        ? {
+            email: emailValue,
+            name: nameValue,
+          }
+        : {
+            email: emailValue,
+            name: nameValue,
+            password: passwordValue,
+          };
+
+    fetchWithRefresh("/auth/user", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("accessToken"),
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => dispatch(setUser(res.user)))
+      .catch((err) => Promise.reject(err));
+  };
+
+  React.useEffect(() => {
+    cancelChanges();
+  }, [user]);
 
   return (
     <div className={styles.container}>
@@ -121,10 +157,16 @@ const Profile = () => {
             type="secondary"
             size="medium"
             extraClass={styles.cancelButton}
+            onClick={cancelChanges}
           >
             Отмена
           </Button>
-          <Button htmlType="button" type="primary" size="medium">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="medium"
+            onClick={(e) => saveChanges(e)}
+          >
             Сохранить
           </Button>
         </div>

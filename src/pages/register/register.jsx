@@ -53,9 +53,6 @@ const Register = () => {
         localStorage.setItem("refreshToken", res.refreshToken);
         localStorage.setItem("accessToken", res.accessToken);
       })
-      // .then(() => {
-      //   navigate("/profile");
-      // })
       .catch((err) => Promise.reject(err));
   };
 
