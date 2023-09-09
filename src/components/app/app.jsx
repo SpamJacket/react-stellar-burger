@@ -14,6 +14,8 @@ import Profile from "../../pages/profile/profile.jsx";
 import Modal from "../modal/modal.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route.jsx";
+import ProfileForm from "../profile-form/profile-form.jsx";
+import ProfileOrders from "../profile-orders/profile-orders.jsx";
 
 import { fetchWithRefresh } from "../../utils/api";
 import { setAuthChecked, setUser } from "../../services/actions/user";
@@ -69,7 +71,15 @@ const App = () => {
           path="/reset-password"
           element={<OnlyUnAuth component={<ResetPassword />} />}
         />
-        <Route path="/profile" element={<OnlyAuth component={<Profile />} />} />
+        <Route path="/orders-list" element={<h2>Список заказов</h2>} />
+        <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
+          <Route path="" element={<ProfileForm />} />
+          <Route path="orders" element={<ProfileOrders />} />
+          <Route
+            path="orders/:orderId"
+            element={<h2>Список заказов пользователя</h2>}
+          />
+        </Route>
       </Routes>
 
       {previousPage && (

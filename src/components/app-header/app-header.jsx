@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useMatch } from "react-router-dom";
 
 import styles from "./app-header.module.css";
 
@@ -10,9 +10,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const AppHeader = () => {
-  const location = useLocation();
-  const iconType = (endpoint) =>
-    location.pathname === endpoint ? "primary" : "secondary";
+  const isConstructor = useMatch("/");
+  const isOrdersList = useMatch("/orders-list");
+  const isProfile = useMatch("/profile/*");
 
   return (
     <header className={styles.header}>
@@ -25,7 +25,7 @@ const AppHeader = () => {
             isActive ? styles.link : styles.inactiveLink
           }
         >
-          <BurgerIcon type={iconType("/")} />
+          <BurgerIcon type={isConstructor ? "primary" : "secondary"} />
           <p className={styles.text}>Конструктор</p>
         </NavLink>
         <NavLink
@@ -36,7 +36,7 @@ const AppHeader = () => {
             isActive ? styles.link : styles.inactiveLink
           }
         >
-          <ListIcon type={iconType("/order-list")} />
+          <ListIcon type={isOrdersList ? "primary" : "secondary"} />
           <p className={styles.text}>Лента заказов</p>
         </NavLink>
       </nav>
@@ -50,7 +50,7 @@ const AppHeader = () => {
             isActive ? styles.link : styles.inactiveLink
           }
         >
-          <ProfileIcon type={iconType("/profile")} />
+          <ProfileIcon type={isProfile ? "primary" : "secondary"} />
           <p className={styles.text}>Личный кабинет</p>
         </NavLink>
       </nav>
