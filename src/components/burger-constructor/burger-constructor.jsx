@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 
@@ -23,7 +24,9 @@ import {
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const { user } = useSelector((store) => store.user);
   const { bun, filings } = useSelector((store) => store.constructorList);
 
   const { orderRequest, orderFailed } = useSelector(
@@ -51,11 +54,15 @@ const BurgerConstructor = () => {
   const [isModalOpened, setIsModalOpened] = React.useState(false);
 
   const handleOrderButtonClick = () => {
-    const ingredientsId = [bun._id];
-    filings.forEach((filing) => ingredientsId.push(filing._id));
-    dispatch(placeOrder(ingredientsId));
-    setIsModalOpened(true);
-    dispatch(cleanConstructorList());
+    if (user) {
+      const ingredientsId = [bun._id];
+      filings.forEach((filing) => ingredientsId.push(filing._id));
+      dispatch(placeOrder(ingredientsId));
+      setIsModalOpened(true);
+      dispatch(cleanConstructorList());
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleCloseModal = () => {

@@ -13,7 +13,10 @@ export const placeOrder = (ingredients) => {
     });
     request(endpoints.ordersUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("accessToken"),
+      },
       body: JSON.stringify({ ingredients }),
     })
       .then((res) => {
