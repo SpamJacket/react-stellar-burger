@@ -16,6 +16,7 @@ import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route.jsx";
 import ProfileForm from "../profile-form/profile-form.jsx";
 import ProfileOrders from "../profile-orders/profile-orders.jsx";
+import NotFound from "../../pages/not-found/not-found.jsx";
 
 import { fetchWithRefresh } from "../../utils/api";
 import { setAuthChecked, setUser } from "../../services/actions/user";
@@ -80,6 +81,7 @@ const App = () => {
             element={<h2>Список заказов пользователя</h2>}
           />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {previousPage && (
