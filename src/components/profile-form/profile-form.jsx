@@ -12,20 +12,24 @@ import {
 
 import { fetchWithRefresh } from "../../utils/api";
 import { setUser } from "../../services/actions/user";
+import useForm from "../../hooks/useForm";
 
 const ProfileForm = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.user);
 
-  const [nameValue, setNameValue] = React.useState("");
+  const { values, handleChange, setValues } = useForm({
+    name: "",
+    email: "",
+    password: "",
+  });
+
   const [isNameDisabled, setIsNameDisabled] = React.useState(true);
-  const [emailValue, setEmailValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("");
 
   const inputRef = React.useRef(null);
 
-  const onNameChange = (e) => {
-    setNameValue(e.target.value);
+  const onInputChange = (e) => {
+    handleChange(e);
   };
 
   const onIconClick = () => {
@@ -33,27 +37,19 @@ const ProfileForm = () => {
     setIsNameDisabled(false);
   };
 
-  const onEmailChange = (e) => {
-    setEmailValue(e.target.value);
-  };
-
-  const onPasswordChange = (e) => {
-    setPasswordValue(e.target.value);
-  };
-
   const saveChanges = (e) => {
     e.preventDefault();
 
     const body =
-      passwordValue === ""
+      values.password === ""
         ? {
-            email: emailValue,
-            name: nameValue,
+            email: values.email,
+            name: values.name,
           }
         : {
-            email: emailValue,
-            name: nameValue,
-            password: passwordValue,
+            email: values.email,
+            name: values.name,
+            password: values.password,
           };
 
     fetchWithRefresh("/auth/user", {
@@ -69,9 +65,11 @@ const ProfileForm = () => {
   };
 
   const cancelChanges = () => {
-    setNameValue(user.name);
-    setEmailValue(user.email);
-    setPasswordValue("");
+    setValues({
+      name: user.name,
+      email: user.email,
+      password: "",
+    });
   };
 
   React.useEffect(() => {
@@ -79,39 +77,39 @@ const ProfileForm = () => {
   }, [user]);
 
   const haveChanges = () => {
-    return nameValue !== user.name ||
-      emailValue !== user.email ||
-      passwordValue !== ""
+    return values.name !== user.name ||
+      values.email !== user.email ||
+      values.password !== ""
       ? true
       : false;
   };
 
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={saveChanges}>
       <Input
         type={"text"}
         placeholder="Имя"
-        onChange={onNameChange}
+        onChange={onInputChange}
         ref={inputRef}
         icon={"EditIcon"}
         onIconClick={onIconClick}
         disabled={isNameDisabled}
         onBlur={() => setIsNameDisabled(true)}
-        value={nameValue}
+        value={values.name}
         name={"name"}
         size={"default"}
       />
       <EmailInput
         placeholder="Логин"
-        onChange={onEmailChange}
+        onChange={onInputChange}
         isIcon={true}
-        value={emailValue}
+        value={values.email}
         name={"email"}
       />
       <PasswordInput
         placeholder="Пароль"
-        onChange={onPasswordChange}
-        value={passwordValue}
+        onChange={onInputChange}
+        value={values.password}
         name={"password"}
         icon="EditIcon"
       />
@@ -126,12 +124,7 @@ const ProfileForm = () => {
           >
             Отмена
           </Button>
-          <Button
-            htmlType="submit"
-            type="primary"
-            size="medium"
-            onClick={(e) => saveChanges(e)}
-          >
+          <Button htmlType="submit" type="primary" size="medium">
             Сохранить
           </Button>
         </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 import styles from "./reset-password.module.css";
@@ -9,20 +8,19 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import request, { fetchWithRefresh } from "../../utils/api.js";
+import { fetchWithRefresh } from "../../utils/api.js";
+import useForm from "../../hooks/useForm.js";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
 
-  const [passwordValue, setPasswordValue] = React.useState("");
-  const [codeValue, setCodeValue] = React.useState("");
+  const { values, handleChange } = useForm({
+    password: "",
+    code: "",
+  });
 
-  const onPasswordChange = (e) => {
-    setPasswordValue(e.target.value);
-  };
-
-  const onCodeChange = (e) => {
-    setCodeValue(e.target.value);
+  const onInputChange = (e) => {
+    handleChange(e);
   };
 
   const onSubmit = (e) => {
@@ -34,8 +32,8 @@ const ResetPassword = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        password: passwordValue,
-        token: codeValue,
+        password: values.password,
+        token: values.code,
       }),
     })
       .then(() => {
@@ -52,18 +50,18 @@ const ResetPassword = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Восстановление пароля</h2>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <PasswordInput
-          onChange={onPasswordChange}
-          value={passwordValue}
+          onChange={onInputChange}
+          value={values.password}
           name={"password"}
           placeholder="Введите новый пароль"
           extraClass={styles.formChild}
         />
         <Input
           type="text"
-          onChange={onCodeChange}
-          value={codeValue}
+          onChange={onInputChange}
+          value={values.code}
           name={"code"}
           placeholder="Введите код из письма"
           size={"default"}
@@ -74,7 +72,7 @@ const ResetPassword = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
-          onClick={onSubmit}
+          disabled={!values.code || !values.password}
         >
           Сохранить
         </Button>

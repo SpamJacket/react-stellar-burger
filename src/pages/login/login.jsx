@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +5,7 @@ import styles from "./login.module.css";
 
 import request from "../../utils/api.js";
 import { setUser } from "../../services/actions/user.js";
+import useForm from "../../hooks/useForm.js";
 
 import {
   Button,
@@ -17,15 +17,13 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [emailValue, setEmailValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("");
+  const { values, handleChange } = useForm({
+    email: "",
+    password: "",
+  });
 
-  const onEmailChange = (e) => {
-    setEmailValue(e.target.value);
-  };
-
-  const onPasswordChange = (e) => {
-    setPasswordValue(e.target.value);
+  const onInputChange = (e) => {
+    handleChange(e);
   };
 
   const onSubmit = (e) => {
@@ -37,8 +35,8 @@ const Login = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: emailValue,
-        password: passwordValue,
+        email: values.email,
+        password: values.password,
       }),
     })
       .then((res) => {
@@ -52,17 +50,17 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Вход</h2>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <EmailInput
-          onChange={onEmailChange}
-          value={emailValue}
+          onChange={onInputChange}
+          value={values.email}
           name={"email"}
           isIcon={false}
           extraClass={styles.formChild}
         />
         <PasswordInput
-          onChange={onPasswordChange}
-          value={passwordValue}
+          onChange={onInputChange}
+          value={values.password}
           name={"password"}
           extraClass={styles.formChild}
         />
@@ -71,8 +69,7 @@ const Login = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
-          onClick={onSubmit}
-          disabled={!emailValue || !passwordValue}
+          disabled={!values.email || !values.password}
         >
           Войти
         </Button>

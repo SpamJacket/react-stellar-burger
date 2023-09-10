@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./forgot-password.module.css";
@@ -9,13 +8,17 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import request from "../../utils/api.js";
+import useForm from "../../hooks/useForm.js";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [emailValue, setEmailValue] = React.useState("");
 
-  const onEmailChange = (e) => {
-    setEmailValue(e.target.value);
+  const { values, handleChange } = useForm({
+    email: "",
+  });
+
+  const onInputChange = (e) => {
+    handleChange(e);
   };
 
   const onSubmit = (e) => {
@@ -27,7 +30,7 @@ const ForgotPassword = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: emailValue,
+        email: values.email,
       }),
     }).then(() => {
       localStorage.setItem("resetFlag", true);
@@ -38,10 +41,10 @@ const ForgotPassword = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Восстановление пароля</h2>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <EmailInput
-          onChange={onEmailChange}
-          value={emailValue}
+          onChange={onInputChange}
+          value={values.email}
           name={"email"}
           placeholder="Укажите e-mail"
           isIcon={false}
@@ -52,8 +55,7 @@ const ForgotPassword = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
-          onClick={onSubmit}
-          disabled={!emailValue}
+          disabled={!values.email}
         >
           Восстановить
         </Button>

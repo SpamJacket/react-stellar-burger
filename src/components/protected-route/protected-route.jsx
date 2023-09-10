@@ -30,7 +30,7 @@ export const OnlyUnAuth = ({ component }) => (
 );
 
 Protected.propTypes = {
-  onlyUnAuth: PropTypes.bool.isRequired,
+  onlyUnAuth: PropTypes.bool,
   component: PropTypes.element.isRequired,
 };
 

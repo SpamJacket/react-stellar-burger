@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -13,25 +12,20 @@ import {
 
 import { setUser } from "../../services/actions/user.js";
 import request from "../../utils/api.js";
+import useForm from "../../hooks/useForm.js";
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [nameValue, setNameValue] = React.useState("");
-  const [emailValue, setEmailValue] = React.useState("");
-  const [passwordValue, setPasswordValue] = React.useState("");
+  const { values, handleChange } = useForm({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const onNameChange = (e) => {
-    setNameValue(e.target.value);
-  };
-
-  const onEmailChange = (e) => {
-    setEmailValue(e.target.value);
-  };
-
-  const onPasswordChange = (e) => {
-    setPasswordValue(e.target.value);
+  const onInputChange = (e) => {
+    handleChange(e);
   };
 
   const onSubmit = (e) => {
@@ -43,9 +37,9 @@ const Register = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: emailValue,
-        password: passwordValue,
-        name: nameValue,
+        email: values.email,
+        password: values.password,
+        name: values.name,
       }),
     })
       .then((res) => {
@@ -59,26 +53,26 @@ const Register = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Регистрация</h2>
-      <form className={styles.form}>
+      <form className={styles.form} onSubmit={onSubmit}>
         <Input
           type="text"
-          onChange={onNameChange}
-          value={nameValue}
+          onChange={onInputChange}
+          value={values.name}
           name={"name"}
           placeholder="Имя"
           size={"default"}
           extraClass={styles.formChild}
         />
         <EmailInput
-          onChange={onEmailChange}
-          value={emailValue}
+          onChange={onInputChange}
+          value={values.email}
           name={"email"}
           isIcon={false}
           extraClass={styles.formChild}
         />
         <PasswordInput
-          onChange={onPasswordChange}
-          value={passwordValue}
+          onChange={onInputChange}
+          value={values.password}
           name={"password"}
           extraClass={styles.formChild}
         />
@@ -87,8 +81,7 @@ const Register = () => {
           type="primary"
           size="medium"
           extraClass={styles.formChild}
-          onClick={onSubmit}
-          disabled={!nameValue || !emailValue || !passwordValue}
+          disabled={!values.name || !values.email || !values.password}
         >
           Зарегистрироваться
         </Button>
