@@ -8,8 +8,8 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { fetchWithRefresh } from "../../utils/api.js";
 import useForm from "../../hooks/useForm.js";
+import { handleResetPassword } from "../../services/actions/user.js";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -25,22 +25,7 @@ const ResetPassword = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    fetchWithRefresh("/password-reset/reset", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        password: values.password,
-        token: values.code,
-      }),
-    })
-      .then(() => {
-        localStorage.removeItem("resetFlag");
-        navigate("/login");
-      })
-      .catch((err) => Promise.reject(err));
+    handleResetPassword(values).finally(() => navigate("/login"));
   };
 
   if (!localStorage.getItem("resetFlag")) {

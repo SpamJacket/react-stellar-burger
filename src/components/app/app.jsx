@@ -18,8 +18,7 @@ import ProfileForm from "../profile-form/profile-form.jsx";
 import ProfileOrders from "../profile-orders/profile-orders.jsx";
 import NotFound from "../../pages/not-found/not-found.jsx";
 
-import { fetchWithRefresh } from "../../utils/api";
-import { setAuthChecked, setUser } from "../../services/actions/user";
+import { getUser, setAuthChecked } from "../../services/actions/user";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,22 +28,7 @@ const App = () => {
 
   React.useEffect(() => {
     if (localStorage.getItem("accessToken")) {
-      fetchWithRefresh("/auth/user", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: localStorage.getItem("accessToken"),
-        },
-      })
-        .then((res) => {
-          dispatch(setUser(res.user));
-        })
-        .catch(() => {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          dispatch(setUser(null));
-        })
-        .finally(() => dispatch(setAuthChecked(true)));
+      dispatch(getUser());
     } else {
       dispatch(setAuthChecked(true));
     }

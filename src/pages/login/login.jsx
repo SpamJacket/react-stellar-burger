@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./login.module.css";
 
-import request from "../../utils/api.js";
-import { setUser } from "../../services/actions/user.js";
 import useForm from "../../hooks/useForm.js";
+
+import { loginUser } from "../../services/actions/user.js";
 
 import {
   Button,
@@ -28,23 +28,7 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    request("/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: values.email,
-        password: values.password,
-      }),
-    })
-      .then((res) => {
-        dispatch(setUser(res.user));
-        localStorage.setItem("refreshToken", res.refreshToken);
-        localStorage.setItem("accessToken", res.accessToken);
-      })
-      .catch((err) => Promise.reject(err));
+    dispatch(loginUser(values));
   };
 
   return (

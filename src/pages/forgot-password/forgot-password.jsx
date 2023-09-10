@@ -7,8 +7,8 @@ import {
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import request from "../../utils/api.js";
 import useForm from "../../hooks/useForm.js";
+import { handleForgotPassword } from "../../services/actions/user.js";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -23,19 +23,7 @@ const ForgotPassword = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    request("/password-reset", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: values.email,
-      }),
-    }).then(() => {
-      localStorage.setItem("resetFlag", true);
-      navigate("/reset-password");
-    });
+    handleForgotPassword(values).finally(() => navigate("/reset-password"));
   };
 
   return (

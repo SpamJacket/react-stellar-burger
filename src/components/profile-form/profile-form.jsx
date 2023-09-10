@@ -10,8 +10,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { fetchWithRefresh } from "../../utils/api";
-import { setUser } from "../../services/actions/user";
+import { updateUser } from "../../services/actions/user";
 import useForm from "../../hooks/useForm";
 
 const ProfileForm = () => {
@@ -39,29 +38,7 @@ const ProfileForm = () => {
 
   const saveChanges = (e) => {
     e.preventDefault();
-
-    const body =
-      values.password === ""
-        ? {
-            email: values.email,
-            name: values.name,
-          }
-        : {
-            email: values.email,
-            name: values.name,
-            password: values.password,
-          };
-
-    fetchWithRefresh("/auth/user", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: localStorage.getItem("accessToken"),
-      },
-      body: JSON.stringify(body),
-    })
-      .then((res) => dispatch(setUser(res.user)))
-      .catch((err) => Promise.reject(err));
+    dispatch(updateUser(values));
   };
 
   const cancelChanges = () => {

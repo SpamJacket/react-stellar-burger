@@ -10,8 +10,7 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { setUser } from "../../services/actions/user.js";
-import request from "../../utils/api.js";
+import { registerUser } from "../../services/actions/user.js";
 import useForm from "../../hooks/useForm.js";
 
 const Register = () => {
@@ -30,24 +29,7 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    request("/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: values.email,
-        password: values.password,
-        name: values.name,
-      }),
-    })
-      .then((res) => {
-        dispatch(setUser(res.user));
-        localStorage.setItem("refreshToken", res.refreshToken);
-        localStorage.setItem("accessToken", res.accessToken);
-      })
-      .catch((err) => Promise.reject(err));
+    dispatch(registerUser(values));
   };
 
   return (

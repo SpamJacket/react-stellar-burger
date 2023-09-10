@@ -3,28 +3,14 @@ import { NavLink, Outlet } from "react-router-dom";
 
 import styles from "./profile.module.css";
 
-import { fetchWithRefresh } from "../../utils/api";
-import { setUser } from "../../services/actions/user";
+import { logoutUser } from "../../services/actions/user.js";
 
 const Profile = () => {
   const dispatch = useDispatch();
 
   const handleLogout = (e) => {
-    fetchWithRefresh("/auth/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: localStorage.getItem("refreshToken"),
-      }),
-    })
-      .then(() => {
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("accessToken");
-        dispatch(setUser(null));
-      })
-      .catch((err) => Promise.reject(err));
+    e.preventDefault();
+    dispatch(logoutUser());
   };
 
   return (
