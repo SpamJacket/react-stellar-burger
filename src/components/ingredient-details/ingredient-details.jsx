@@ -1,13 +1,13 @@
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import styles from "./ingredient-details.module.css";
 
 const IngredientDetails = () => {
   const { ingredients } = useSelector((store) => store.ingredientsList);
-  const location = useLocation();
+  const { ingredientId } = useParams();
   const ingredient = ingredients.find(
-    (ingredient) => ingredient._id === location.pathname.slice(13)
+    (ingredient) => ingredient._id === ingredientId
   );
 
   return (

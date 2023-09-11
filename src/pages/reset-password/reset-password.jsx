@@ -1,4 +1,5 @@
 import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import styles from "./reset-password.module.css";
 
@@ -12,6 +13,7 @@ import useForm from "../../hooks/useForm.js";
 import { handleResetPassword } from "../../services/actions/user.js";
 
 const ResetPassword = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { values, handleChange } = useForm({
@@ -25,7 +27,8 @@ const ResetPassword = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    handleResetPassword(values).finally(() => navigate("/login"));
+    dispatch(handleResetPassword(values));
+    navigate("/login");
   };
 
   if (!localStorage.getItem("resetFlag")) {

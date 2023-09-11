@@ -1,7 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-
-import { getIngredients } from "../../services/actions/burger-ingredients.js";
+import { useSelector } from "react-redux";
 
 import styles from "./burger-ingredients.module.css";
 
@@ -9,17 +7,11 @@ import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const BurgerIngredients = () => {
-  const dispatch = useDispatch();
-
   const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(
     (store) => store.ingredientsList
   );
 
   const { bun, filings } = useSelector((store) => store.constructorList);
-
-  React.useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
 
   const [current, setCurrent] = React.useState("Buns");
 
@@ -73,7 +65,7 @@ const BurgerIngredients = () => {
         if (ingredient.type === type) {
           return (
             <BurgerIngredient
-              key={index}
+              key={ingredient._id}
               ingredientData={ingredient}
               counter={ingredientsId[ingredient._id] ?? 0}
             />

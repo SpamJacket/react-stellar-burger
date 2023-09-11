@@ -32,7 +32,7 @@ export const loginUser = ({ email, password }) => {
         localStorage.setItem("refreshToken", res.refreshToken);
         localStorage.setItem("accessToken", res.accessToken);
       })
-      .catch((err) => Promise.reject(err));
+      .catch(console.error);
   };
 };
 
@@ -52,7 +52,7 @@ export const logoutUser = () => {
         localStorage.removeItem("accessToken");
         dispatch(setUser(null));
       })
-      .catch((err) => Promise.reject(err));
+      .catch(console.error);
   };
 };
 
@@ -74,35 +74,39 @@ export const registerUser = ({ email, password, name }) => {
         localStorage.setItem("refreshToken", res.refreshToken);
         localStorage.setItem("accessToken", res.accessToken);
       })
-      .catch((err) => Promise.reject(err));
+      .catch(console.error);
   };
 };
 
-export const handleForgotPassword = async ({ email }) => {
-  return request("/password-reset", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email }),
-  })
-    .then(() => localStorage.setItem("resetFlag", true))
-    .catch((err) => Promise.reject(err));
+export const handleForgotPassword = ({ email }) => {
+  return (dispatch) => {
+    request("/password-reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then(() => localStorage.setItem("resetFlag", true))
+      .catch(console.error);
+  };
 };
 
-export const handleResetPassword = async ({ password, code }) => {
-  return fetchWithRefresh("/password-reset/reset", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      password,
-      token: code,
-    }),
-  })
-    .then(() => localStorage.removeItem("resetFlag"))
-    .catch((err) => Promise.reject(err));
+export const handleResetPassword = ({ password, code }) => {
+  return (dispatch) => {
+    fetchWithRefresh("/password-reset/reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password,
+        token: code,
+      }),
+    })
+      .then(() => localStorage.removeItem("resetFlag"))
+      .catch(console.error);
+  };
 };
 
 export const getUser = () => {
@@ -149,6 +153,6 @@ export const updateUser = ({ name, email, password }) => {
       body: JSON.stringify(body),
     })
       .then((res) => dispatch(setUser(res.user)))
-      .catch((err) => Promise.reject(err));
+      .catch(console.error);
   };
 };

@@ -5,7 +5,6 @@ import { useDrop } from "react-dnd";
 
 import {
   addToConstructorList,
-  cleanConstructorList,
   setFilings,
 } from "../../services/actions/burger-constructor.js";
 import { placeOrder } from "../../services/actions/order-details.js";
@@ -57,9 +56,7 @@ const BurgerConstructor = () => {
     if (user) {
       const ingredientsId = [bun._id];
       filings.forEach((filing) => ingredientsId.push(filing._id));
-      dispatch(placeOrder(ingredientsId));
-      setIsModalOpened(true);
-      dispatch(cleanConstructorList());
+      dispatch(placeOrder(ingredientsId, setIsModalOpened));
     } else {
       navigate("/login");
     }

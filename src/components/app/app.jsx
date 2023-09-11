@@ -17,8 +17,10 @@ import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route.jsx";
 import ProfileForm from "../profile-form/profile-form.jsx";
 import ProfileOrders from "../profile-orders/profile-orders.jsx";
 import NotFound from "../../pages/not-found/not-found.jsx";
+import IngredientDetailsPage from "../../pages/ingredient-details/ingredient-details";
 
-import { getUser, setAuthChecked } from "../../services/actions/user";
+import { getUser, setAuthChecked } from "../../services/actions/user.js";
+import { getIngredients } from "../../services/actions/burger-ingredients.js";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -33,6 +35,10 @@ const App = () => {
       dispatch(setAuthChecked(true));
     }
   }, []);
+
+  React.useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   const handleModalClose = () => {
     navigate(-1);
@@ -65,6 +71,10 @@ const App = () => {
             element={<h2>Список заказов пользователя</h2>}
           />
         </Route>
+        <Route
+          path="/ingredients/:ingredientId"
+          element={<IngredientDetailsPage />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

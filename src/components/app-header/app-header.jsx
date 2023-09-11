@@ -1,4 +1,4 @@
-import { NavLink, useMatch } from "react-router-dom";
+import { NavLink, useMatch, useNavigate } from "react-router-dom";
 
 import styles from "./app-header.module.css";
 
@@ -10,6 +10,8 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const AppHeader = () => {
+  const navigate = useNavigate();
+
   const isConstructor = useMatch("/");
   const isOrdersList = useMatch("/orders-list");
   const isProfile = useMatch("/profile/*");
@@ -40,7 +42,9 @@ const AppHeader = () => {
           <p className={styles.text}>Лента заказов</p>
         </NavLink>
       </nav>
-      <Logo />
+      <div className={styles.logo} onClick={() => navigate("/")}>
+        <Logo />
+      </div>
       <nav className={styles.navBar}>
         <NavLink
           to={"/profile"}

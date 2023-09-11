@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import styles from "./forgot-password.module.css";
 
@@ -11,6 +12,7 @@ import useForm from "../../hooks/useForm.js";
 import { handleForgotPassword } from "../../services/actions/user.js";
 
 const ForgotPassword = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { values, handleChange } = useForm({
@@ -23,7 +25,8 @@ const ForgotPassword = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    handleForgotPassword(values).finally(() => navigate("/reset-password"));
+    dispatch(handleForgotPassword(values));
+    navigate("/reset-password");
   };
 
   return (
