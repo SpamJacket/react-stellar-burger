@@ -15,9 +15,10 @@ import Modal from "../modal/modal.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route.jsx";
 import ProfileForm from "../profile-form/profile-form.jsx";
-import ProfileOrders from "../profile-orders/profile-orders.jsx";
+import OrdersList from "../orders-list/orders-list";
 import NotFound from "../../pages/not-found/not-found.jsx";
 import IngredientDetailsPage from "../../pages/ingredient-details/ingredient-details";
+import FeedPage from "../../pages/feed/feed.jsx";
 
 import { getUser, setAuthChecked } from "../../services/actions/user.js";
 import { getIngredients } from "../../services/actions/burger-ingredients.js";
@@ -62,14 +63,10 @@ const App = () => {
           path="/reset-password"
           element={<OnlyUnAuth component={<ResetPassword />} />}
         />
-        <Route path="/orders-list" element={<h2>Список заказов</h2>} />
+        <Route path="/feed" element={<FeedPage />} />
         <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
           <Route path="" element={<ProfileForm />} />
-          <Route path="orders" element={<ProfileOrders />} />
-          <Route
-            path="orders/:orderId"
-            element={<h2>Список заказов пользователя</h2>}
-          />
+          <Route path="orders" element={<OrdersList privateList={true} />} />
         </Route>
         <Route
           path="/ingredients/:ingredientId"

@@ -13,7 +13,7 @@ const AppHeader = () => {
   const navigate = useNavigate();
 
   const isConstructor = useMatch("/");
-  const isOrdersList = useMatch("/orders-list");
+  const isOrdersList = useMatch("/feed/*");
   const isProfile = useMatch("/profile/*");
 
   return (
@@ -31,7 +31,7 @@ const AppHeader = () => {
           <p className={styles.text}>Конструктор</p>
         </NavLink>
         <NavLink
-          to={"/orders-list"}
+          to={"/feed"}
           type="button"
           aria-label="Лента заказов"
           className={({ isActive }) =>

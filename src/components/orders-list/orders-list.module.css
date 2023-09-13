@@ -1,0 +1,22 @@
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  padding-left: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow-y: scroll;
+  composes: pr-2 custom-scroll from global;
+}
+
+.list::-webkit-scrollbar-track {
+  margin-bottom: 60px;
+}
+
+.privateList {
+  composes: list;
+  translate: 0 -80px;
+  height: calc(100% + 80px);
+  grid-column: 2 / span 2;
+}
