@@ -19,9 +19,11 @@ import OrdersList from "../orders-list/orders-list";
 import NotFound from "../../pages/not-found/not-found.jsx";
 import IngredientDetailsPage from "../../pages/ingredient-details/ingredient-details";
 import FeedPage from "../../pages/feed/feed.jsx";
+import OrderView from "../order-view/order-view";
 
 import { getUser, setAuthChecked } from "../../services/actions/user.js";
 import { getIngredients } from "../../services/actions/burger-ingredients.js";
+import OrderViewPage from "../../pages/order-view/order-view";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -72,6 +74,11 @@ const App = () => {
           path="/ingredients/:ingredientId"
           element={<IngredientDetailsPage />}
         />
+        <Route path="/feed/:orderId" element={<OrderViewPage />} />
+        <Route
+          path="/profile/orders/:orderId"
+          element={<OnlyAuth component={<OrderViewPage />} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
 
@@ -82,6 +89,22 @@ const App = () => {
             element={
               <Modal closeModal={handleModalClose}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:orderId"
+            element={
+              <Modal closeModal={handleModalClose}>
+                <OrderView />
+              </Modal>
+            }
+          />
+          <Route
+            path="/feed/:orderId"
+            element={
+              <Modal closeModal={handleModalClose}>
+                <OrderView />
               </Modal>
             }
           />

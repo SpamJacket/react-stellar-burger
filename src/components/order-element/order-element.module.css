@@ -6,6 +6,7 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: 24px 30px 64px;
   row-gap: 24px;
+  cursor: pointer;
 }
 
 .privateOrder {
@@ -102,6 +103,11 @@
   justify-content: right;
 }
 
-.coast {
+.cost {
   composes: pr-2 text text_type_digits-default from global;
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
 }

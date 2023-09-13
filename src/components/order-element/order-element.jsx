@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useLocation, useMatch } from "react-router-dom";
 
 import styles from "./order-element.module.css";
 
@@ -17,6 +18,8 @@ const imagesArray = [
 ];
 
 const OrderElement = ({ privateList }) => {
+  const location = useLocation();
+
   const images = React.useMemo(() => {
     return imagesArray.map((imageUrl, index) => {
       return index < 6 ? (
@@ -57,7 +60,15 @@ const OrderElement = ({ privateList }) => {
   });
 
   return (
-    <>
+    <Link
+      to={
+        location.pathname === "/feed"
+          ? `/feed/${123456}`
+          : `/profile/orders/${123456}`
+      }
+      state={{ previousPage: location }}
+      className={styles.link}
+    >
       {privateList ? (
         <li className={styles.privateOrder}>
           <div className={styles.title}>
@@ -68,7 +79,7 @@ const OrderElement = ({ privateList }) => {
           <p className={styles.status}>Создан</p>
           <div className={styles.images}>{images}</div>
           <p className={styles.price}>
-            <span className={styles.coast}>480</span>
+            <span className={styles.cost}>480</span>
             <CurrencyIcon type="primary" />
           </p>
         </li>
@@ -81,12 +92,12 @@ const OrderElement = ({ privateList }) => {
           <h3 className={styles.name}>Death Star Starship Main бургер</h3>
           <div className={styles.images}>{images}</div>
           <p className={styles.price}>
-            <span className={styles.coast}>480</span>
+            <span className={styles.cost}>480</span>
             <CurrencyIcon type="primary" />
           </p>
         </li>
       )}
-    </>
+    </Link>
   );
 };
 

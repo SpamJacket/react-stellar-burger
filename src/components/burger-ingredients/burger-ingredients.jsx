@@ -61,7 +61,7 @@ const BurgerIngredients = () => {
 
   const renderIngredients = React.useCallback(
     (type) => {
-      return ingredients.map((ingredient, index) => {
+      return ingredients.map((ingredient) => {
         if (ingredient.type === type) {
           return (
             <BurgerIngredient
