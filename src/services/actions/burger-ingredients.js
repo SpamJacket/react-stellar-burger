@@ -22,7 +22,7 @@ export const getIngredients = () => {
         dispatch({
           type: GET_INGREDIENTS_FAILED,
         });
-        console.log(err);
+        console.error(err);
       });
   };
 };

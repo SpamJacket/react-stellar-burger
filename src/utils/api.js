@@ -1,11 +1,7 @@
 import { BASE_URL } from "./constants.js";
 
 const checkResponse = (res) => {
-  if (res.ok) {
-    return res.json();
-  }
-
-  return Promise.reject(`Ошибка: ${res.status}`);
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
 const checkSuccess = (res) => {
@@ -20,6 +16,37 @@ const request = async (endpoint, options) => {
   return await fetch(BASE_URL + endpoint, options)
     .then(checkResponse)
     .then(checkSuccess);
+};
+
+const refreshToken = () => {
+  return request("/auth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+    },
+    body: JSON.stringify({
+      token: localStorage.getItem("refreshToken"),
+    }),
+  });
+};
+
+export const fetchWithRefresh = async (endpoint, options) => {
+  try {
+    return request(endpoint, options);
+  } catch (err) {
+    if (err.message === "jwt expired") {
+      const refreshData = refreshToken();
+
+      localStorage.setItem("refreshToken", refreshData.refreshToken);
+      localStorage.setItem("accessToken", refreshData.accessToken);
+
+      options.headers.authorization = refreshData.accessToken;
+
+      return request(endpoint, options);
+    } else {
+      return Promise.reject(err);
+    }
+  }
 };
 
 export default request;

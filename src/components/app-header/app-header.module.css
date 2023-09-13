@@ -20,21 +20,26 @@
   margin-left: 288px;
 }
 
-.button {
+.link {
+  text-decoration: none;
   cursor: pointer;
   background-color: transparent;
-  border: none;
   color: inherit;
+  border: none;
   display: flex;
   align-items: center;
   composes: pl-5 pr-5 pt-4 pb-4 from global;
 }
 
-.link {
+.text {
   composes: pl-2 text text_type_main-default from global;
 }
 
-.link_inactive {
+.inactiveLink {
   composes: link;
   composes: text_color_inactive from global;
+}
+
+.logo {
+  cursor: pointer;
 }

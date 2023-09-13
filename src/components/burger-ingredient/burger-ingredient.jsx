@@ -1,19 +1,12 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
+import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-
-import {
-  setIngredientInfo,
-  cleanIngredientInfo,
-} from "../../services/actions/ingredient-details.js";
 
 import { ingredientPropType } from "../../utils/prop-types.js";
 
 import styles from "./burger-ingredient.module.css";
-
-import Modal from "../modal/Modal.jsx";
-import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 
 import {
   Counter,
@@ -21,24 +14,14 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
-  const dispatch = useDispatch();
+  const location = useLocation();
 
   const { bun } = useSelector((store) => store.constructorList);
-
-  const { ingredient } = useSelector((store) => store.ingredientDetails);
 
   const [, dragRef] = useDrag({
     type: "ingredient",
     item: ingredientData,
   });
-
-  const handleItemClick = () => {
-    dispatch(setIngredientInfo(ingredientData));
-  };
-
-  const handleCloseModal = () => {
-    dispatch(cleanIngredientInfo());
-  };
 
   const content = React.useMemo(() => {
     return (
@@ -61,18 +44,25 @@ const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
   return (
     <>
       {ingredientData.type === "bun" && bun?._id === ingredientData._id ? (
-        <li className={styles.li} onClick={handleItemClick}>
-          {content}
+        <li>
+          <Link
+            to={`/ingredients/${ingredientData._id}`}
+            state={{ previousPage: location }}
+            className={styles.link}
+          >
+            {content}
+          </Link>
         </li>
       ) : (
-        <li ref={dragRef} className={styles.li} onClick={handleItemClick}>
-          {content}
+        <li ref={dragRef}>
+          <Link
+            to={`/ingredients/${ingredientData._id}`}
+            state={{ previousPage: location }}
+            className={styles.link}
+          >
+            {content}
+          </Link>
         </li>
-      )}
-      {ingredient?._id === ingredientData._id && (
-        <Modal closeModal={handleCloseModal}>
-          <IngredientDetails />
-        </Modal>
       )}
     </>
   );

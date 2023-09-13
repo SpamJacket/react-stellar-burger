@@ -1,0 +1,15 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.buttons {
+  align-self: end;
+  display: flex;
+  column-gap: 20px;
+}
+
+.cancelButton {
+  padding: 16px 8px;
+}

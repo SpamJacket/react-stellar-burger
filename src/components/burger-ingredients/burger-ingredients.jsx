@@ -1,7 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-
-import { getIngredients } from "../../services/actions/burger-ingredients.js";
+import { useSelector } from "react-redux";
 
 import styles from "./burger-ingredients.module.css";
 
@@ -9,21 +7,14 @@ import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const BurgerIngredients = () => {
-  const dispatch = useDispatch();
-
   const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(
     (store) => store.ingredientsList
   );
 
   const { bun, filings } = useSelector((store) => store.constructorList);
 
-  React.useEffect(() => {
-    dispatch(getIngredients());
-  }, [dispatch]);
-
   const [current, setCurrent] = React.useState("Buns");
 
-  const containerRef = React.useRef();
   const bunsHeaderRef = React.useRef();
   const saucesHeaderRef = React.useRef();
   const mainsHeaderRef = React.useRef();
@@ -53,14 +44,6 @@ const BurgerIngredients = () => {
     }
   };
 
-  React.useEffect(() => {
-    containerRef.current.addEventListener("scroll", updateTab);
-
-    return () => {
-      containerRef.current.removeEventListener("scroll", updateTab);
-    };
-  }, []);
-
   const ingredientsId = React.useMemo(() => {
     const ingredients = {};
     if (bun) {
@@ -82,7 +65,7 @@ const BurgerIngredients = () => {
         if (ingredient.type === type) {
           return (
             <BurgerIngredient
-              key={index}
+              key={ingredient._id}
               ingredientData={ingredient}
               counter={ingredientsId[ingredient._id] ?? 0}
             />
@@ -139,7 +122,7 @@ const BurgerIngredients = () => {
           Начинки
         </Tab>
       </div>
-      <div ref={containerRef} className={styles.ingredients}>
+      <div onScroll={updateTab} className={styles.ingredients}>
         {ingredientsFailed ? (
           <h2 className={styles.errorTitle}>
             Произошла ошибка! Перезагрузите страницу
