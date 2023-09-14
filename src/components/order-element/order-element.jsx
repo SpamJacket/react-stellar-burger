@@ -72,7 +72,48 @@ const OrderElement = ({
 
       return currentPrice + ingredient.price;
     }, 0);
-  }, []);
+  }, [ingredients, ingredientsList]);
+
+  const dateTime = React.useMemo(() => {
+    const newDate = new Date(Date.parse(createdAt));
+    const nowDate = new Date(Date.now());
+    let newDateTime = "";
+
+    if (
+      nowDate.getDate() === newDate.getDate() &&
+      nowDate.getMonth() === newDate.getMonth() &&
+      nowDate.getFullYear() === newDate.getFullYear()
+    ) {
+      newDateTime += "Сегодня, ";
+    } else if (
+      nowDate.getDate() - newDate.getDate() === 1 &&
+      nowDate.getMonth() === newDate.getMonth() &&
+      nowDate.getFullYear() === newDate.getFullYear()
+    ) {
+      newDateTime += "Вчера, ";
+    } else if (
+      nowDate.getDate() - newDate.getDate() === 2 &&
+      nowDate.getMonth() === newDate.getMonth() &&
+      nowDate.getFullYear() === newDate.getFullYear()
+    ) {
+      newDateTime += "2 дня назад, ";
+    } else {
+      newDateTime += `${newDate.getDate()}.${newDate.getMonth()}.${newDate.getFullYear()}, `;
+    }
+
+    newDateTime += `${newDate.getHours()}:${("00" + newDate.getMinutes()).slice(
+      -2
+    )} `;
+
+    const utc = new Date(Date.parse(createdAt));
+    const gmt = String(utc).slice(25).slice(0, 8);
+
+    if (gmt.slice(6) === "00") {
+      return newDateTime + `i-${gmt.slice(0, 6)}`;
+    }
+
+    return newDateTime + `i-${gmt.slice(0, 6)}:${gmt.slice(6)}`;
+  }, [createdAt]);
 
   return (
     <Link
@@ -83,7 +124,7 @@ const OrderElement = ({
       <li className={isPrivateList ? styles.privateOrder : styles.order}>
         <div className={styles.title}>
           <h4 className={styles.number}>{`#${number}`}</h4>
-          <p className={styles.time}>{createdAt}</p>
+          <p className={styles.time}>{dateTime}</p>
         </div>
         <h3 className={styles.name}>{name}</h3>
         {isPrivateList && <p className={styles.status}>{translateStatus}</p>}
