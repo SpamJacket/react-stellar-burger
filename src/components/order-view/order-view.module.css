@@ -1,6 +1,6 @@
 .container {
-  min-width: 720px;
-  min-height: 636px;
+  min-width: 640px;
+  max-width: 720px;
 }
 
 .number {

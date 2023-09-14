@@ -42,7 +42,7 @@ const OrdersList = () => {
     connect();
 
     return () => {
-      // disconnect();
+      disconnect();
     };
   }, []);
 

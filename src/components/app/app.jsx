@@ -74,9 +74,9 @@ const App = () => {
           path="/ingredients/:ingredientId"
           element={<IngredientDetailsPage />}
         />
-        <Route path="/feed/:orderId" element={<OrderViewPage />} />
+        <Route path="/feed/:orderNumber" element={<OrderViewPage />} />
         <Route
-          path="/profile/orders/:orderId"
+          path="/profile/orders/:orderNumber"
           element={<OnlyAuth component={<OrderViewPage />} />}
         />
         <Route path="*" element={<NotFound />} />
@@ -93,7 +93,7 @@ const App = () => {
             }
           />
           <Route
-            path="/profile/orders/:orderId"
+            path="/profile/orders/:orderNumber"
             element={
               <Modal closeModal={handleModalClose}>
                 <OrderView />
@@ -101,7 +101,7 @@ const App = () => {
             }
           />
           <Route
-            path="/feed/:orderId"
+            path="/feed/:orderNumber"
             element={
               <Modal closeModal={handleModalClose}>
                 <OrderView />

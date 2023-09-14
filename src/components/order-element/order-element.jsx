@@ -1,12 +1,11 @@
 import React from "react";
 import { Link, useLocation, useMatch } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 import { orderPropType } from "../../utils/prop-types";
 
 import styles from "./order-element.module.css";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useSelector } from "react-redux";
 
 const OrderElement = ({
   data: { createdAt, ingredients, name, number, status },
@@ -41,7 +40,7 @@ const OrderElement = ({
           }
           style={{
             translate: `calc(-16px * ${index})`,
-            zIndex: `${ingredients.length - index - 1}`,
+            zIndex: `${6 - index - 1}`,
           }}
         >
           <img
@@ -66,9 +65,6 @@ const OrderElement = ({
       const ingredient = ingredientsList.ingredients.find(
         (ingredient) => ingredient._id === ingredientId
       );
-      if (ingredient.type === "bun") {
-        return currentPrice + ingredient.price * 2;
-      }
 
       return currentPrice + ingredient.price;
     }, 0);
@@ -117,13 +113,15 @@ const OrderElement = ({
 
   return (
     <Link
-      to={isPrivateList ? `/profile/orders/${123456}` : `/feed/${123456}`}
+      to={isPrivateList ? `/profile/orders/${number}` : `/feed/${number}`}
       state={{ previousPage: location }}
       className={styles.link}
     >
       <li className={isPrivateList ? styles.privateOrder : styles.order}>
         <div className={styles.title}>
-          <h4 className={styles.number}>{`#${number}`}</h4>
+          <h4 className={styles.number}>{`#${("000000" + number).slice(
+            -6
+          )}`}</h4>
           <p className={styles.time}>{dateTime}</p>
         </div>
         <h3 className={styles.name}>{name}</h3>

@@ -8,7 +8,6 @@ const socketMiddleware = (wsActions) => {
       const {
         wsConnect,
         wsDisconnect,
-        // wsSendMessage,
         wsConnecting,
         onOpen,
         onClose,
@@ -22,15 +21,6 @@ const socketMiddleware = (wsActions) => {
       }
 
       if (socket) {
-        if (type === wsDisconnect) {
-          socket.close();
-          socket = null;
-        }
-
-        // if (type === wsSendMessage) {
-        //   socket.send(JSON.stringify(action.payload));
-        // }
-
         socket.onopen = () => {
           dispatch({ type: onOpen });
         };
@@ -49,6 +39,11 @@ const socketMiddleware = (wsActions) => {
 
           dispatch({ type: onMessage, payload: parseData });
         };
+
+        if (type === wsDisconnect) {
+          socket.close();
+          socket = null;
+        }
       }
 
       next(action);

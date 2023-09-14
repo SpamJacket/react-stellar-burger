@@ -6,6 +6,7 @@ import { orderDetails } from "./order-details.js";
 import { userReducer } from "./user.js";
 import { feedReducer } from "./feed.js";
 import { ordersReducer } from "./orders.js";
+import { orderViewReducer } from "./order-view.js";
 
 const rootReducer = combineReducers({
   ingredientsList: ingredientsReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   feed: feedReducer,
   orders: ordersReducer,
+  orderView: orderViewReducer,
 });
 
 export default rootReducer;

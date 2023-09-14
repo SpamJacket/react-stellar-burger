@@ -18,9 +18,9 @@ const FeedPage = () => {
             {orders.map(
               (order, index) =>
                 order.status === "done" &&
-                index < 30 && (
+                index < 20 && (
                   <li key={order.number} className={styles.doneNumber}>
-                    {order.number}
+                    {`000000${order.number}`.slice(-6)}
                   </li>
                 )
             )}
@@ -32,9 +32,9 @@ const FeedPage = () => {
             {orders.map(
               (order, index) =>
                 order.status === "pending" &&
-                index < 30 && (
+                index < 20 && (
                   <li key={order.number} className={styles.number}>
-                    {order.number}
+                    {`000000${order.number}`.slice(-6)}
                   </li>
                 )
             )}

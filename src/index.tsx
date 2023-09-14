@@ -22,7 +22,6 @@ import {
 import {
   ORDERS_CONNECT,
   ORDERS_DISCONNECT,
-  ORDERS_SEND_MESSAGE,
   ORDERS_WS_CONNECTING,
   ORDERS_WS_OPEN,
   ORDERS_WS_CLOSE,
@@ -43,7 +42,6 @@ const feedMiddleware = socketMiddleware({
 const ordersMiddleware = socketMiddleware({
   wsConnect: ORDERS_CONNECT,
   wsDisconnect: ORDERS_DISCONNECT,
-  wsSendMessage: ORDERS_SEND_MESSAGE,
   wsConnecting: ORDERS_WS_CONNECTING,
   onOpen: ORDERS_WS_OPEN,
   onClose: ORDERS_WS_CLOSE,
