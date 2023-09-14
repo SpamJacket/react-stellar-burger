@@ -24,8 +24,7 @@ export const placeOrder = (ingredients, setIsModalOpened) => {
         dispatch({
           type: PLACE_ORDER_SUCCESS,
           order: {
-            name: res.name,
-            orderId: ("000000" + res.order.number).slice(-6),
+            orderNumber: ("000000" + res.order.number).slice(-6),
           },
         });
       })
