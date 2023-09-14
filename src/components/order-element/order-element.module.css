@@ -4,14 +4,14 @@
   display: grid;
   composes: p-6 from global;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 24px 30px 64px;
+  grid-template-rows: 24px fit-content 64px;
   row-gap: 24px;
   cursor: pointer;
 }
 
 .privateOrder {
   composes: order;
-  grid-template-rows: 24px 30px 24px 64px;
+  grid-template-rows: 24px fit-content 24px 64px;
 }
 
 .title {
@@ -35,13 +35,11 @@
 
 .status {
   grid-column: 1 / span 2;
-  translate: 0 -16px;
   composes: text text_type_main-default from global;
 }
 
 .images {
   display: flex;
-  translate: 0 -16px;
 }
 
 .imageContainer {

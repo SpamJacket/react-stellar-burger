@@ -5,6 +5,8 @@ const endpoints = {
   ordersUrl: "/orders",
 };
 
+const BASE_WS_ORDERS_URL = "wss://norma.nomoreparties.space/orders";
+
 const GET_INGREDIENTS_REQUEST = "GET_INGREDIENTS_REQUEST";
 const GET_INGREDIENTS_SUCCESS = "GET_INGREDIENTS_SUCCESS";
 const GET_INGREDIENTS_FAILED = "GET_INGREDIENTS_FAILED";
@@ -139,6 +141,7 @@ const orderAcceptBackground = (
 export {
   BASE_URL,
   endpoints,
+  BASE_WS_ORDERS_URL,
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAILED,

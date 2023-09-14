@@ -68,7 +68,7 @@ const App = () => {
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
           <Route path="" element={<ProfileForm />} />
-          <Route path="orders" element={<OrdersList privateList={true} />} />
+          <Route path="orders" element={<OrdersList />} />
         </Route>
         <Route
           path="/ingredients/:ingredientId"

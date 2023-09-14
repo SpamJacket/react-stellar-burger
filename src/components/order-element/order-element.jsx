@@ -1,104 +1,104 @@
 import React from "react";
 import { Link, useLocation, useMatch } from "react-router-dom";
 
+import { orderPropType } from "../../utils/prop-types";
+
 import styles from "./order-element.module.css";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useSelector } from "react-redux";
 
-const imagesArray = [
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-  "https://code.s3.yandex.net/react/code/bun-01.png",
-];
-
-const OrderElement = ({ privateList }) => {
+const OrderElement = ({
+  data: { createdAt, ingredients, name, number, status },
+}) => {
   const location = useLocation();
+  const isPrivateList = useMatch("/profile/orders");
+  const ingredientsList = useSelector((store) => store.ingredientsList);
+
+  const translateStatus = React.useMemo(() => {
+    switch (status) {
+      case "done":
+        return "Выполнен";
+      case "pending":
+        return "В работе";
+      case "created":
+        return "Создан";
+    }
+  }, [status]);
 
   const images = React.useMemo(() => {
-    return imagesArray.map((imageUrl, index) => {
+    return ingredients.map((ingredientId, index) => {
+      const ingredient = ingredientsList.ingredients.find(
+        (ingredient) => ingredient._id === ingredientId
+      );
       return index < 6 ? (
-        index === 5 ? (
-          <div
-            key={index}
-            className={styles.lastImageContainer}
-            style={{
-              translate: `calc(-16px * ${index})`,
-              zIndex: `${imagesArray.length - index - 1}`,
-            }}
-          >
-            <img
-              className={styles.lastImage}
-              src={imageUrl}
-              alt="Флюоресцентная булка R2-D3"
-            />
-            <p className={styles.extra}>{`+${imagesArray.length - 6}`}</p>
-          </div>
-        ) : (
-          <div
-            key={index}
-            className={styles.imageContainer}
-            style={{
-              translate: `calc(-16px * ${index})`,
-              zIndex: `${imagesArray.length - index - 1}`,
-            }}
-          >
-            <img
-              className={styles.image}
-              src={imageUrl}
-              alt="Флюоресцентная булка R2-D3"
-            />
-          </div>
-        )
+        <div
+          key={ingredientId + index}
+          className={
+            index === 5 && ingredients.length > 6
+              ? styles.lastImageContainer
+              : styles.imageContainer
+          }
+          style={{
+            translate: `calc(-16px * ${index})`,
+            zIndex: `${ingredients.length - index - 1}`,
+          }}
+        >
+          <img
+            className={
+              index === 5 && ingredients.length > 6
+                ? styles.lastImage
+                : styles.image
+            }
+            src={ingredient.image}
+            alt="Флюоресцентная булка R2-D3"
+          />
+          {index === 5 && ingredients.length > 6 && (
+            <p className={styles.extra}>{`+${ingredients.length - 6}`}</p>
+          )}
+        </div>
       ) : null;
     });
-  });
+  }, [ingredients, ingredientsList]);
+
+  const totalPrice = React.useMemo(() => {
+    return ingredients.reduce((currentPrice, ingredientId) => {
+      const ingredient = ingredientsList.ingredients.find(
+        (ingredient) => ingredient._id === ingredientId
+      );
+      if (ingredient.type === "bun") {
+        return currentPrice + ingredient.price * 2;
+      }
+
+      return currentPrice + ingredient.price;
+    }, 0);
+  }, []);
 
   return (
     <Link
-      to={
-        location.pathname === "/feed"
-          ? `/feed/${123456}`
-          : `/profile/orders/${123456}`
-      }
+      to={isPrivateList ? `/profile/orders/${123456}` : `/feed/${123456}`}
       state={{ previousPage: location }}
       className={styles.link}
     >
-      {privateList ? (
-        <li className={styles.privateOrder}>
-          <div className={styles.title}>
-            <h4 className={styles.number}>#123456</h4>
-            <p className={styles.time}>Сегодня, 16:20 i-GMT+3</p>
-          </div>
-          <h3 className={styles.name}>Death Star Starship Main бургер</h3>
-          <p className={styles.status}>Создан</p>
-          <div className={styles.images}>{images}</div>
-          <p className={styles.price}>
-            <span className={styles.cost}>480</span>
-            <CurrencyIcon type="primary" />
-          </p>
-        </li>
-      ) : (
-        <li className={styles.order}>
-          <div className={styles.title}>
-            <h4 className={styles.number}>#123456</h4>
-            <p className={styles.time}>Сегодня, 16:20 i-GMT+3</p>
-          </div>
-          <h3 className={styles.name}>Death Star Starship Main бургер</h3>
-          <div className={styles.images}>{images}</div>
-          <p className={styles.price}>
-            <span className={styles.cost}>480</span>
-            <CurrencyIcon type="primary" />
-          </p>
-        </li>
-      )}
+      <li className={isPrivateList ? styles.privateOrder : styles.order}>
+        <div className={styles.title}>
+          <h4 className={styles.number}>{`#${number}`}</h4>
+          <p className={styles.time}>{createdAt}</p>
+        </div>
+        <h3 className={styles.name}>{name}</h3>
+        {isPrivateList && <p className={styles.status}>{translateStatus}</p>}
+        <div className={styles.images}>{images}</div>
+        <p className={styles.price}>
+          <span className={styles.cost}>{totalPrice}</span>
+          <CurrencyIcon type="primary" />
+        </p>
+      </li>
     </Link>
   );
+};
+
+OrderElement.propTypes = {
+  data: orderPropType.isRequired,
 };
 
 export default OrderElement;

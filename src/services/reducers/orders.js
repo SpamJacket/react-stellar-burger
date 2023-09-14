@@ -9,6 +9,8 @@ import {
 const initialState = {
   status: "offline",
   orders: [],
+  total: null,
+  totalToday: null,
   error: "",
 };
 
@@ -38,7 +40,9 @@ export const ordersReducer = (state = initialState, action) => {
     case ORDERS_WS_MESSAGE:
       return {
         ...state,
-        orders: action.payload,
+        orders: action.payload.orders.reverse(),
+        total: action.payload.total,
+        totalToday: action.payload.totalToday,
       };
     default:
       return state;
