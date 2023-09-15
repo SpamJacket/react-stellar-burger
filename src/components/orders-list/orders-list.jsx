@@ -19,7 +19,7 @@ import { BASE_WS_ORDERS_URL } from "../../utils/constants";
 const OrdersList = () => {
   const dispatch = useDispatch();
   const isPrivateList = useMatch("/profile/orders");
-  const { orders } = useSelector(
+  const { orders, status } = useSelector(
     isPrivateList ? (store) => store.orders : (store) => store.feed
   );
 
@@ -48,11 +48,20 @@ const OrdersList = () => {
 
   return (
     <>
-      <ul className={isPrivateList ? styles.privateList : styles.list}>
-        {orders.map((order) => (
-          <OrderElement data={order} key={order.number} />
-        ))}
-      </ul>
+      {status === "online" ? (
+        <ul className={isPrivateList ? styles.privateList : styles.list}>
+          {orders.map((order) => (
+            <OrderElement data={order} key={order.number} />
+          ))}
+        </ul>
+      ) : (
+        isPrivateList && (
+          <div className={styles.loader}>
+            <h2 className={styles.title}>Идет подключение, подождите</h2>
+            <p className={styles.status}>{`Статус: ${status}`}</p>
+          </div>
+        )
+      )}
     </>
   );
 };

@@ -1,6 +1,8 @@
 .container {
   min-width: 640px;
   max-width: 720px;
+  min-height: 300px;
+  display: grid;
 }
 
 .number {
@@ -61,4 +63,18 @@
 
 .cost {
   composes: pr-2 from global;
+}
+
+.errorContainer {
+  composes: pt-4 pb-4 pr-10 from global;
+}
+
+.errorTitle {
+  composes: text text_type_main-medium from global;
+}
+
+.loaderTitle {
+  align-self: center;
+  text-align: center;
+  composes: text text_type_main-medium from global;
 }

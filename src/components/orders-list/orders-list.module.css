@@ -20,3 +20,21 @@
   height: calc(100% + 80px);
   grid-column: 2 / span 2;
 }
+
+.loader {
+  grid-column: 2 / span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  row-gap: 34px;
+  padding-top: 17px;
+}
+
+.title {
+  composes: text text_type_main-medium from global;
+}
+
+.status {
+  composes: text text_type_main-default from global;
+}
