@@ -22,22 +22,26 @@ const OrderViewElement = ({ ingredientId }) => {
   }, [ingredients, ingredientId]);
 
   return (
-    <li className={styles.ingredient}>
-      <div className={styles.imageContainer}>
-        <img
-          className={styles.image}
-          src={ingredient.image}
-          alt={ingredient.name}
-        />
-      </div>
-      <p className={styles.name}>{ingredient.name}</p>
-      <p className={styles.price}>
-        <span
-          className={styles.cost}
-        >{`${counter} X ${ingredient.price}`}</span>
-        <CurrencyIcon type="primary" />
-      </p>
-    </li>
+    <>
+      {ingredientId && (
+        <li className={styles.ingredient}>
+          <div className={styles.imageContainer}>
+            <img
+              className={styles.image}
+              src={ingredient.image}
+              alt={ingredient.name}
+            />
+          </div>
+          <p className={styles.name}>{ingredient.name}</p>
+          <p className={styles.price}>
+            <span
+              className={styles.cost}
+            >{`${counter} X ${ingredient.price}`}</span>
+            <CurrencyIcon type="primary" />
+          </p>
+        </li>
+      )}
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import Preloader from "../../pages/preloader/preloader.jsx";
 
-const Protected = ({ onlyUnAuth = false, component }) => {
+const Protected = ({ onlyUnAuth, component }) => {
   const { user, isAuthChecked } = useSelector((store) => store.user);
   const location = useLocation();
 
@@ -28,6 +28,10 @@ export const OnlyAuth = Protected;
 export const OnlyUnAuth = ({ component }) => (
   <Protected onlyUnAuth={true} component={component} />
 );
+
+Protected.defaultProps = {
+  onlyUnAuth: false,
+};
 
 Protected.propTypes = {
   onlyUnAuth: PropTypes.bool,

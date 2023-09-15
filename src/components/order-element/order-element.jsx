@@ -1,11 +1,14 @@
 import React from "react";
 import { Link, useLocation, useMatch } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { orderPropType } from "../../utils/prop-types";
 
 import styles from "./order-element.module.css";
 
+import OrderElementImage from "../order-element-image/order-element-image";
+
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+
+import { orderPropType } from "../../utils/prop-types";
 
 const OrderElement = ({
   data: { createdAt, ingredients, name, number, status },
@@ -27,46 +30,35 @@ const OrderElement = ({
 
   const images = React.useMemo(() => {
     return ingredients.map((ingredientId, index) => {
-      const ingredient = ingredientsList.ingredients.find(
-        (ingredient) => ingredient._id === ingredientId
-      );
-      return index < 6 ? (
-        <div
-          key={ingredientId + index}
-          className={
-            index === 5 && ingredients.length > 6
-              ? styles.lastImageContainer
-              : styles.imageContainer
-          }
-          style={{
-            translate: `calc(-16px * ${index})`,
-            zIndex: `${6 - index - 1}`,
-          }}
-        >
-          <img
-            className={
-              index === 5 && ingredients.length > 6
-                ? styles.lastImage
-                : styles.image
-            }
-            src={ingredient.image}
-            alt="Флюоресцентная булка R2-D3"
+      if (ingredientId) {
+        const ingredient = ingredientsList.ingredients.find(
+          (ingredient) => ingredient._id === ingredientId
+        );
+        return index < 6 ? (
+          <OrderElementImage
+            key={ingredientId + index}
+            index={index}
+            orderLength={ingredients.length}
+            image={ingredient.image}
+            name={ingredient.name}
           />
-          {index === 5 && ingredients.length > 6 && (
-            <p className={styles.extra}>{`+${ingredients.length - 6}`}</p>
-          )}
-        </div>
-      ) : null;
+        ) : null;
+      }
+      return null;
     });
   }, [ingredients, ingredientsList]);
 
   const totalPrice = React.useMemo(() => {
     return ingredients.reduce((currentPrice, ingredientId) => {
-      const ingredient = ingredientsList.ingredients.find(
-        (ingredient) => ingredient._id === ingredientId
-      );
+      if (ingredientId) {
+        const ingredient = ingredientsList.ingredients.find(
+          (ingredient) => ingredient._id === ingredientId
+        );
 
-      return currentPrice + ingredient.price;
+        return currentPrice + ingredient.price;
+      }
+
+      return currentPrice;
     }, 0);
   }, [ingredients, ingredientsList]);
 
@@ -112,27 +104,33 @@ const OrderElement = ({
   }, [createdAt]);
 
   return (
-    <Link
-      to={isPrivateList ? `/profile/orders/${number}` : `/feed/${number}`}
-      state={{ previousPage: location }}
-      className={styles.link}
-    >
-      <li className={isPrivateList ? styles.privateOrder : styles.order}>
-        <div className={styles.title}>
-          <h4 className={styles.number}>{`#${("000000" + number).slice(
-            -6
-          )}`}</h4>
-          <p className={styles.time}>{dateTime}</p>
-        </div>
-        <h3 className={styles.name}>{name}</h3>
-        {isPrivateList && <p className={styles.status}>{translateStatus}</p>}
-        <div className={styles.images}>{images}</div>
-        <p className={styles.price}>
-          <span className={styles.cost}>{totalPrice}</span>
-          <CurrencyIcon type="primary" />
-        </p>
-      </li>
-    </Link>
+    <>
+      {name && (
+        <Link
+          to={isPrivateList ? `/profile/orders/${number}` : `/feed/${number}`}
+          state={{ previousPage: location }}
+          className={styles.link}
+        >
+          <li className={isPrivateList ? styles.privateOrder : styles.order}>
+            <div className={styles.title}>
+              <h4 className={styles.number}>{`#${("000000" + number).slice(
+                -6
+              )}`}</h4>
+              <p className={styles.time}>{dateTime}</p>
+            </div>
+            <h3 className={styles.name}>{name}</h3>
+            {isPrivateList && (
+              <p className={styles.status}>{translateStatus}</p>
+            )}
+            <div className={styles.images}>{images}</div>
+            <p className={styles.price}>
+              <span className={styles.cost}>{totalPrice}</span>
+              <CurrencyIcon type="primary" />
+            </p>
+          </li>
+        </Link>
+      )}
+    </>
   );
 };
 

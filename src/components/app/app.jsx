@@ -4,26 +4,27 @@ import { useDispatch } from "react-redux";
 
 import styles from "./app.module.css";
 
-import AppHeader from "../app-header/app-header.jsx";
 import Home from "../../pages/home/home.jsx";
 import Login from "../../pages/login/login.jsx";
 import Register from "../../pages/register/register.jsx";
 import ForgotPassword from "../../pages/forgot-password/forgot-password.jsx";
 import ResetPassword from "../../pages/reset-password/reset-password.jsx";
 import Profile from "../../pages/profile/profile.jsx";
+import NotFound from "../../pages/not-found/not-found.jsx";
+import IngredientDetailsPage from "../../pages/ingredient-details/ingredient-details";
+import FeedPage from "../../pages/feed/feed.jsx";
+import OrderViewPage from "../../pages/order-view/order-view";
+
+import AppHeader from "../app-header/app-header.jsx";
 import Modal from "../modal/modal.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route.jsx";
 import ProfileForm from "../profile-form/profile-form.jsx";
 import OrdersList from "../orders-list/orders-list";
-import NotFound from "../../pages/not-found/not-found.jsx";
-import IngredientDetailsPage from "../../pages/ingredient-details/ingredient-details";
-import FeedPage from "../../pages/feed/feed.jsx";
 import OrderView from "../order-view/order-view";
 
 import { getUser, setAuthChecked } from "../../services/actions/user.js";
 import { getIngredients } from "../../services/actions/burger-ingredients.js";
-import OrderViewPage from "../../pages/order-view/order-view";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ const App = () => {
     } else {
       dispatch(setAuthChecked(true));
     }
-  }, []);
+  }, [dispatch]);
 
   React.useEffect(() => {
     dispatch(getIngredients());

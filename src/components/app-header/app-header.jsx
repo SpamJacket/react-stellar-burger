@@ -11,7 +11,6 @@ import {
 
 const AppHeader = () => {
   const navigate = useNavigate();
-
   const isConstructor = useMatch("/");
   const isOrdersList = useMatch("/feed/*");
   const isProfile = useMatch("/profile/*");

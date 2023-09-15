@@ -36,8 +36,13 @@
 }
 
 .inactiveLink {
-  composes: link;
-  composes: text_color_inactive from global;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  composes: pl-5 pr-5 pt-4 pb-4 text_color_inactive from global;
 }
 
 .logo {

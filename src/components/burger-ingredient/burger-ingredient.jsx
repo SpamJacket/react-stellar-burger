@@ -4,14 +4,14 @@ import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import { ingredientPropType } from "../../utils/prop-types.js";
-
 import styles from "./burger-ingredient.module.css";
 
 import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
+import { ingredientPropType } from "../../utils/prop-types.js";
 
 const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
   const location = useLocation();

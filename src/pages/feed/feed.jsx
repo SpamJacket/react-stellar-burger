@@ -1,13 +1,40 @@
+import { useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 
-import OrdersList from "../../components/orders-list/orders-list";
-
 import styles from "./feed.module.css";
+
+import OrdersList from "../../components/orders-list/orders-list";
 
 const FeedPage = () => {
   const { orders, status, total, totalToday } = useSelector(
     (store) => store.feed
   );
+
+  const ordersNumberList = useCallback(
+    (status) => {
+      return orders.map(
+        (order, index) =>
+          index < 20 &&
+          order.status === status && (
+            <li
+              key={order.number}
+              className={status === "done" ? styles.doneNumber : styles.number}
+            >
+              {`000000${order.number}`.slice(-6)}
+            </li>
+          )
+      );
+    },
+    [orders]
+  );
+
+  const ordersDoneNumberList = useMemo(() => {
+    return ordersNumberList("done");
+  }, [ordersNumberList]);
+
+  const ordersPendingNumberList = useMemo(() => {
+    return ordersNumberList("pending");
+  }, [ordersNumberList]);
 
   return (
     <div className={styles.container}>
@@ -17,31 +44,11 @@ const FeedPage = () => {
         <div className={styles.info}>
           <div className={styles.status}>
             <h4 className={styles.statusTitle}>Готовы:</h4>
-            <ul className={styles.orders}>
-              {orders.map(
-                (order, index) =>
-                  order.status === "done" &&
-                  index < 20 && (
-                    <li key={order.number} className={styles.doneNumber}>
-                      {`000000${order.number}`.slice(-6)}
-                    </li>
-                  )
-              )}
-            </ul>
+            <ul className={styles.orders}>{ordersDoneNumberList}</ul>
           </div>
           <div className={styles.status}>
             <h4 className={styles.statusTitle}>В работе:</h4>
-            <ul className={styles.orders}>
-              {orders.map(
-                (order, index) =>
-                  order.status === "pending" &&
-                  index < 20 && (
-                    <li key={order.number} className={styles.number}>
-                      {`000000${order.number}`.slice(-6)}
-                    </li>
-                  )
-              )}
-            </ul>
+            <ul className={styles.orders}>{ordersPendingNumberList}</ul>
           </div>
           <div className={styles.total}>
             <h4 className={styles.totalTitle}>Выполнено за все время:</h4>

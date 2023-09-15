@@ -1,10 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useMatch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import OrderElement from "../../components/order-element/order-element";
-
 import styles from "./orders-list.module.css";
+
+import OrderElement from "../../components/order-element/order-element";
 
 import {
   connect as connectOrders,
@@ -23,20 +23,26 @@ const OrdersList = () => {
     isPrivateList ? (store) => store.orders : (store) => store.feed
   );
 
-  const connect = isPrivateList
-    ? () =>
-        dispatch(
-          connectOrders(
-            BASE_WS_ORDERS_URL +
-              `?token=${localStorage
-                .getItem("accessToken")
-                .replace(/\bBearer \b/g, "")}`
+  const connect = useCallback(
+    isPrivateList
+      ? () =>
+          dispatch(
+            connectOrders(
+              BASE_WS_ORDERS_URL +
+                `?token=${localStorage
+                  .getItem("accessToken")
+                  .replace(/\bBearer \b/g, "")}`
+            )
           )
-        )
-    : () => dispatch(connectFeed(BASE_WS_ORDERS_URL + "/all"));
-  const disconnect = isPrivateList
-    ? () => dispatch(disconnectOrders())
-    : () => dispatch(disconnectFeed());
+      : () => dispatch(connectFeed(BASE_WS_ORDERS_URL + "/all")),
+    [dispatch]
+  );
+  const disconnect = useCallback(
+    isPrivateList
+      ? () => dispatch(disconnectOrders())
+      : () => dispatch(disconnectFeed()),
+    [dispatch]
+  );
 
   useEffect(() => {
     connect();
@@ -44,7 +50,7 @@ const OrdersList = () => {
     return () => {
       disconnect();
     };
-  }, []);
+  }, [connect, disconnect]);
 
   return (
     <>

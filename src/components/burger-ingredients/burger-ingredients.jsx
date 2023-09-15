@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import styles from "./burger-ingredients.module.css";
 
 import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
+
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const BurgerIngredients = () => {

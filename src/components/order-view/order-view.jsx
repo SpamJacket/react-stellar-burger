@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./order-view.module.css";
 
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-
 import OrderViewElement from "../order-view-element/order-view-element";
+
+import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import {
   setOrderView,
@@ -26,7 +26,7 @@ const OrderView = ({ isPage }) => {
     return () => {
       dispatch(cleanOrderView());
     };
-  }, []);
+  }, [dispatch, orderNumber]);
 
   const { order, orderViewRequest, orderViewFailed } = useSelector(
     (store) => store.orderView
@@ -48,11 +48,15 @@ const OrderView = ({ isPage }) => {
 
   const totalPrice = useMemo(() => {
     return ingredients?.reduce((currentPrice, ingredientId) => {
-      const ingredient = ingredientsList.ingredients.find(
-        (ingredient) => ingredient._id === ingredientId
-      );
+      if (ingredientId) {
+        const ingredient = ingredientsList.ingredients.find(
+          (ingredient) => ingredient._id === ingredientId
+        );
 
-      return currentPrice + ingredient.price;
+        return currentPrice + ingredient.price;
+      }
+
+      return currentPrice;
     }, 0);
   }, [ingredients, ingredientsList]);
 
@@ -97,6 +101,49 @@ const OrderView = ({ isPage }) => {
     return newDateTime + `i-${gmt.slice(0, 6)}:${gmt.slice(6)}`;
   }, [createdAt]);
 
+  const content = useMemo(() => {
+    return orderViewRequest ? (
+      <h2 className={styles.loaderTitle}>Идет загрузка, подождите</h2>
+    ) : (
+      <>
+        <h4 className={isPage ? styles.centerNumber : styles.number}>
+          {`#${("000000" + orderNumber).slice(-6)}`}
+        </h4>
+        <h3 className={styles.name}>{name}</h3>
+        <p className={styles.status}>{translateStatus}</p>
+        <div className={styles.structure}>
+          <h5 className={styles.title}>Состав:</h5>
+          <ul className={styles.list}>
+            {uniqIngredients.map((ingredient, index) => {
+              return (
+                <OrderViewElement
+                  key={ingredient + index}
+                  ingredientId={ingredient}
+                />
+              );
+            })}
+          </ul>
+        </div>
+        <div className={styles.subtitle}>
+          <p className={styles.time}>{dateTime}</p>
+          <p className={styles.price}>
+            <span className={styles.cost}>{totalPrice}</span>
+            <CurrencyIcon type="primary" />
+          </p>
+        </div>
+      </>
+    );
+  }, [
+    orderViewRequest,
+    isPage,
+    name,
+    translateStatus,
+    ingredients,
+    dateTime,
+    totalPrice,
+    orderNumber,
+  ]);
+
   return (
     <>
       {orderViewFailed ? (
@@ -106,39 +153,7 @@ const OrderView = ({ isPage }) => {
           </h2>
         </div>
       ) : (
-        <div className={styles.container}>
-          {orderViewRequest ? (
-            <h2 className={styles.loaderTitle}>Идет загрузка, подождите</h2>
-          ) : (
-            <>
-              <h4 className={isPage ? styles.centerNumber : styles.number}>
-                {`#${("000000" + orderNumber).slice(-6)}`}
-              </h4>
-              <h3 className={styles.name}>{name}</h3>
-              <p className={styles.status}>{translateStatus}</p>
-              <div className={styles.structure}>
-                <h5 className={styles.title}>Состав:</h5>
-                <ul className={styles.list}>
-                  {uniqIngredients.map((ingredient, index) => {
-                    return (
-                      <OrderViewElement
-                        key={ingredient + index}
-                        ingredientId={ingredient}
-                      />
-                    );
-                  })}
-                </ul>
-              </div>
-              <div className={styles.subtitle}>
-                <p className={styles.time}>{dateTime}</p>
-                <p className={styles.price}>
-                  <span className={styles.cost}>{totalPrice}</span>
-                  <CurrencyIcon type="primary" />
-                </p>
-              </div>
-            </>
-          )}
-        </div>
+        <div className={styles.container}>{content}</div>
       )}
     </>
   );
