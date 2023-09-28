@@ -4,14 +4,14 @@ import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import { ingredientPropType } from "../../utils/prop-types.js";
-
 import styles from "./burger-ingredient.module.css";
 
 import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
+import { ingredientPropType } from "../../utils/prop-types.js";
 
 const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
   const location = useLocation();
@@ -42,29 +42,19 @@ const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
   }, [ingredientData, counter]);
 
   return (
-    <>
+    <Link
+      to={`/ingredients/${ingredientData._id}`}
+      state={{ previousPage: location }}
+      className={styles.link}
+    >
       {ingredientData.type === "bun" && bun?._id === ingredientData._id ? (
-        <li>
-          <Link
-            to={`/ingredients/${ingredientData._id}`}
-            state={{ previousPage: location }}
-            className={styles.link}
-          >
-            {content}
-          </Link>
-        </li>
+        <li className={styles.element}>{content}</li>
       ) : (
-        <li ref={dragRef}>
-          <Link
-            to={`/ingredients/${ingredientData._id}`}
-            state={{ previousPage: location }}
-            className={styles.link}
-          >
-            {content}
-          </Link>
+        <li className={styles.element} ref={dragRef}>
+          {content}
         </li>
       )}
-    </>
+    </Link>
   );
 });
 

@@ -4,20 +4,24 @@ import { useDispatch } from "react-redux";
 
 import styles from "./app.module.css";
 
-import AppHeader from "../app-header/app-header.jsx";
 import Home from "../../pages/home/home.jsx";
 import Login from "../../pages/login/login.jsx";
 import Register from "../../pages/register/register.jsx";
 import ForgotPassword from "../../pages/forgot-password/forgot-password.jsx";
 import ResetPassword from "../../pages/reset-password/reset-password.jsx";
 import Profile from "../../pages/profile/profile.jsx";
+import NotFound from "../../pages/not-found/not-found.jsx";
+import IngredientDetailsPage from "../../pages/ingredient-details/ingredient-details";
+import FeedPage from "../../pages/feed/feed.jsx";
+import OrderViewPage from "../../pages/order-view/order-view";
+
+import AppHeader from "../app-header/app-header.jsx";
 import Modal from "../modal/modal.jsx";
 import IngredientDetails from "../ingredient-details/ingredient-details.jsx";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route/protected-route.jsx";
 import ProfileForm from "../profile-form/profile-form.jsx";
-import ProfileOrders from "../profile-orders/profile-orders.jsx";
-import NotFound from "../../pages/not-found/not-found.jsx";
-import IngredientDetailsPage from "../../pages/ingredient-details/ingredient-details";
+import OrdersList from "../orders-list/orders-list";
+import OrderView from "../order-view/order-view";
 
 import { getUser, setAuthChecked } from "../../services/actions/user.js";
 import { getIngredients } from "../../services/actions/burger-ingredients.js";
@@ -34,7 +38,7 @@ const App = () => {
     } else {
       dispatch(setAuthChecked(true));
     }
-  }, []);
+  }, [dispatch]);
 
   React.useEffect(() => {
     dispatch(getIngredients());
@@ -62,18 +66,19 @@ const App = () => {
           path="/reset-password"
           element={<OnlyUnAuth component={<ResetPassword />} />}
         />
-        <Route path="/orders-list" element={<h2>Список заказов</h2>} />
+        <Route path="/feed" element={<FeedPage />} />
         <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
           <Route path="" element={<ProfileForm />} />
-          <Route path="orders" element={<ProfileOrders />} />
-          <Route
-            path="orders/:orderId"
-            element={<h2>Список заказов пользователя</h2>}
-          />
+          <Route path="orders" element={<OrdersList />} />
         </Route>
         <Route
           path="/ingredients/:ingredientId"
           element={<IngredientDetailsPage />}
+        />
+        <Route path="/feed/:orderNumber" element={<OrderViewPage />} />
+        <Route
+          path="/profile/orders/:orderNumber"
+          element={<OnlyAuth component={<OrderViewPage />} />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -85,6 +90,22 @@ const App = () => {
             element={
               <Modal closeModal={handleModalClose}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="/profile/orders/:orderNumber"
+            element={
+              <Modal closeModal={handleModalClose}>
+                <OrderView />
+              </Modal>
+            }
+          />
+          <Route
+            path="/feed/:orderNumber"
+            element={
+              <Modal closeModal={handleModalClose}>
+                <OrderView />
               </Modal>
             }
           />

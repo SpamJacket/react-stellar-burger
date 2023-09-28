@@ -1,0 +1,77 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 60px 1fr;
+  max-width: 1240px;
+  width: 100%;
+  column-gap: 60px;
+  composes: pt-10 from global;
+  height: 100%;
+  overflow: hidden;
+}
+
+.title {
+  grid-column: 1 / span 2;
+  composes: pb-5 text text_type_main-large from global;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, min-content);
+  gap: 60px 36px;
+}
+
+.statusTitle {
+  composes: pb-6 text text_type_main-medium from global;
+}
+
+.orders {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-height: 344px;
+  row-gap: 8px;
+}
+
+.number {
+  composes: text text_type_digits-default from global;
+}
+
+.doneNumber {
+  composes: number;
+  color: #0cc;
+}
+
+.total {
+  grid-column: 1 / span 2;
+}
+
+.totalTitle {
+  composes: text text_type_main-medium from global;
+}
+
+.counter {
+  composes: text text_type_digits-large from global;
+}
+
+.loader {
+  grid-column: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  row-gap: 40px;
+  padding-top: 180px;
+}
+
+.loaderTitle {
+  composes: text text_type_main-large from global;
+}
+
+.loaderStatus {
+  composes: text text_type_main-medium from global;
+}

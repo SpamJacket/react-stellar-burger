@@ -4,6 +4,7 @@
   grid-template-rows: 1fr;
   column-gap: 60px;
   padding-top: 120px;
+  overflow: hidden;
 }
 
 .links {

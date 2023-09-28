@@ -3,15 +3,14 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./login.module.css";
 
-import useForm from "../../hooks/useForm.js";
-
-import { loginUser } from "../../services/actions/user.js";
-
 import {
   Button,
   EmailInput,
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
+import useForm from "../../hooks/useForm.js";
+import { loginUser } from "../../services/actions/user.js";
 
 const Login = () => {
   const dispatch = useDispatch();

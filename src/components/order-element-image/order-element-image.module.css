@@ -1,0 +1,51 @@
+.imageContainer {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(
+    45deg,
+    rgba(128, 26, 178, 1) 0%,
+    rgba(76, 76, 255, 1) 100%
+  );
+  border-radius: 100px;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.image {
+  border-radius: inherit;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #131316;
+}
+
+.lastImageContainer {
+  position: relative;
+  composes: imageContainer;
+}
+
+.lastImageContainer::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border-radius: 100px;
+  translate: -50% -50%;
+  background-color: #1c1c21;
+  opacity: 0.6;
+}
+
+.lastImage {
+  composes: image;
+}
+
+.extra {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  composes: text text_type_main-default from global;
+  z-index: 1;
+}

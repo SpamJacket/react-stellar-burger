@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./profile-form.module.css";
@@ -41,25 +41,25 @@ const ProfileForm = () => {
     dispatch(updateUser(values));
   };
 
-  const cancelChanges = () => {
-    setValues({
+  const cancelChanges = useCallback(() => {
+    return setValues({
       name: user.name,
       email: user.email,
       password: "",
     });
-  };
+  }, [user]);
 
   React.useEffect(() => {
     cancelChanges();
-  }, [user]);
+  }, [cancelChanges]);
 
-  const haveChanges = () => {
+  const haveChanges = useMemo(() => {
     return values.name !== user.name ||
       values.email !== user.email ||
       values.password !== ""
       ? true
       : false;
-  };
+  }, [values, user]);
 
   return (
     <form className={styles.form} onSubmit={saveChanges}>
@@ -90,7 +90,7 @@ const ProfileForm = () => {
         name={"password"}
         icon="EditIcon"
       />
-      {haveChanges() && (
+      {haveChanges && (
         <div className={styles.buttons}>
           <Button
             htmlType="button"

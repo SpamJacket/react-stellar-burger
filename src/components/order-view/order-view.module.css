@@ -1,0 +1,80 @@
+.container {
+  min-width: 640px;
+  max-width: 720px;
+  min-height: 300px;
+  display: grid;
+}
+
+.number {
+  composes: pt-5 pb-5 text text_type_digits-default from global;
+}
+
+.centerNumber {
+  composes: number;
+  text-align: center;
+}
+
+.name {
+  composes: pt-5 pb-2 text text_type_main-medium from global;
+}
+
+.status {
+  color: #0cc;
+  composes: pb-15 text text_type_main-default from global;
+}
+
+.structure {
+  box-sizing: border-box;
+  overflow: hidden;
+  composes: pb-10 from global;
+}
+
+.title {
+  composes: pb-6 text text_type_main-medium from global;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  padding-left: 0;
+  margin: 0;
+  box-sizing: border-box;
+  max-height: 312px;
+  overflow-y: scroll;
+  composes: pr-6 custom-scroll from global;
+}
+
+.subtitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.time {
+  composes: text text_type_main-default text_color_inactive from global;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  composes: text text_type_digits-default from global;
+}
+
+.cost {
+  composes: pr-2 from global;
+}
+
+.errorContainer {
+  composes: pt-4 pb-4 pr-10 from global;
+}
+
+.errorTitle {
+  composes: text text_type_main-medium from global;
+}
+
+.loaderTitle {
+  align-self: center;
+  text-align: center;
+  composes: text text_type_main-medium from global;
+}

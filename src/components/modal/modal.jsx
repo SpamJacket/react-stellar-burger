@@ -14,19 +14,22 @@ const Modal = ({ children, closeModal }) => {
   const modalRef = React.useRef();
   const overlayRef = React.useRef();
 
-  const animateClosing = () => {
+  const animateClosing = React.useCallback(() => {
     modalRef.current.style = "opacity: 0";
     setTimeout(() => {
       overlayRef.current.style = "opacity: 0";
     }, 100);
     setTimeout(closeModal, 300);
-  };
+  }, [modalRef, overlayRef, closeModal]);
 
-  const handleEscClose = (e) => {
-    if (e.key === "Escape") {
-      animateClosing();
-    }
-  };
+  const handleEscClose = React.useCallback(
+    (e) => {
+      if (e.key === "Escape") {
+        animateClosing();
+      }
+    },
+    [animateClosing]
+  );
 
   React.useEffect(() => {
     document.addEventListener("keydown", handleEscClose);
@@ -34,14 +37,14 @@ const Modal = ({ children, closeModal }) => {
     return () => {
       document.removeEventListener("keydown", handleEscClose);
     };
-  }, []);
+  }, [handleEscClose]);
 
   React.useEffect(() => {
     setTimeout(() => {
       overlayRef.current.style = "opacity: 1";
       modalRef.current.style = "opacity: 1";
     }, 0);
-  }, []);
+  }, [overlayRef, modalRef]);
 
   return ReactDOM.createPortal(
     <div className={styles.modal}>

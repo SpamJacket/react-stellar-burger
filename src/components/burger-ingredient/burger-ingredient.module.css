@@ -25,12 +25,15 @@
 }
 
 .link {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.element {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 8px;
-  cursor: pointer;
-  color: inherit;
-  text-decoration: none;
 }

@@ -3,12 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 
-import {
-  addToConstructorList,
-  setFilings,
-} from "../../services/actions/burger-constructor.js";
-import { placeOrder } from "../../services/actions/order-details.js";
-
 import styles from "./burger-constructor.module.css";
 
 import Modal from "../modal/modal.jsx";
@@ -20,6 +14,12 @@ import {
   CurrencyIcon,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
+
+import {
+  addToConstructorList,
+  setFilings,
+} from "../../services/actions/burger-constructor.js";
+import { placeOrder } from "../../services/actions/order-details.js";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
