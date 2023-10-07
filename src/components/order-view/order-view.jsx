@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/hooks/hooks";
 
 import styles from "./order-view.module.css";
 
@@ -53,7 +53,7 @@ const OrderView = ({ isPage }) => {
           (ingredient) => ingredient._id === ingredientId
         );
 
-        return currentPrice + ingredient.price;
+        return ingredient ? currentPrice + ingredient.price : currentPrice;
       }
 
       return currentPrice;

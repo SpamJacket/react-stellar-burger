@@ -1,22 +1,35 @@
-import { SET_USER, SET_AUTH_CHECKED } from "../../utils/constants.js";
-import request, { fetchWithRefresh } from "../../utils/api.js";
+import { SET_USER, SET_AUTH_CHECKED } from "../../utils/constants";
+import request, { fetchWithRefresh } from "../../utils/api";
+import { TAppDispatch, TInputs, TUser } from "../../utils/types";
 
-export const setUser = (user) => {
+export interface ISetUserAction {
+  readonly type: typeof SET_USER;
+  readonly user: TUser | null;
+}
+
+export interface ISetAuthCheckedAction {
+  readonly type: typeof SET_AUTH_CHECKED;
+  readonly payload: boolean;
+}
+
+export type TUserActions = ISetUserAction | ISetAuthCheckedAction;
+
+export const setUser = (user: TUser | null): ISetUserAction => {
   return {
     type: SET_USER,
     user,
   };
 };
 
-export const setAuthChecked = (value) => {
+export const setAuthChecked = (value: boolean): ISetAuthCheckedAction => {
   return {
     type: SET_AUTH_CHECKED,
     payload: value,
   };
 };
 
-export const loginUser = ({ email, password }) => {
-  return (dispatch) => {
+export const loginUser = ({ email, password }: TInputs): Function => {
+  return (dispatch: TAppDispatch): void => {
     request("/auth/login", {
       method: "POST",
       headers: {
@@ -36,8 +49,8 @@ export const loginUser = ({ email, password }) => {
   };
 };
 
-export const logoutUser = () => {
-  return (dispatch) => {
+export const logoutUser = (): Function => {
+  return (dispatch: TAppDispatch): void => {
     fetchWithRefresh("/auth/logout", {
       method: "POST",
       headers: {
@@ -56,8 +69,8 @@ export const logoutUser = () => {
   };
 };
 
-export const registerUser = ({ email, password, name }) => {
-  return (dispatch) => {
+export const registerUser = ({ email, password, name }: TInputs): Function => {
+  return (dispatch: TAppDispatch): void => {
     request("/auth/register", {
       method: "POST",
       headers: {
@@ -78,8 +91,8 @@ export const registerUser = ({ email, password, name }) => {
   };
 };
 
-export const handleForgotPassword = ({ email }) => {
-  return (dispatch) => {
+export const handleForgotPassword = ({ email }: TInputs): Function => {
+  return (): void => {
     request("/password-reset", {
       method: "POST",
       headers: {
@@ -87,14 +100,17 @@ export const handleForgotPassword = ({ email }) => {
       },
       body: JSON.stringify({ email }),
     })
-      .then(() => localStorage.setItem("resetFlag", true))
+      .then(() => {
+        localStorage.setItem("resetFlag", "true");
+        setTimeout(() => localStorage.removeItem("resetFlag"), 60000);
+      })
       .catch(console.error);
   };
 };
 
-export const handleResetPassword = ({ password, code }) => {
-  return (dispatch) => {
-    fetchWithRefresh("/password-reset/reset", {
+export const handleResetPassword = ({ password, code }: TInputs): Function => {
+  return (): void => {
+    request("/password-reset/reset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,13 +125,13 @@ export const handleResetPassword = ({ password, code }) => {
   };
 };
 
-export const getUser = () => {
-  return (dispatch) => {
+export const getUser = (): Function => {
+  return (dispatch: TAppDispatch): void => {
     fetchWithRefresh("/auth/user", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        authorization: localStorage.getItem("accessToken"),
+        authorization: `${localStorage.getItem("accessToken")}`,
       },
     })
       .then((res) => {
@@ -130,9 +146,9 @@ export const getUser = () => {
   };
 };
 
-export const updateUser = ({ name, email, password }) => {
-  return (dispatch) => {
-    const body =
+export const updateUser = ({ name, email, password }: TInputs): Function => {
+  return (dispatch: TAppDispatch): void => {
+    const body: TInputs =
       password === ""
         ? {
             email,
@@ -148,7 +164,7 @@ export const updateUser = ({ name, email, password }) => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        authorization: localStorage.getItem("accessToken"),
+        authorization: `${localStorage.getItem("accessToken")}`,
       },
       body: JSON.stringify(body),
     })

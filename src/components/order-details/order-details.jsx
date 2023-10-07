@@ -1,10 +1,10 @@
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks/hooks";
 
 import styles from "./order-details.module.css";
 
 import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { orderAcceptBackground } from "../../utils/constants.js";
+import { orderAcceptBackground } from "../../utils/constants";
 
 const OrderDetails = () => {
   const { order } = useSelector((store) => store.orderDetails);

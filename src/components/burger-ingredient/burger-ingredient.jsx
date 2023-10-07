@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks/hooks";
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -11,7 +11,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { ingredientPropType } from "../../utils/prop-types.js";
+import { ingredientPropType } from "../../utils/prop-types";
 
 const BurgerIngredient = React.memo(({ ingredientData, counter }) => {
   const location = useLocation();

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks/hooks";
 import { useDrag, useDrop } from "react-dnd";
 
 import styles from "./burger-element.module.css";
@@ -10,8 +10,8 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { deleteFromConstructorList } from "../../services/actions/burger-constructor.js";
-import { ingredientPropType } from "../../utils/prop-types.js";
+import { deleteFromConstructorList } from "../../services/actions/burger-constructor";
+import { ingredientPropType } from "../../utils/prop-types";
 
 const BurgerElement = React.memo(({ filing, sortIngredients }) => {
   const dispatch = useDispatch();

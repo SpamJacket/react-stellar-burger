@@ -3,14 +3,24 @@ import {
   DELETE_FROM_CONSTRUCTOR_LIST,
   CLEAN_CONSTRUCTOR_LIST,
   SET_FILINGS,
-} from "../../utils/constants.js";
+} from "../../utils/constants";
+import type { TIngredientWithUuid } from "../../utils/types";
+import type { TBurgerConstructorActions } from "../actions/burger-constructor";
 
-const initialState = {
+type TBurgerConstructorState = {
+  bun: TIngredientWithUuid | null;
+  filings: ReadonlyArray<TIngredientWithUuid>;
+};
+
+const initialState: TBurgerConstructorState = {
   bun: null,
   filings: [],
 };
 
-export const constructorReducer = (state = initialState, action) => {
+export const constructorReducer = (
+  state = initialState,
+  action: TBurgerConstructorActions
+): TBurgerConstructorState => {
   switch (action.type) {
     case ADD_TO_CONSTRUCTOR_LIST:
       return action.ingredient.type === "bun"

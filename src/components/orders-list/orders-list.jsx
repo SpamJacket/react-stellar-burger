@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react";
 import { useMatch } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/hooks/hooks";
 
 import styles from "./orders-list.module.css";
 

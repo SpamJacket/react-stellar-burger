@@ -2,15 +2,25 @@ import {
   PLACE_ORDER_REQUEST,
   PLACE_ORDER_SUCCESS,
   PLACE_ORDER_FAILED,
-} from "../../utils/constants.js";
+} from "../../utils/constants";
+import { TOrderDetailsActions } from "../actions/order-details";
 
-const initialState = {
+type TOrderDetailsState = {
+  order: { orderNumber: string } | null;
+  orderRequest: boolean;
+  orderFailed: boolean;
+};
+
+const initialState: TOrderDetailsState = {
   order: null,
   orderRequest: false,
   orderFailed: false,
 };
 
-export const orderDetails = (state = initialState, action) => {
+export const orderDetailsReducer = (
+  state = initialState,
+  action: TOrderDetailsActions
+): TOrderDetailsState => {
   switch (action.type) {
     case PLACE_ORDER_REQUEST:
       return {

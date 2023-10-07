@@ -5,8 +5,18 @@ import {
   FEED_WS_ERROR,
   FEED_WS_MESSAGE,
 } from "../../utils/constants";
+import { TOrderWithStringIngredients } from "../../utils/types";
+import type { TFeedActions } from "../actions/feed";
 
-const initialState = {
+type TFeedState = {
+  status: string;
+  orders: ReadonlyArray<TOrderWithStringIngredients>;
+  total: number | null;
+  totalToday: number | null;
+  error: string;
+};
+
+const initialState: TFeedState = {
   status: "offline",
   orders: [],
   total: null,
@@ -14,7 +24,10 @@ const initialState = {
   error: "",
 };
 
-export const feedReducer = (state = initialState, action) => {
+export const feedReducer = (
+  state = initialState,
+  action: TFeedActions
+): TFeedState => {
   switch (action.type) {
     case FEED_WS_CONNECTING:
       return {

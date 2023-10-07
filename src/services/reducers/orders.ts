@@ -5,8 +5,18 @@ import {
   ORDERS_WS_ERROR,
   ORDERS_WS_MESSAGE,
 } from "../../utils/constants";
+import { TOrderWithStringIngredients } from "../../utils/types";
+import { TOrdersActions } from "../actions/orders";
 
-const initialState = {
+export type TOrdersState = {
+  status: string;
+  orders: ReadonlyArray<TOrderWithStringIngredients>;
+  total: number | null;
+  totalToday: number | null;
+  error: string;
+};
+
+const initialState: TOrdersState = {
   status: "offline",
   orders: [],
   total: null,
@@ -14,7 +24,10 @@ const initialState = {
   error: "",
 };
 
-export const ordersReducer = (state = initialState, action) => {
+export const ordersReducer = (
+  state = initialState,
+  action: TOrdersActions
+): TOrdersState => {
   switch (action.type) {
     case ORDERS_WS_CONNECTING:
       return {

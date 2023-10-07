@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks/hooks";
 
 import styles from "./feed.module.css";
 

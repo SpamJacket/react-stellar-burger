@@ -1,8 +1,8 @@
-const socketMiddleware = (wsActions) => {
-  return (store) => {
-    let socket = null;
+const socketMiddleware = (wsActions: any): Function => {
+  return (store: any) => {
+    let socket: any = null;
 
-    return (next) => (action) => {
+    return (next: any) => (action: any) => {
       const { dispatch } = store;
       const { type } = action;
       const {
@@ -33,7 +33,7 @@ const socketMiddleware = (wsActions) => {
           dispatch({ type: onError, payload: "WebSocket error" });
         };
 
-        socket.onmessage = (e) => {
+        socket.onmessage = (e: any) => {
           const { data } = e;
           const parseData = JSON.parse(data);
 

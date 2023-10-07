@@ -1,5 +1,5 @@
 import { Navigate, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks/hooks";
 
 import styles from "./reset-password.module.css";
 
@@ -9,8 +9,8 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import useForm from "../../hooks/useForm.js";
-import { handleResetPassword } from "../../services/actions/user.js";
+import { useForm } from "../../services/hooks/useForm";
+import { handleResetPassword } from "../../services/actions/user";
 
 const ResetPassword = () => {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../../services/hooks/hooks";
 
 import styles from "./profile-form.module.css";
 
@@ -11,7 +11,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { updateUser } from "../../services/actions/user";
-import useForm from "../../hooks/useForm";
+import { useForm } from "../../services/hooks/useForm";
 
 const ProfileForm = () => {
   const dispatch = useDispatch();

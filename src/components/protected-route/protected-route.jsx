@@ -1,8 +1,8 @@
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks/hooks";
 import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import Preloader from "../../pages/preloader/preloader.jsx";
+import Preloader from "../../pages/preloader/preloader";
 
 const Protected = ({ onlyUnAuth, component }) => {
   const { user, isAuthChecked } = useSelector((store) => store.user);

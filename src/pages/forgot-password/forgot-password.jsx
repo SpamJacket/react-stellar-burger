@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks/hooks";
 
 import styles from "./forgot-password.module.css";
 
@@ -8,8 +8,8 @@ import {
   EmailInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import useForm from "../../hooks/useForm.js";
-import { handleForgotPassword } from "../../services/actions/user.js";
+import { useForm } from "../../services/hooks/useForm";
+import { handleForgotPassword } from "../../services/actions/user";
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();

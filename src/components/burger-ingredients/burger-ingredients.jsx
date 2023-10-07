@@ -1,9 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks/hooks";
 
 import styles from "./burger-ingredients.module.css";
 
-import BurgerIngredient from "../burger-ingredient/burger-ingredient.jsx";
+import BurgerIngredient from "../burger-ingredient/burger-ingredient";
 
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 

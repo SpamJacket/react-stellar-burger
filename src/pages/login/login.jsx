@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../services/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./login.module.css";
@@ -9,8 +9,8 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import useForm from "../../hooks/useForm.js";
-import { loginUser } from "../../services/actions/user.js";
+import { useForm } from "../../services/hooks/useForm";
+import { loginUser } from "../../services/actions/user";
 
 const Login = () => {
   const dispatch = useDispatch();

@@ -3,15 +3,28 @@ import {
   SET_ORDER_VIEW,
   PLACE_ORDER_VIEW_FAILED,
   CLEAN_ORDER_VIEW,
-} from "../../utils/constants.js";
+} from "../../utils/constants";
+import { TOrderWithStringIngredients } from "../../utils/types";
+import { TOrderViewActions } from "../actions/order-view";
 
-const initialState = {
+type TOrderViewState = {
+  order: ReadonlyArray<
+    TOrderWithStringIngredients & { owner: string; __v: number }
+  > | null;
+  orderViewRequest: boolean;
+  orderViewFailed: boolean;
+};
+
+const initialState: TOrderViewState = {
   order: null,
   orderViewRequest: false,
   orderViewFailed: false,
 };
 
-export const orderViewReducer = (state = initialState, action) => {
+export const orderViewReducer = (
+  state = initialState,
+  action: TOrderViewActions
+): TOrderViewState => {
   switch (action.type) {
     case PLACE_ORDER_VIEW_REQUEST:
       return {

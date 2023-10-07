@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "../../services/hooks/hooks";
 import { useDrop } from "react-dnd";
 
 import styles from "./burger-constructor.module.css";
 
-import Modal from "../modal/modal.jsx";
-import OrderDetails from "../order-details/order-details.jsx";
-import BurgerElement from "../burger-element/burger-element.jsx";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+import BurgerElement from "../burger-element/burger-element";
 
 import {
   ConstructorElement,
@@ -18,8 +18,8 @@ import {
 import {
   addToConstructorList,
   setFilings,
-} from "../../services/actions/burger-constructor.js";
-import { placeOrder } from "../../services/actions/order-details.js";
+} from "../../services/actions/burger-constructor";
+import { placeOrder } from "../../services/actions/order-details";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();

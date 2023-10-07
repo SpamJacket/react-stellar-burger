@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks/hooks";
 import PropTypes from "prop-types";
 
 import styles from "./order-view-element.module.css";
@@ -23,7 +23,7 @@ const OrderViewElement = ({ ingredientId }) => {
 
   return (
     <>
-      {ingredientId && (
+      {ingredientId && ingredient && (
         <li className={styles.ingredient}>
           <div className={styles.imageContainer}>
             <img

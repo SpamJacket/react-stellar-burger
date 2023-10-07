@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useMatch } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector } from "../../services/hooks/hooks";
 
 import styles from "./order-element.module.css";
 
@@ -34,7 +34,7 @@ const OrderElement = ({
         const ingredient = ingredientsList.ingredients.find(
           (ingredient) => ingredient._id === ingredientId
         );
-        return index < 6 ? (
+        return index < 6 && ingredient ? (
           <OrderElementImage
             key={ingredientId + index}
             index={index}
@@ -55,7 +55,7 @@ const OrderElement = ({
           (ingredient) => ingredient._id === ingredientId
         );
 
-        return currentPrice + ingredient.price;
+        return ingredient ? currentPrice + ingredient.price : currentPrice;
       }
 
       return currentPrice;
