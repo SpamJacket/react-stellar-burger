@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from "react";
-import PropTypes from "prop-types";
+import { FC, useEffect, useMemo } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "../../services/hooks/hooks";
 
@@ -14,14 +13,16 @@ import {
   cleanOrderView,
 } from "../../services/actions/order-view";
 
-const OrderView = ({ isPage }) => {
+const OrderView: FC<{ isPage?: boolean }> = ({ isPage }) => {
   const dispatch = useDispatch();
   const { orderNumber } = useParams();
 
   const ingredientsList = useSelector((store) => store.ingredientsList);
 
   useEffect(() => {
-    dispatch(setOrderView(orderNumber));
+    if (orderNumber) {
+      dispatch(setOrderView(orderNumber));
+    }
 
     return () => {
       dispatch(cleanOrderView());
@@ -31,11 +32,18 @@ const OrderView = ({ isPage }) => {
   const { order, orderViewRequest, orderViewFailed } = useSelector(
     (store) => store.orderView
   );
-  const { name, ingredients, status, createdAt } = order ? order[0] : {};
+  const {
+    name = "",
+    ingredients = [],
+    status = "",
+    createdAt = "",
+  } = order ? order[0] : {};
 
-  const uniqIngredients = Array.from(new Set(ingredients));
+  const uniqIngredients: ReadonlyArray<string> = Array.from(
+    new Set(ingredients)
+  );
 
-  const translateStatus = useMemo(() => {
+  const translateStatus = useMemo<string>(() => {
     switch (status) {
       case "done":
         return "Выполнен";
@@ -43,10 +51,12 @@ const OrderView = ({ isPage }) => {
         return "В работе";
       case "created":
         return "Создан";
+      default:
+        return "Что это за заказ?";
     }
   }, [status]);
 
-  const totalPrice = useMemo(() => {
+  const totalPrice = useMemo<number>(() => {
     return ingredients?.reduce((currentPrice, ingredientId) => {
       if (ingredientId) {
         const ingredient = ingredientsList.ingredients.find(
@@ -60,7 +70,7 @@ const OrderView = ({ isPage }) => {
     }, 0);
   }, [ingredients, ingredientsList]);
 
-  const dateTime = useMemo(() => {
+  const dateTime = useMemo<string>(() => {
     const newDate = new Date(Date.parse(createdAt));
     const nowDate = new Date(Date.now());
     let newDateTime = "";
@@ -101,7 +111,7 @@ const OrderView = ({ isPage }) => {
     return newDateTime + `i-${gmt.slice(0, 6)}:${gmt.slice(6)}`;
   }, [createdAt]);
 
-  const content = useMemo(() => {
+  const content = useMemo<JSX.Element>(() => {
     return orderViewRequest ? (
       <h2 className={styles.loaderTitle}>Идет загрузка, подождите</h2>
     ) : (
@@ -161,10 +171,6 @@ const OrderView = ({ isPage }) => {
 
 OrderView.defaultProps = {
   isPage: false,
-};
-
-OrderView.propTypes = {
-  isPage: PropTypes.bool,
 };
 
 export default OrderView;

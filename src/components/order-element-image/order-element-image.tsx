@@ -1,8 +1,12 @@
-import PropTypes from "prop-types";
-
+import { FC } from "react";
 import styles from "./order-element-image.module.css";
 
-const OrderElementImage = ({ index, orderLength, image, name }) => {
+const OrderElementImage: FC<{
+  index: number;
+  orderLength: number;
+  image: string;
+  name: string;
+}> = ({ index, orderLength, image, name }) => {
   return (
     <div
       className={
@@ -27,13 +31,6 @@ const OrderElementImage = ({ index, orderLength, image, name }) => {
       )}
     </div>
   );
-};
-
-OrderElementImage.propTypes = {
-  index: PropTypes.number.isRequired,
-  orderLength: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
 };
 
 export default OrderElementImage;

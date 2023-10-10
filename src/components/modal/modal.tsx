@@ -1,6 +1,5 @@
-import React from "react";
+import React, { FC } from "react";
 import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
 
 import styles from "./modal.module.css";
 
@@ -8,21 +7,28 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const modalRoot = document.getElementById("react-modal");
+const modalRoot = document.getElementById("react-modal") as HTMLElement;
 
-const Modal = ({ children, closeModal }) => {
-  const modalRef = React.useRef();
-  const overlayRef = React.useRef();
+const Modal: FC<{ children: React.ReactNode; closeModal: Function }> = ({
+  children,
+  closeModal,
+}) => {
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  const overlayRef = React.useRef<HTMLDivElement>(null);
 
-  const animateClosing = React.useCallback(() => {
-    modalRef.current.style = "opacity: 0";
-    setTimeout(() => {
-      overlayRef.current.style = "opacity: 0";
-    }, 100);
-    setTimeout(closeModal, 300);
+  const animateClosing = React.useCallback<() => void>(() => {
+    if (modalRef.current && overlayRef.current) {
+      modalRef.current.style.cssText = "opacity: 0";
+      setTimeout(() => {
+        if (overlayRef.current) {
+          overlayRef.current.style.cssText = "opacity: 0";
+        }
+      }, 100);
+      setTimeout(closeModal, 300);
+    }
   }, [modalRef, overlayRef, closeModal]);
 
-  const handleEscClose = React.useCallback(
+  const handleEscClose = React.useCallback<(e: any) => void>(
     (e) => {
       if (e.key === "Escape") {
         animateClosing();
@@ -41,8 +47,10 @@ const Modal = ({ children, closeModal }) => {
 
   React.useEffect(() => {
     setTimeout(() => {
-      overlayRef.current.style = "opacity: 1";
-      modalRef.current.style = "opacity: 1";
+      if (modalRef.current && overlayRef.current) {
+        overlayRef.current.style.cssText = "opacity: 1";
+        modalRef.current.style.cssText = "opacity: 1";
+      }
     }, 0);
   }, [overlayRef, modalRef]);
 
@@ -58,11 +66,6 @@ const Modal = ({ children, closeModal }) => {
     </div>,
     modalRoot
   );
-};
-
-Modal.propTypes = {
-  children: PropTypes.element.isRequired,
-  closeModal: PropTypes.func.isRequired,
 };
 
 export default Modal;

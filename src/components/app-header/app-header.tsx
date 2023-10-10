@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { NavLink, useMatch, useNavigate } from "react-router-dom";
 
 import styles from "./app-header.module.css";
@@ -9,7 +10,7 @@ import {
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   const navigate = useNavigate();
   const isConstructor = useMatch("/");
   const isOrdersList = useMatch("/feed/*");

@@ -6,7 +6,7 @@ import {
 } from "../../utils/constants";
 import { cleanConstructorList } from "./burger-constructor";
 import request from "../../utils/api";
-import { TAppDispatch } from "../../utils/types";
+import { TAppThunk } from "../../utils/types";
 
 export interface IPlaceOrderRequestAction {
   readonly type: typeof PLACE_ORDER_REQUEST;
@@ -29,8 +29,8 @@ export type TOrderDetailsActions =
 export const placeOrder = (
   ingredients: ReadonlyArray<string>,
   setIsModalOpened: Function
-): Function => {
-  return (dispatch: TAppDispatch): void => {
+): TAppThunk<Promise<unknown>> => {
+  return async (dispatch) => {
     dispatch({
       type: PLACE_ORDER_REQUEST,
     });

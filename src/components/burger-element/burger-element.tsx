@@ -1,5 +1,4 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import { useSelector, useDispatch } from "../../services/hooks/hooks";
 import { useDrag, useDrop } from "react-dnd";
 
@@ -11,14 +10,17 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { deleteFromConstructorList } from "../../services/actions/burger-constructor";
-import { ingredientPropType } from "../../utils/prop-types";
+import { TIngredientWithUuid } from "../../utils/types";
 
-const BurgerElement = React.memo(({ filing, sortIngredients }) => {
+const BurgerElement: FC<{
+  filing: TIngredientWithUuid;
+  sortIngredients: Function;
+}> = React.memo(({ filing, sortIngredients }) => {
   const dispatch = useDispatch();
 
   const { filings } = useSelector((store) => store.constructorList);
 
-  const dragDropRef = React.useRef(null);
+  const dragDropRef = React.useRef<HTMLLIElement>(null);
 
   const [{ isDrag }, dragRef] = useDrag({
     type: "sortedIngredient",
@@ -30,11 +32,13 @@ const BurgerElement = React.memo(({ filing, sortIngredients }) => {
     }),
   });
 
-  const [, dropTarget] = useDrop({
+  const [, dropTarget] = useDrop<{ id: string }>({
     accept: "sortedIngredient",
     hover(item) {
-      const dragIndex = filings.findIndex((el) => el.constructorId === item.id);
-      const hoverIndex = filings.findIndex(
+      const dragIndex: number = filings.findIndex(
+        (el) => el.constructorId === item.id
+      );
+      const hoverIndex: number = filings.findIndex(
         (el) => el.constructorId === filing.constructorId
       );
 
@@ -42,11 +46,11 @@ const BurgerElement = React.memo(({ filing, sortIngredients }) => {
     },
   });
 
-  const opacity = isDrag ? 0 : 1;
+  const opacity: number = isDrag ? 0 : 1;
 
   dragRef(dropTarget(dragDropRef));
 
-  const handleDeleteIngredientClick = () => {
+  const handleDeleteIngredientClick = (): void => {
     dispatch(deleteFromConstructorList(filing.constructorId));
   };
 
@@ -57,22 +61,17 @@ const BurgerElement = React.memo(({ filing, sortIngredients }) => {
         aria-label="Значок перетаскивания"
         className={styles.dragIcon}
       >
-        <DragIcon />
+        <DragIcon type={"primary"} />
       </button>
       <ConstructorElement
         text={filing.name}
         price={filing.price}
         thumbnail={filing.image}
-        extraClass={[styles.element_background_dark, styles.element]}
+        extraClass={styles.element_background_dark + " " + styles.element}
         handleClose={handleDeleteIngredientClick}
       />
     </li>
   );
 });
-
-BurgerElement.propTypes = {
-  filing: ingredientPropType.isRequired,
-  sortIngredients: PropTypes.func.isRequired,
-};
 
 export default BurgerElement;

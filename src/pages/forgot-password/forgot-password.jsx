@@ -25,8 +25,9 @@ const ForgotPassword = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(handleForgotPassword(values));
-    navigate("/reset-password");
+    dispatch(handleForgotPassword(values, navigate))
+      .then(() => navigate("/reset-password"))
+      .catch(console.error);
   };
 
   return (

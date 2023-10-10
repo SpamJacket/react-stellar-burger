@@ -27,11 +27,15 @@ const ResetPassword = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(handleResetPassword(values));
-    navigate("/login");
+    dispatch(handleResetPassword(values, navigate))
+      .then(() => navigate("/login"))
+      .catch(console.error);
   };
 
-  if (!localStorage.getItem("resetFlag")) {
+  if (
+    (localStorage.getItem("resetFlag") === "false") |
+    !localStorage.getItem("resetFlag")
+  ) {
     return <Navigate to="/" replace={true} />;
   }
 
@@ -73,7 +77,7 @@ const ResetPassword = () => {
           size="medium"
           extraClass={styles.link}
           onClick={() => {
-            localStorage.removeItem("resetFlag");
+            localStorage.setItem("resetFlag", "false");
             navigate("/login");
           }}
         >

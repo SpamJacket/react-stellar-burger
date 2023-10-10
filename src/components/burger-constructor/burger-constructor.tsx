@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "../../services/hooks/hooks";
 import { useDrop } from "react-dnd";
@@ -20,8 +20,9 @@ import {
   setFilings,
 } from "../../services/actions/burger-constructor";
 import { placeOrder } from "../../services/actions/order-details";
+import { TIngredient, TIngredientWithUuid } from "../../utils/types";
 
-const BurgerConstructor = () => {
+const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -32,17 +33,19 @@ const BurgerConstructor = () => {
     (store) => store.orderDetails
   );
 
-  const [{}, dropTarget] = useDrop({
+  const [, dropTarget] = useDrop<TIngredient>({
     accept: "ingredient",
     drop(item) {
       dispatch(addToConstructorList(item));
     },
   });
 
-  const sortIngredients = React.useCallback(
-    (fromIndex, toIndex) => {
-      const dragFiling = filings[fromIndex];
-      const newFilings = [...filings];
+  const sortIngredients = React.useCallback<
+    (fromIndex: number, toIndex: number) => void
+  >(
+    (fromIndex: number, toIndex: number) => {
+      const dragFiling: TIngredientWithUuid = filings[fromIndex];
+      const newFilings: Array<TIngredientWithUuid> = [...filings];
       newFilings.splice(fromIndex, 1);
       newFilings.splice(toIndex, 0, dragFiling);
       dispatch(setFilings(newFilings));
@@ -50,11 +53,11 @@ const BurgerConstructor = () => {
     [dispatch, filings]
   );
 
-  const [isModalOpened, setIsModalOpened] = React.useState(false);
+  const [isModalOpened, setIsModalOpened] = React.useState<boolean>(false);
 
-  const handleOrderButtonClick = () => {
-    if (user) {
-      const ingredientsId = [bun._id];
+  const handleOrderButtonClick = (): void => {
+    if (user && bun) {
+      const ingredientsId: Array<string> = [bun._id];
       filings.forEach((filing) => ingredientsId.push(filing._id));
       dispatch(placeOrder(ingredientsId, setIsModalOpened));
     } else {
@@ -62,11 +65,11 @@ const BurgerConstructor = () => {
     }
   };
 
-  const handleCloseModal = () => {
+  const handleCloseModal = (): void => {
     setIsModalOpened(false);
   };
 
-  const totalPrice = React.useMemo(() => {
+  const totalPrice = React.useMemo<number>(() => {
     let price = 0;
     if (bun) {
       price += bun.price * 2;
@@ -76,7 +79,7 @@ const BurgerConstructor = () => {
     }, price);
   }, [bun, filings]);
 
-  const content = React.useMemo(() => {
+  const content = React.useMemo<JSX.Element>(() => {
     return orderRequest ? (
       <h2 className={styles.loadingTitle}>Идет оформление заказа, подождите</h2>
     ) : (
@@ -90,10 +93,9 @@ const BurgerConstructor = () => {
               text={bun.name + " (верх)"}
               price={bun.price}
               thumbnail={bun.image}
-              extraClass={[
-                styles.element_background_dark,
-                styles.borderElement,
-              ]}
+              extraClass={
+                styles.element_background_dark + " " + styles.borderElement
+              }
             />
           )}
           <ul className={styles.list}>
@@ -113,16 +115,15 @@ const BurgerConstructor = () => {
               text={bun.name + " (низ)"}
               price={bun.price}
               thumbnail={bun.image}
-              extraClass={[
-                styles.element_background_dark,
-                styles.borderElement,
-              ]}
+              extraClass={
+                styles.element_background_dark + " " + styles.borderElement
+              }
             />
           )}
         </div>
         <div className={styles.price}>
           <p className={styles.digit}>{totalPrice}</p>
-          <CurrencyIcon />
+          <CurrencyIcon type={"primary"} />
         </div>
         <Button
           disabled={bun ? false : true}

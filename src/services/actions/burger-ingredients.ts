@@ -5,7 +5,7 @@ import {
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAILED,
 } from "../../utils/constants";
-import { TAppDispatch, TIngredient } from "../../utils/types";
+import { TAppThunk, TIngredient } from "../../utils/types";
 
 export interface IGetIngredientsRequestAction {
   readonly type: typeof GET_INGREDIENTS_REQUEST;
@@ -25,8 +25,8 @@ export type TBurgerIngredientsActions =
   | IGetIngredientsSuccessAction
   | IGetIngredientsFailedAction;
 
-export const getIngredients = (): Function => {
-  return (dispatch: TAppDispatch): void => {
+export const getIngredients = (): TAppThunk<Promise<unknown>> => {
+  return async (dispatch) => {
     dispatch({
       type: GET_INGREDIENTS_REQUEST,
     });

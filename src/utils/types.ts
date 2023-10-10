@@ -6,9 +6,24 @@ import { TOrderDetailsActions } from "../services/actions/order-details";
 import { TOrderViewActions } from "../services/actions/order-view";
 import { TOrdersActions } from "../services/actions/orders";
 import { TUserActions } from "../services/actions/user";
+import { Middleware } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
-
-export type TKey = { [key: string]: string };
+import {
+  FEED_CONNECT,
+  FEED_DISCONNECT,
+  FEED_WS_CONNECTING,
+  FEED_WS_OPEN,
+  FEED_WS_CLOSE,
+  FEED_WS_ERROR,
+  FEED_WS_MESSAGE,
+  ORDERS_CONNECT,
+  ORDERS_DISCONNECT,
+  ORDERS_WS_CONNECTING,
+  ORDERS_WS_OPEN,
+  ORDERS_WS_CLOSE,
+  ORDERS_WS_ERROR,
+  ORDERS_WS_MESSAGE,
+} from "./constants";
 
 export type TInputs = {
   email?: string;
@@ -54,7 +69,7 @@ export type TOrderWithStringIngredients = TOrder & {
 
 export type TFetchOptions = {
   method: string;
-  headers: TKey;
+  headers: { [key: string]: string };
   body?: string;
 };
 
@@ -106,7 +121,8 @@ export type TRequest = TUserRefreshRequest &
   TGetOrderRequest & { success: boolean; message: string };
 
 export type TRootState = ReturnType<typeof store.getState>;
-type TApplicationActions =
+
+export type TApplicationActions =
   | TBurgerConstructorActions
   | TBurgerIngredientsActions
   | TFeedActions
@@ -127,3 +143,27 @@ export type TAppDispatch = ThunkDispatch<
   never,
   TApplicationActions
 >;
+
+export type TWebSocketMiddleware = Middleware<{}, TRootState>;
+
+export type TFeedWsActions = {
+  wsConnect: typeof FEED_CONNECT;
+  wsDisconnect: typeof FEED_DISCONNECT;
+  wsConnecting: typeof FEED_WS_CONNECTING;
+  onOpen: typeof FEED_WS_OPEN;
+  onClose: typeof FEED_WS_CLOSE;
+  onError: typeof FEED_WS_ERROR;
+  onMessage: typeof FEED_WS_MESSAGE;
+};
+
+export type TOrdersWsActions = {
+  wsConnect: typeof ORDERS_CONNECT;
+  wsDisconnect: typeof ORDERS_DISCONNECT;
+  wsConnecting: typeof ORDERS_WS_CONNECTING;
+  onOpen: typeof ORDERS_WS_OPEN;
+  onClose: typeof ORDERS_WS_CLOSE;
+  onError: typeof ORDERS_WS_ERROR;
+  onMessage: typeof ORDERS_WS_MESSAGE;
+};
+
+export type TWebSocketActions = TOrdersWsActions | TFeedWsActions;

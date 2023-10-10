@@ -6,7 +6,7 @@ import {
 } from "../../utils/constants";
 
 import request from "../../utils/api";
-import { TAppDispatch, TOrderWithStringIngredients } from "../../utils/types";
+import { TAppThunk, TOrderWithStringIngredients } from "../../utils/types";
 
 export interface IPlaceOrderViewRequestAction {
   readonly type: typeof PLACE_ORDER_VIEW_REQUEST;
@@ -33,8 +33,8 @@ export type TOrderViewActions =
   | IPlaceOrderViewFailedAction
   | ICleanOrderViewAction;
 
-export const setOrderView = (number: string): Function => {
-  return (dispatch: TAppDispatch): void => {
+export const setOrderView = (number: string): TAppThunk<Promise<unknown>> => {
+  return async (dispatch) => {
     dispatch({
       type: PLACE_ORDER_VIEW_REQUEST,
     });

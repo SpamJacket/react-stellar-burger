@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Link, useLocation, useMatch } from "react-router-dom";
 import { useSelector } from "../../services/hooks/hooks";
 
@@ -8,16 +8,20 @@ import OrderElementImage from "../order-element-image/order-element-image";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { orderPropType } from "../../utils/prop-types";
-
-const OrderElement = ({
-  data: { createdAt, ingredients, name, number, status },
-}) => {
+const OrderElement: FC<{
+  data: {
+    createdAt: string;
+    ingredients: ReadonlyArray<string>;
+    name: string;
+    number: number;
+    status: string;
+  };
+}> = ({ data: { createdAt, ingredients, name, number, status } }) => {
   const location = useLocation();
   const isPrivateList = useMatch("/profile/orders");
   const ingredientsList = useSelector((store) => store.ingredientsList);
 
-  const translateStatus = React.useMemo(() => {
+  const translateStatus = React.useMemo<string>(() => {
     switch (status) {
       case "done":
         return "Выполнен";
@@ -25,10 +29,12 @@ const OrderElement = ({
         return "В работе";
       case "created":
         return "Создан";
+      default:
+        return "Что это за заказ?";
     }
   }, [status]);
 
-  const images = React.useMemo(() => {
+  const images = React.useMemo<ReadonlyArray<JSX.Element | null>>(() => {
     return ingredients.map((ingredientId, index) => {
       if (ingredientId) {
         const ingredient = ingredientsList.ingredients.find(
@@ -48,7 +54,7 @@ const OrderElement = ({
     });
   }, [ingredients, ingredientsList]);
 
-  const totalPrice = React.useMemo(() => {
+  const totalPrice = React.useMemo<number>(() => {
     return ingredients.reduce((currentPrice, ingredientId) => {
       if (ingredientId) {
         const ingredient = ingredientsList.ingredients.find(
@@ -62,7 +68,7 @@ const OrderElement = ({
     }, 0);
   }, [ingredients, ingredientsList]);
 
-  const dateTime = React.useMemo(() => {
+  const dateTime = React.useMemo<string>(() => {
     const newDate = new Date(Date.parse(createdAt));
     const nowDate = new Date(Date.now());
     let newDateTime = "";
@@ -132,10 +138,6 @@ const OrderElement = ({
       )}
     </>
   );
-};
-
-OrderElement.propTypes = {
-  data: orderPropType.isRequired,
 };
 
 export default OrderElement;

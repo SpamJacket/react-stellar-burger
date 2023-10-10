@@ -45,6 +45,8 @@ export interface IFeedWsMessageAction {
 }
 
 export type TFeedActions =
+  | IFeedConnectAction
+  | IFeedDisconnectAction
   | IFeedWsConnectingAction
   | IFeedWsOpenAction
   | IFeedWsCloseAction

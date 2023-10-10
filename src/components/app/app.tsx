@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "../../services/hooks/hooks";
 
@@ -26,7 +26,7 @@ import OrderView from "../order-view/order-view";
 import { getUser, setAuthChecked } from "../../services/actions/user";
 import { getIngredients } from "../../services/actions/burger-ingredients";
 
-const App = () => {
+const App: FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ const App = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  const handleModalClose = () => {
+  const handleModalClose = (): void => {
     navigate(-1);
   };
 

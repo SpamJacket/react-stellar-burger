@@ -1,21 +1,21 @@
-import React from "react";
+import React, { FC } from "react";
 import { useSelector } from "../../services/hooks/hooks";
-import PropTypes from "prop-types";
 
 import styles from "./order-view-element.module.css";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { TIngredient } from "../../utils/types";
 
-const OrderViewElement = ({ ingredientId }) => {
+const OrderViewElement: FC<{ ingredientId: string }> = ({ ingredientId }) => {
   const ingredientsList = useSelector((store) => store.ingredientsList);
-  const ingredient = ingredientsList.ingredients.find(
+  const ingredient: TIngredient | undefined = ingredientsList.ingredients.find(
     (ingredient) => ingredient._id === ingredientId
   );
 
   const { order } = useSelector((store) => store.orderView);
-  const { ingredients } = order ? order[0] : {};
+  const { ingredients = [] } = order ? order[0] : {};
 
-  const counter = React.useMemo(() => {
+  const counter = React.useMemo<number>(() => {
     return ingredients.reduce((currentCount, ingredient) => {
       return ingredient === ingredientId ? currentCount + 1 : currentCount;
     }, 0);
@@ -43,10 +43,6 @@ const OrderViewElement = ({ ingredientId }) => {
       )}
     </>
   );
-};
-
-OrderViewElement.propTypes = {
-  ingredientId: PropTypes.string.isRequired,
 };
 
 export default OrderViewElement;

@@ -2,8 +2,9 @@ import { useSelector } from "../../services/hooks/hooks";
 import { useParams } from "react-router-dom";
 
 import styles from "./ingredient-details.module.css";
+import { FC } from "react";
 
-const IngredientDetails = () => {
+const IngredientDetails: FC = () => {
   const { ingredients } = useSelector((store) => store.ingredientsList);
   const { ingredientId } = useParams();
   const ingredient = ingredients.find(

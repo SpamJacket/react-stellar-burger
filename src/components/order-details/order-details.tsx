@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { useSelector } from "../../services/hooks/hooks";
 
 import styles from "./order-details.module.css";
@@ -6,7 +7,7 @@ import { CheckMarkIcon } from "@ya.praktikum/react-developer-burger-ui-component
 
 import { orderAcceptBackground } from "../../utils/constants";
 
-const OrderDetails = () => {
+const OrderDetails: FC = () => {
   const { order } = useSelector((store) => store.orderDetails);
 
   return (

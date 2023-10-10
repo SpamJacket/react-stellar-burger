@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { useSelector } from "../../services/hooks/hooks";
 
 import styles from "./burger-ingredients.module.css";
@@ -7,46 +7,58 @@ import BurgerIngredient from "../burger-ingredient/burger-ingredient";
 
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 
-const BurgerIngredients = () => {
+const BurgerIngredients: FC = () => {
   const { ingredients, ingredientsRequest, ingredientsFailed } = useSelector(
     (store) => store.ingredientsList
   );
 
   const { bun, filings } = useSelector((store) => store.constructorList);
 
-  const [current, setCurrent] = React.useState("Buns");
+  const [current, setCurrent] = React.useState<string>("Buns");
 
-  const bunsHeaderRef = React.useRef();
-  const saucesHeaderRef = React.useRef();
-  const mainsHeaderRef = React.useRef();
+  const bunsHeaderRef = React.useRef<HTMLHeadingElement>(null);
+  const saucesHeaderRef = React.useRef<HTMLHeadingElement>(null);
+  const mainsHeaderRef = React.useRef<HTMLHeadingElement>(null);
 
-  const scrollIntoTitle = (tab) => {
+  const scrollIntoTitle = (tab: string): void => {
     setCurrent(tab);
-    if (tab === "Buns") {
-      bunsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
-    } else if (tab === "Sauces") {
-      saucesHeaderRef.current.scrollIntoView({ behavior: "smooth" });
-    } else {
-      mainsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+    if (
+      bunsHeaderRef.current &&
+      saucesHeaderRef.current &&
+      mainsHeaderRef.current
+    ) {
+      if (tab === "Buns") {
+        bunsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+      } else if (tab === "Sauces") {
+        saucesHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+      } else {
+        mainsHeaderRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
-  const updateTab = () => {
-    const bunsRect = bunsHeaderRef.current.getBoundingClientRect();
-    const saucesRect = saucesHeaderRef.current.getBoundingClientRect();
-    const mainsRect = mainsHeaderRef.current.getBoundingClientRect();
+  const updateTab = (): void => {
+    if (
+      bunsHeaderRef.current &&
+      saucesHeaderRef.current &&
+      mainsHeaderRef.current
+    ) {
+      const bunsRect = bunsHeaderRef.current.getBoundingClientRect();
+      const saucesRect = saucesHeaderRef.current.getBoundingClientRect();
+      const mainsRect = mainsHeaderRef.current.getBoundingClientRect();
 
-    if (mainsRect.top < 400) {
-      setCurrent("Mains");
-    } else if (saucesRect.top < 400) {
-      setCurrent("Sauces");
-    } else if (bunsRect.top < 400) {
-      setCurrent("Buns");
+      if (mainsRect.top < 400) {
+        setCurrent("Mains");
+      } else if (saucesRect.top < 400) {
+        setCurrent("Sauces");
+      } else if (bunsRect.top < 400) {
+        setCurrent("Buns");
+      }
     }
   };
 
-  const ingredientsId = React.useMemo(() => {
-    const ingredients = {};
+  const ingredientsId = React.useMemo<{ [key: string]: number }>(() => {
+    const ingredients: { [key: string]: number } = {};
     if (bun) {
       ingredients[bun._id] = 2;
     }
@@ -60,7 +72,9 @@ const BurgerIngredients = () => {
     return ingredients;
   }, [bun, filings]);
 
-  const renderIngredients = React.useCallback(
+  const renderIngredients = React.useCallback<
+    (type: string) => ReadonlyArray<JSX.Element | undefined>
+  >(
     (type) => {
       return ingredients.map((ingredient) => {
         if (ingredient.type === type) {
@@ -77,7 +91,7 @@ const BurgerIngredients = () => {
     [ingredients, ingredientsId]
   );
 
-  const content = React.useMemo(() => {
+  const content = React.useMemo<JSX.Element>(() => {
     return ingredientsRequest ? (
       <h2 className={styles.loadingTitle}>
         Подождите, идет загрузка ингредиентов
