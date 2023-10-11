@@ -40,12 +40,10 @@ const BurgerConstructor: FC = () => {
     },
   });
 
-  const sortIngredients = React.useCallback<
-    (fromIndex: number, toIndex: number) => void
-  >(
+  const sortIngredients = React.useCallback(
     (fromIndex: number, toIndex: number) => {
-      const dragFiling: TIngredientWithUuid = filings[fromIndex];
-      const newFilings: Array<TIngredientWithUuid> = [...filings];
+      const dragFiling = filings[fromIndex];
+      const newFilings = [...filings];
       newFilings.splice(fromIndex, 1);
       newFilings.splice(toIndex, 0, dragFiling);
       dispatch(setFilings(newFilings));
@@ -55,9 +53,9 @@ const BurgerConstructor: FC = () => {
 
   const [isModalOpened, setIsModalOpened] = React.useState<boolean>(false);
 
-  const handleOrderButtonClick = (): void => {
+  const handleOrderButtonClick = () => {
     if (user && bun) {
-      const ingredientsId: Array<string> = [bun._id];
+      const ingredientsId = [bun._id];
       filings.forEach((filing) => ingredientsId.push(filing._id));
       dispatch(placeOrder(ingredientsId, setIsModalOpened));
     } else {
@@ -65,11 +63,11 @@ const BurgerConstructor: FC = () => {
     }
   };
 
-  const handleCloseModal = (): void => {
+  const handleCloseModal = () => {
     setIsModalOpened(false);
   };
 
-  const totalPrice = React.useMemo<number>(() => {
+  const totalPrice = React.useMemo(() => {
     let price = 0;
     if (bun) {
       price += bun.price * 2;
@@ -79,7 +77,7 @@ const BurgerConstructor: FC = () => {
     }, price);
   }, [bun, filings]);
 
-  const content = React.useMemo<JSX.Element>(() => {
+  const content = React.useMemo(() => {
     return orderRequest ? (
       <h2 className={styles.loadingTitle}>Идет оформление заказа, подождите</h2>
     ) : (

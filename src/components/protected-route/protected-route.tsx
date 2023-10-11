@@ -3,11 +3,12 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import Preloader from "../../pages/preloader/preloader";
 import { FC } from "react";
+import { TLocation } from "../../utils/types";
 
 const Protected: FC<{
   onlyUnAuth?: boolean;
   component: JSX.Element;
-}> = ({ onlyUnAuth, component }) => {
+}> = ({ onlyUnAuth = false, component }) => {
   const { user, isAuthChecked } = useSelector((store) => store.user);
   const location = useLocation();
 
@@ -16,7 +17,7 @@ const Protected: FC<{
   }
 
   if (onlyUnAuth && user) {
-    const { from } = location.state || { from: { pathname: "/" } };
+    const { from }: TLocation = location.state || { from: { pathname: "/" } };
     return <Navigate to={from} />;
   }
 
@@ -31,7 +32,3 @@ export const OnlyAuth = Protected;
 export const OnlyUnAuth: FC<{ component: JSX.Element }> = ({ component }) => (
   <Protected onlyUnAuth={true} component={component} />
 );
-
-Protected.defaultProps = {
-  onlyUnAuth: false,
-};

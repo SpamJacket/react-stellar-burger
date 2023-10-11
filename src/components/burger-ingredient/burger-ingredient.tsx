@@ -22,7 +22,7 @@ const BurgerIngredient: FC<{ ingredientData: TIngredient; counter: number }> =
       item: ingredientData,
     });
 
-    const content = React.useMemo<JSX.Element>(() => {
+    const content = React.useMemo(() => {
       return (
         <>
           <img

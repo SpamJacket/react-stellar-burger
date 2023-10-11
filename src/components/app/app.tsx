@@ -25,12 +25,14 @@ import OrderView from "../order-view/order-view";
 
 import { getUser, setAuthChecked } from "../../services/actions/user";
 import { getIngredients } from "../../services/actions/burger-ingredients";
+import { PreviousPage } from "../../utils/types";
 
 const App: FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const previousPage = location.state && location.state.previousPage;
+  const previousPage: PreviousPage =
+    location.state && location.state.previousPage;
 
   React.useEffect(() => {
     if (localStorage.getItem("accessToken")) {
@@ -44,7 +46,7 @@ const App: FC = () => {
     dispatch(getIngredients());
   }, [dispatch]);
 
-  const handleModalClose = (): void => {
+  const handleModalClose = () => {
     navigate(-1);
   };
 

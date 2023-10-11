@@ -25,6 +25,16 @@ import {
   ORDERS_WS_MESSAGE,
 } from "./constants";
 
+export type PreviousPage = {
+  pathname: string;
+  search: string;
+  hash: string;
+  key: string;
+  state: null | PreviousPage;
+};
+
+export type TLocation = PreviousPage & { from: { pathname: string } };
+
 export type TInputs = {
   email?: string;
   password?: string;

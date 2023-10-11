@@ -33,8 +33,8 @@ export type TOrderViewActions =
   | IPlaceOrderViewFailedAction
   | ICleanOrderViewAction;
 
-export const setOrderView = (number: string): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+export const setOrderView = (number: string): TAppThunk => {
+  return (dispatch) => {
     dispatch({
       type: PLACE_ORDER_VIEW_REQUEST,
     });
@@ -56,7 +56,7 @@ export const setOrderView = (number: string): TAppThunk<Promise<unknown>> => {
   };
 };
 
-export const cleanOrderView = () => {
+export const cleanOrderView = (): ICleanOrderViewAction => {
   return {
     type: CLEAN_ORDER_VIEW,
   };

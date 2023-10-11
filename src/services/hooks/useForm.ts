@@ -1,15 +1,11 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import type { TInputs } from "../../utils/types";
 
-export function useForm(inputValues: TInputs = {}): {
-  values: TInputs;
-  handleChange: Function;
-  setValues: Function;
-} {
+export function useForm(inputValues: TInputs = {}) {
   const [values, setValues] = React.useState<TInputs>(inputValues);
 
-  const handleChange = (e: any): void => {
-    const { value, name } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target as HTMLInputElement;
     setValues({ ...values, [name]: value });
   };
 

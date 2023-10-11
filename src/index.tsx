@@ -3,7 +3,11 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
-import { legacy_createStore as createStore, applyMiddleware } from "redux";
+import {
+  legacy_createStore as createStore,
+  applyMiddleware,
+  StoreEnhancer,
+} from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { Provider } from "react-redux";
 import rootReducer from "./services/reducers/index";
@@ -27,7 +31,7 @@ import {
   ORDERS_WS_MESSAGE,
 } from "./utils/constants";
 
-const feedMiddleware: any = socketMiddleware({
+const feedMiddleware = socketMiddleware({
   wsConnect: FEED_CONNECT,
   wsDisconnect: FEED_DISCONNECT,
   wsConnecting: FEED_WS_CONNECTING,
@@ -37,7 +41,7 @@ const feedMiddleware: any = socketMiddleware({
   onMessage: FEED_WS_MESSAGE,
 });
 
-const ordersMiddleware: any = socketMiddleware({
+const ordersMiddleware = socketMiddleware({
   wsConnect: ORDERS_CONNECT,
   wsDisconnect: ORDERS_DISCONNECT,
   wsConnecting: ORDERS_WS_CONNECTING,
@@ -49,7 +53,9 @@ const ordersMiddleware: any = socketMiddleware({
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
 
-const enhancer = composeWithDevTools(
+const enhancer: StoreEnhancer<{
+  dispatch: unknown;
+}> = composeWithDevTools(
   applyMiddleware(thunk, feedMiddleware, ordersMiddleware)
 );
 

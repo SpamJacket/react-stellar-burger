@@ -13,7 +13,7 @@ import {
   cleanOrderView,
 } from "../../services/actions/order-view";
 
-const OrderView: FC<{ isPage?: boolean }> = ({ isPage }) => {
+const OrderView: FC<{ isPage?: boolean }> = ({ isPage = false }) => {
   const dispatch = useDispatch();
   const { orderNumber } = useParams();
 
@@ -39,11 +39,9 @@ const OrderView: FC<{ isPage?: boolean }> = ({ isPage }) => {
     createdAt = "",
   } = order ? order[0] : {};
 
-  const uniqIngredients: ReadonlyArray<string> = Array.from(
-    new Set(ingredients)
-  );
+  const uniqIngredients = Array.from(new Set(ingredients));
 
-  const translateStatus = useMemo<string>(() => {
+  const translateStatus = useMemo(() => {
     switch (status) {
       case "done":
         return "Выполнен";
@@ -56,7 +54,7 @@ const OrderView: FC<{ isPage?: boolean }> = ({ isPage }) => {
     }
   }, [status]);
 
-  const totalPrice = useMemo<number>(() => {
+  const totalPrice = useMemo(() => {
     return ingredients?.reduce((currentPrice, ingredientId) => {
       if (ingredientId) {
         const ingredient = ingredientsList.ingredients.find(
@@ -70,7 +68,7 @@ const OrderView: FC<{ isPage?: boolean }> = ({ isPage }) => {
     }, 0);
   }, [ingredients, ingredientsList]);
 
-  const dateTime = useMemo<string>(() => {
+  const dateTime = useMemo(() => {
     const newDate = new Date(Date.parse(createdAt));
     const nowDate = new Date(Date.now());
     let newDateTime = "";
@@ -111,7 +109,7 @@ const OrderView: FC<{ isPage?: boolean }> = ({ isPage }) => {
     return newDateTime + `i-${gmt.slice(0, 6)}:${gmt.slice(6)}`;
   }, [createdAt]);
 
-  const content = useMemo<JSX.Element>(() => {
+  const content = useMemo(() => {
     return orderViewRequest ? (
       <h2 className={styles.loaderTitle}>Идет загрузка, подождите</h2>
     ) : (
@@ -167,10 +165,6 @@ const OrderView: FC<{ isPage?: boolean }> = ({ isPage }) => {
       )}
     </>
   );
-};
-
-OrderView.defaultProps = {
-  isPage: false,
 };
 
 export default OrderView;

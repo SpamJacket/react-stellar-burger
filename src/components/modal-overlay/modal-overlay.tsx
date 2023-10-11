@@ -1,10 +1,10 @@
-import React from "react";
+import React, { MouseEvent } from "react";
 
 import styles from "./modal-overlay.module.css";
 
 const ModalOverlay = React.forwardRef<HTMLDivElement, { closeModal: Function }>(
   ({ closeModal }, overlayRef) => {
-    const handleOverlayClick = (e: any): void => {
+    const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
       if (e.target === e.currentTarget) {
         closeModal();
       }

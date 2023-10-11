@@ -1,13 +1,11 @@
 import { BASE_URL } from "./constants";
-import type { TFetchOptions, TRequest, TUserRefreshRequest } from "./types";
+import type { TFetchOptions, TRequest } from "./types";
 
-const checkResponse = (res: any): Promise<TRequest> => {
-  return res.ok
-    ? res.json()
-    : res.json().then((err: any): Promise<never> => Promise.reject(err));
+const checkResponse = (res: { ok: any; json: () => Promise<any> }) => {
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-const checkSuccess = (res: any): Promise<TRequest> => {
+const checkSuccess = (res: { ok: any; success: boolean; message: string }) => {
   if (res && res.success) {
     return res;
   }
@@ -15,16 +13,16 @@ const checkSuccess = (res: any): Promise<TRequest> => {
   return Promise.reject(`Ответ не success: ${res.message}`);
 };
 
-const request = (
+const request = async (
   endpoint: string,
   options?: TFetchOptions | { method: string }
-): Promise<TRequest> => {
-  return fetch(BASE_URL + endpoint, options)
+) => {
+  return (await fetch(BASE_URL + endpoint, options)
     .then(checkResponse)
-    .then(checkSuccess);
+    .then(checkSuccess)) as TRequest | never;
 };
 
-const refreshToken = (): Promise<TUserRefreshRequest> => {
+const refreshToken = () => {
   return request("/auth/token", {
     method: "POST",
     headers: {
@@ -39,12 +37,12 @@ const refreshToken = (): Promise<TUserRefreshRequest> => {
 export const fetchWithRefresh = async (
   endpoint: string,
   options: TFetchOptions
-): Promise<TRequest> => {
+) => {
   try {
     return await request(endpoint, options);
   } catch (err: any) {
     if (err.message === "jwt expired" || err.message === "jwt malformed") {
-      const refreshData: TUserRefreshRequest = await refreshToken();
+      const refreshData = await refreshToken();
 
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);

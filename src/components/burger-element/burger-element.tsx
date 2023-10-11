@@ -35,10 +35,8 @@ const BurgerElement: FC<{
   const [, dropTarget] = useDrop<{ id: string }>({
     accept: "sortedIngredient",
     hover(item) {
-      const dragIndex: number = filings.findIndex(
-        (el) => el.constructorId === item.id
-      );
-      const hoverIndex: number = filings.findIndex(
+      const dragIndex = filings.findIndex((el) => el.constructorId === item.id);
+      const hoverIndex = filings.findIndex(
         (el) => el.constructorId === filing.constructorId
       );
 
@@ -46,11 +44,11 @@ const BurgerElement: FC<{
     },
   });
 
-  const opacity: number = isDrag ? 0 : 1;
+  const opacity = isDrag ? 0 : 1;
 
   dragRef(dropTarget(dragDropRef));
 
-  const handleDeleteIngredientClick = (): void => {
+  const handleDeleteIngredientClick = () => {
     dispatch(deleteFromConstructorList(filing.constructorId));
   };
 

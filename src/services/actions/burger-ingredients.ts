@@ -25,8 +25,8 @@ export type TBurgerIngredientsActions =
   | IGetIngredientsSuccessAction
   | IGetIngredientsFailedAction;
 
-export const getIngredients = (): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+export const getIngredients = (): TAppThunk => {
+  return (dispatch) => {
     dispatch({
       type: GET_INGREDIENTS_REQUEST,
     });

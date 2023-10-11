@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useCallback } from "react";
+import React, { FC, useMemo, useCallback, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "../../services/hooks/hooks";
 
 import styles from "./profile-form.module.css";
@@ -27,11 +27,11 @@ const ProfileForm: FC = () => {
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const onInputChange = (e: any): void => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
   };
 
-  const onIconClick = (): void => {
+  const onIconClick = () => {
     setTimeout(() => {
       if (inputRef.current) {
         inputRef.current.focus();
@@ -40,12 +40,12 @@ const ProfileForm: FC = () => {
     setIsNameDisabled(false);
   };
 
-  const saveChanges = (e: any): void => {
+  const saveChanges = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(updateUser(values));
   };
 
-  const cancelChanges = useCallback<() => Function>(() => {
+  const cancelChanges = useCallback(() => {
     if (user) {
       return setValues({
         name: user.name,
@@ -59,7 +59,7 @@ const ProfileForm: FC = () => {
     cancelChanges();
   }, [cancelChanges]);
 
-  const haveChanges = useMemo<boolean>(() => {
+  const haveChanges = useMemo(() => {
     if (user) {
       return (
         values.name !== user.name ||

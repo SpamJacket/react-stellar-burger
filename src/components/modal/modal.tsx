@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import ReactDOM from "react-dom";
 
 import styles from "./modal.module.css";
@@ -9,14 +9,14 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
 const modalRoot = document.getElementById("react-modal") as HTMLElement;
 
-const Modal: FC<{ children: React.ReactNode; closeModal: Function }> = ({
+const Modal: FC<{ children: ReactNode; closeModal: Function }> = ({
   children,
   closeModal,
 }) => {
   const modalRef = React.useRef<HTMLDivElement>(null);
   const overlayRef = React.useRef<HTMLDivElement>(null);
 
-  const animateClosing = React.useCallback<() => void>(() => {
+  const animateClosing = React.useCallback(() => {
     if (modalRef.current && overlayRef.current) {
       modalRef.current.style.cssText = "opacity: 0";
       setTimeout(() => {
@@ -28,8 +28,8 @@ const Modal: FC<{ children: React.ReactNode; closeModal: Function }> = ({
     }
   }, [modalRef, overlayRef, closeModal]);
 
-  const handleEscClose = React.useCallback<(e: any) => void>(
-    (e) => {
+  const handleEscClose = React.useCallback(
+    (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         animateClosing();
       }

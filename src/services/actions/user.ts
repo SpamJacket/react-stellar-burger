@@ -1,7 +1,6 @@
 import { SET_USER, SET_AUTH_CHECKED } from "../../utils/constants";
 import request, { fetchWithRefresh } from "../../utils/api";
 import { TAppThunk, TInputs, TUser } from "../../utils/types";
-import { NavigateFunction } from "react-router-dom";
 
 export interface ISetUserAction {
   readonly type: typeof SET_USER;
@@ -29,11 +28,8 @@ export const setAuthChecked = (value: boolean): ISetAuthCheckedAction => {
   };
 };
 
-export const loginUser = ({
-  email,
-  password,
-}: TInputs): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+export const loginUser = ({ email, password }: TInputs): TAppThunk => {
+  return (dispatch) => {
     request("/auth/login", {
       method: "POST",
       headers: {
@@ -53,8 +49,8 @@ export const loginUser = ({
   };
 };
 
-export const logoutUser = (): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+export const logoutUser = (): TAppThunk => {
+  return (dispatch) => {
     fetchWithRefresh("/auth/logout", {
       method: "POST",
       headers: {
@@ -73,12 +69,8 @@ export const logoutUser = (): TAppThunk<Promise<unknown>> => {
   };
 };
 
-export const registerUser = ({
-  email,
-  password,
-  name,
-}: TInputs): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+export const registerUser = ({ email, password, name }: TInputs): TAppThunk => {
+  return (dispatch) => {
     request("/auth/register", {
       method: "POST",
       headers: {
@@ -99,9 +91,7 @@ export const registerUser = ({
   };
 };
 
-export const handleForgotPassword = ({
-  email,
-}: TInputs): TAppThunk<Promise<unknown>> => {
+export const handleForgotPassword = ({ email }: TInputs): TAppThunk => {
   return async () => {
     await request("/password-reset", {
       method: "POST",
@@ -116,10 +106,7 @@ export const handleForgotPassword = ({
   };
 };
 
-export const handleResetPassword = ({
-  password,
-  code,
-}: TInputs): TAppThunk<Promise<unknown>> => {
+export const handleResetPassword = ({ password, code }: TInputs): TAppThunk => {
   return async () => {
     await request("/password-reset/reset", {
       method: "POST",
@@ -134,8 +121,8 @@ export const handleResetPassword = ({
   };
 };
 
-export const getUser = (): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+export const getUser = (): TAppThunk => {
+  return (dispatch) => {
     fetchWithRefresh("/auth/user", {
       method: "GET",
       headers: {
@@ -155,12 +142,8 @@ export const getUser = (): TAppThunk<Promise<unknown>> => {
   };
 };
 
-export const updateUser = ({
-  name,
-  email,
-  password,
-}: TInputs): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+export const updateUser = ({ name, email, password }: TInputs): TAppThunk => {
+  return (dispatch) => {
     const body: TInputs =
       password === ""
         ? {

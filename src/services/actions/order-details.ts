@@ -29,8 +29,8 @@ export type TOrderDetailsActions =
 export const placeOrder = (
   ingredients: ReadonlyArray<string>,
   setIsModalOpened: Function
-): TAppThunk<Promise<unknown>> => {
-  return async (dispatch) => {
+): TAppThunk => {
+  return (dispatch) => {
     dispatch({
       type: PLACE_ORDER_REQUEST,
     });

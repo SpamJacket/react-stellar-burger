@@ -20,7 +20,7 @@ const BurgerIngredients: FC = () => {
   const saucesHeaderRef = React.useRef<HTMLHeadingElement>(null);
   const mainsHeaderRef = React.useRef<HTMLHeadingElement>(null);
 
-  const scrollIntoTitle = (tab: string): void => {
+  const scrollIntoTitle = (tab: string) => {
     setCurrent(tab);
     if (
       bunsHeaderRef.current &&
@@ -37,7 +37,7 @@ const BurgerIngredients: FC = () => {
     }
   };
 
-  const updateTab = (): void => {
+  const updateTab = () => {
     if (
       bunsHeaderRef.current &&
       saucesHeaderRef.current &&
@@ -57,7 +57,7 @@ const BurgerIngredients: FC = () => {
     }
   };
 
-  const ingredientsId = React.useMemo<{ [key: string]: number }>(() => {
+  const ingredientsId = React.useMemo(() => {
     const ingredients: { [key: string]: number } = {};
     if (bun) {
       ingredients[bun._id] = 2;
@@ -72,10 +72,8 @@ const BurgerIngredients: FC = () => {
     return ingredients;
   }, [bun, filings]);
 
-  const renderIngredients = React.useCallback<
-    (type: string) => ReadonlyArray<JSX.Element | undefined>
-  >(
-    (type) => {
+  const renderIngredients = React.useCallback(
+    (type: string) => {
       return ingredients.map((ingredient) => {
         if (ingredient.type === type) {
           return (
@@ -91,7 +89,7 @@ const BurgerIngredients: FC = () => {
     [ingredients, ingredientsId]
   );
 
-  const content = React.useMemo<JSX.Element>(() => {
+  const content = React.useMemo(() => {
     return ingredientsRequest ? (
       <h2 className={styles.loadingTitle}>
         Подождите, идет загрузка ингредиентов

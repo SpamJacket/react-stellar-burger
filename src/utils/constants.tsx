@@ -1,6 +1,6 @@
 const BASE_URL: string = "https://norma.nomoreparties.space/api";
 
-const endpoints: { ingredientsUrl: string; ordersUrl: string } = {
+const endpoints = {
   ingredientsUrl: "/ingredients",
   ordersUrl: "/orders",
 };

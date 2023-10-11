@@ -21,7 +21,7 @@ const OrderElement: FC<{
   const isPrivateList = useMatch("/profile/orders");
   const ingredientsList = useSelector((store) => store.ingredientsList);
 
-  const translateStatus = React.useMemo<string>(() => {
+  const translateStatus = React.useMemo(() => {
     switch (status) {
       case "done":
         return "Выполнен";
@@ -34,7 +34,7 @@ const OrderElement: FC<{
     }
   }, [status]);
 
-  const images = React.useMemo<ReadonlyArray<JSX.Element | null>>(() => {
+  const images = React.useMemo(() => {
     return ingredients.map((ingredientId, index) => {
       if (ingredientId) {
         const ingredient = ingredientsList.ingredients.find(
@@ -54,7 +54,7 @@ const OrderElement: FC<{
     });
   }, [ingredients, ingredientsList]);
 
-  const totalPrice = React.useMemo<number>(() => {
+  const totalPrice = React.useMemo(() => {
     return ingredients.reduce((currentPrice, ingredientId) => {
       if (ingredientId) {
         const ingredient = ingredientsList.ingredients.find(
@@ -68,7 +68,7 @@ const OrderElement: FC<{
     }, 0);
   }, [ingredients, ingredientsList]);
 
-  const dateTime = React.useMemo<string>(() => {
+  const dateTime = React.useMemo(() => {
     const newDate = new Date(Date.parse(createdAt));
     const nowDate = new Date(Date.now());
     let newDateTime = "";

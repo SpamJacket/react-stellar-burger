@@ -23,22 +23,15 @@ const OrdersList: FC = () => {
     isPrivateList ? (store) => store.orders : (store) => store.feed
   );
 
-  const connect = useCallback<() => void>(
-    !isPrivateList
-      ? () => {
-          const url: string | null = localStorage.getItem("accessToken");
-          if (url) {
-            dispatch(
-              connectOrders(
-                BASE_WS_ORDERS_URL + `?token=${url.replace(/\bBearer \b/g, "")}`
-              )
-            );
-          }
-        }
-      : () => dispatch(connectFeed(BASE_WS_ORDERS_URL + "/all")),
+  const connect = useCallback(
+    isPrivateList
+      ? (endpoint: string) =>
+          dispatch(connectOrders(BASE_WS_ORDERS_URL + endpoint))
+      : (endpoint: string) =>
+          dispatch(connectFeed(BASE_WS_ORDERS_URL + endpoint)),
     [dispatch]
   );
-  const disconnect = useCallback<() => void>(
+  const disconnect = useCallback(
     isPrivateList
       ? () => dispatch(disconnectOrders())
       : () => dispatch(disconnectFeed()),
@@ -46,7 +39,12 @@ const OrdersList: FC = () => {
   );
 
   useEffect(() => {
-    connect();
+    const endpoint: string | null = isPrivateList
+      ? localStorage.getItem("accessToken")
+      : "/all";
+    if (endpoint) {
+      connect(endpoint);
+    }
 
     return () => {
       disconnect();
