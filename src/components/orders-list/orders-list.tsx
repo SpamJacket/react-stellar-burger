@@ -40,7 +40,9 @@ const OrdersList: FC = () => {
 
   useEffect(() => {
     const endpoint: string | null = isPrivateList
-      ? localStorage.getItem("accessToken")
+      ? `?token=${localStorage
+          .getItem("accessToken")
+          ?.replace(/\bBearer \b/g, "")}`
       : "/all";
     if (endpoint) {
       connect(endpoint);

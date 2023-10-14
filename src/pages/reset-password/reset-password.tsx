@@ -1,3 +1,4 @@
+import { FC, ChangeEvent, FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "../../services/hooks/hooks";
 
@@ -12,7 +13,7 @@ import {
 import { useForm } from "../../services/hooks/useForm";
 import { handleResetPassword } from "../../services/actions/user";
 
-const ResetPassword = () => {
+const ResetPassword: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,19 +22,17 @@ const ResetPassword = () => {
     code: "",
   });
 
-  const onInputChange = (e) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(handleResetPassword(values, navigate))
-      .then(() => navigate("/login"))
-      .catch(console.error);
+    dispatch(handleResetPassword(values, navigate));
   };
 
   if (
-    (localStorage.getItem("resetFlag") === "false") |
+    localStorage.getItem("resetFlag") === "false" ||
     !localStorage.getItem("resetFlag")
   ) {
     return <Navigate to="/" replace={true} />;
@@ -45,7 +44,7 @@ const ResetPassword = () => {
       <form className={styles.form} onSubmit={onSubmit}>
         <PasswordInput
           onChange={onInputChange}
-          value={values.password}
+          value={values.password as string}
           name={"password"}
           placeholder="Введите новый пароль"
           extraClass={styles.formChild}
@@ -53,7 +52,7 @@ const ResetPassword = () => {
         <Input
           type="text"
           onChange={onInputChange}
-          value={values.code}
+          value={values.code as string}
           name={"code"}
           placeholder="Введите код из письма"
           size={"default"}

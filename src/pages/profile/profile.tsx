@@ -1,3 +1,4 @@
+import { FC, MouseEvent } from "react";
 import { useDispatch } from "../../services/hooks/hooks";
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -5,10 +6,10 @@ import styles from "./profile.module.css";
 
 import { logoutUser } from "../../services/actions/user";
 
-const Profile = () => {
+const Profile: FC = () => {
   const dispatch = useDispatch();
 
-  const handleLogout = (e) => {
+  const handleLogout = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     dispatch(logoutUser());
   };
@@ -33,7 +34,7 @@ const Profile = () => {
         >
           История заказов
         </NavLink>
-        <NavLink className={styles.link} onClick={handleLogout}>
+        <NavLink className={styles.link} onClick={handleLogout} to={"/"}>
           Выход
         </NavLink>
         <p className={styles.text}>

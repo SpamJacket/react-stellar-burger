@@ -8,9 +8,9 @@ import {
 import { TOrderWithStringIngredients } from "../../utils/types";
 import { TOrdersActions } from "../actions/orders";
 
-export type TOrdersState = {
+type TOrdersState = {
   status: string;
-  orders: ReadonlyArray<TOrderWithStringIngredients>;
+  orders: Array<TOrderWithStringIngredients>;
   total: number | null;
   totalToday: number | null;
   error: string;

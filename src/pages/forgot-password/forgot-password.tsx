@@ -1,3 +1,4 @@
+import { FC, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "../../services/hooks/hooks";
 
@@ -11,7 +12,7 @@ import {
 import { useForm } from "../../services/hooks/useForm";
 import { handleForgotPassword } from "../../services/actions/user";
 
-const ForgotPassword = () => {
+const ForgotPassword: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,15 +20,13 @@ const ForgotPassword = () => {
     email: "",
   });
 
-  const onInputChange = (e) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(handleForgotPassword(values, navigate))
-      .then(() => navigate("/reset-password"))
-      .catch(console.error);
+    dispatch(handleForgotPassword(values, navigate));
   };
 
   return (
@@ -36,7 +35,7 @@ const ForgotPassword = () => {
       <form className={styles.form} onSubmit={onSubmit}>
         <EmailInput
           onChange={onInputChange}
-          value={values.email}
+          value={values.email as string}
           name={"email"}
           placeholder="Укажите e-mail"
           isIcon={false}

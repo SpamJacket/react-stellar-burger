@@ -156,7 +156,7 @@ export type TAppDispatch = ThunkDispatch<
 
 export type TWebSocketMiddleware = Middleware<{}, TRootState>;
 
-export type TFeedWsActions = {
+type TFeedWsActions = {
   wsConnect: typeof FEED_CONNECT;
   wsDisconnect: typeof FEED_DISCONNECT;
   wsConnecting: typeof FEED_WS_CONNECTING;
@@ -166,7 +166,7 @@ export type TFeedWsActions = {
   onMessage: typeof FEED_WS_MESSAGE;
 };
 
-export type TOrdersWsActions = {
+type TOrdersWsActions = {
   wsConnect: typeof ORDERS_CONNECT;
   wsDisconnect: typeof ORDERS_DISCONNECT;
   wsConnecting: typeof ORDERS_WS_CONNECTING;

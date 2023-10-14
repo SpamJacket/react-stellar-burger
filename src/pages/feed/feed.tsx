@@ -1,17 +1,17 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, FC } from "react";
 import { useSelector } from "../../services/hooks/hooks";
 
 import styles from "./feed.module.css";
 
 import OrdersList from "../../components/orders-list/orders-list";
 
-const FeedPage = () => {
+const FeedPage: FC = () => {
   const { orders, status, total, totalToday } = useSelector(
     (store) => store.feed
   );
 
   const ordersNumberList = useCallback(
-    (status) => {
+    (status: "done" | "pending" | "created") => {
       return orders.map(
         (order, index) =>
           index < 20 &&

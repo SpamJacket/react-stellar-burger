@@ -1,3 +1,4 @@
+import { ChangeEvent, FC, FormEvent } from "react";
 import { useDispatch } from "../../services/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +14,7 @@ import {
 import { registerUser } from "../../services/actions/user";
 import { useForm } from "../../services/hooks/useForm";
 
-const Register = () => {
+const Register: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,11 +24,11 @@ const Register = () => {
     password: "",
   });
 
-  const onInputChange = (e) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(registerUser(values));
   };
@@ -39,7 +40,7 @@ const Register = () => {
         <Input
           type="text"
           onChange={onInputChange}
-          value={values.name}
+          value={values.name as string}
           name={"name"}
           placeholder="Имя"
           size={"default"}
@@ -47,14 +48,14 @@ const Register = () => {
         />
         <EmailInput
           onChange={onInputChange}
-          value={values.email}
+          value={values.email as string}
           name={"email"}
           isIcon={false}
           extraClass={styles.formChild}
         />
         <PasswordInput
           onChange={onInputChange}
-          value={values.password}
+          value={values.password as string}
           name={"password"}
           extraClass={styles.formChild}
         />

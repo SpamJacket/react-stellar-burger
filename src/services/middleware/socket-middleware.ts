@@ -37,7 +37,7 @@ const socketMiddleware = (
           dispatch({ type: onError, payload: "WebSocket error" });
         };
 
-        socket.onmessage = (e: any) => {
+        socket.onmessage = (e) => {
           const { data } = e;
           const parseData = JSON.parse(data);
 

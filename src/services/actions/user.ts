@@ -1,6 +1,7 @@
 import { SET_USER, SET_AUTH_CHECKED } from "../../utils/constants";
 import request, { fetchWithRefresh } from "../../utils/api";
 import { TAppThunk, TInputs, TUser } from "../../utils/types";
+import { NavigateFunction } from "react-router-dom";
 
 export interface ISetUserAction {
   readonly type: typeof SET_USER;
@@ -91,22 +92,31 @@ export const registerUser = ({ email, password, name }: TInputs): TAppThunk => {
   };
 };
 
-export const handleForgotPassword = ({ email }: TInputs): TAppThunk => {
+export const handleForgotPassword = (
+  { email }: TInputs,
+  navigate: NavigateFunction
+): TAppThunk => {
   return async () => {
-    await request("/password-reset", {
+    request("/password-reset", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email }),
-    }).then(() => {
-      localStorage.setItem("resetFlag", "true");
-      setTimeout(() => localStorage.setItem("resetFlag", "false"), 600000);
-    });
+    })
+      .then(() => {
+        localStorage.setItem("resetFlag", "true");
+        setTimeout(() => localStorage.setItem("resetFlag", "false"), 600000);
+      })
+      .then(() => navigate("/reset-password"))
+      .catch(console.error);
   };
 };
 
-export const handleResetPassword = ({ password, code }: TInputs): TAppThunk => {
+export const handleResetPassword = (
+  { password, code }: TInputs,
+  navigate: NavigateFunction
+): TAppThunk => {
   return async () => {
     await request("/password-reset/reset", {
       method: "POST",
@@ -117,7 +127,10 @@ export const handleResetPassword = ({ password, code }: TInputs): TAppThunk => {
         password,
         token: code,
       }),
-    }).then(() => localStorage.setItem("resetFlag", "false"));
+    })
+      .then(() => localStorage.setItem("resetFlag", "false"))
+      .then(() => navigate("/login"))
+      .catch(console.error);
   };
 };
 

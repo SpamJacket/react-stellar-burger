@@ -1,6 +1,7 @@
+import { FC } from "react";
 import styles from "./not-found.module.css";
 
-const NotFound = () => {
+const NotFound: FC = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Ууупс!</h2>

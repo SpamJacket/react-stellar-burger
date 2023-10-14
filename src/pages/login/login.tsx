@@ -1,3 +1,4 @@
+import { FC, ChangeEvent, FormEvent } from "react";
 import { useDispatch } from "../../services/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +13,7 @@ import {
 import { useForm } from "../../services/hooks/useForm";
 import { loginUser } from "../../services/actions/user";
 
-const Login = () => {
+const Login: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,11 +22,11 @@ const Login = () => {
     password: "",
   });
 
-  const onInputChange = (e) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(loginUser(values));
   };
@@ -36,14 +37,14 @@ const Login = () => {
       <form className={styles.form} onSubmit={onSubmit}>
         <EmailInput
           onChange={onInputChange}
-          value={values.email}
+          value={values.email as string}
           name={"email"}
           isIcon={false}
           extraClass={styles.formChild}
         />
         <PasswordInput
           onChange={onInputChange}
-          value={values.password}
+          value={values.password as string}
           name={"password"}
           extraClass={styles.formChild}
         />
