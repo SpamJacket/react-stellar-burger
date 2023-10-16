@@ -7,7 +7,7 @@ import {
   FEED_WS_ERROR,
   FEED_WS_MESSAGE,
 } from "../../utils/constants";
-import { TOrderWithStringIngredients } from "../../utils/types";
+import { TOrderWithId } from "../../utils/types";
 
 export interface IFeedConnectAction {
   readonly type: typeof FEED_CONNECT;
@@ -38,7 +38,7 @@ export interface IFeedWsErrorAction {
 export interface IFeedWsMessageAction {
   readonly type: typeof FEED_WS_MESSAGE;
   readonly payload: {
-    orders: ReadonlyArray<TOrderWithStringIngredients>;
+    orders: ReadonlyArray<TOrderWithId>;
     total: number;
     totalToday: number;
   };

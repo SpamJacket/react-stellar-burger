@@ -22,10 +22,6 @@ const ResetPassword: FC = () => {
     code: "",
   });
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleChange(e);
-  };
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(handleResetPassword(values, navigate));
@@ -43,7 +39,7 @@ const ResetPassword: FC = () => {
       <h2 className={styles.title}>Восстановление пароля</h2>
       <form className={styles.form} onSubmit={onSubmit}>
         <PasswordInput
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.password as string}
           name={"password"}
           placeholder="Введите новый пароль"
@@ -51,7 +47,7 @@ const ResetPassword: FC = () => {
         />
         <Input
           type="text"
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.code as string}
           name={"code"}
           placeholder="Введите код из письма"

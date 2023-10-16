@@ -7,15 +7,10 @@ import styles from "./order-element.module.css";
 import OrderElementImage from "../order-element-image/order-element-image";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { TOrder } from "../../utils/types";
 
 const OrderElement: FC<{
-  data: {
-    createdAt: string;
-    ingredients: ReadonlyArray<string>;
-    name: string;
-    number: number;
-    status: string;
-  };
+  data: TOrder;
 }> = ({ data: { createdAt, ingredients, name, number, status } }) => {
   const location = useLocation();
   const isPrivateList = useMatch("/profile/orders");

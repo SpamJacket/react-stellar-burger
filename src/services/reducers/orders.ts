@@ -5,12 +5,12 @@ import {
   ORDERS_WS_ERROR,
   ORDERS_WS_MESSAGE,
 } from "../../utils/constants";
-import { TOrderWithStringIngredients } from "../../utils/types";
+import { TOrderWithId } from "../../utils/types";
 import { TOrdersActions } from "../actions/orders";
 
 type TOrdersState = {
   status: string;
-  orders: Array<TOrderWithStringIngredients>;
+  orders: Array<TOrderWithId>;
   total: number | null;
   totalToday: number | null;
   error: string;

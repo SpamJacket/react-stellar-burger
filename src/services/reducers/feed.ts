@@ -5,12 +5,12 @@ import {
   FEED_WS_ERROR,
   FEED_WS_MESSAGE,
 } from "../../utils/constants";
-import { TOrderWithStringIngredients } from "../../utils/types";
+import { TOrderWithId } from "../../utils/types";
 import type { TFeedActions } from "../actions/feed";
 
 type TFeedState = {
   status: string;
-  orders: ReadonlyArray<TOrderWithStringIngredients>;
+  orders: ReadonlyArray<TOrderWithId>;
   total: number | null;
   totalToday: number | null;
   error: string;

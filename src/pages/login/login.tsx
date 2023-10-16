@@ -22,10 +22,6 @@ const Login: FC = () => {
     password: "",
   });
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleChange(e);
-  };
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(loginUser(values));
@@ -36,14 +32,14 @@ const Login: FC = () => {
       <h2 className={styles.title}>Вход</h2>
       <form className={styles.form} onSubmit={onSubmit}>
         <EmailInput
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.email as string}
           name={"email"}
           isIcon={false}
           extraClass={styles.formChild}
         />
         <PasswordInput
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.password as string}
           name={"password"}
           extraClass={styles.formChild}

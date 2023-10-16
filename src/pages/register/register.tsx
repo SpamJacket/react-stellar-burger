@@ -24,10 +24,6 @@ const Register: FC = () => {
     password: "",
   });
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleChange(e);
-  };
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(registerUser(values));
@@ -39,7 +35,7 @@ const Register: FC = () => {
       <form className={styles.form} onSubmit={onSubmit}>
         <Input
           type="text"
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.name as string}
           name={"name"}
           placeholder="Имя"
@@ -47,14 +43,14 @@ const Register: FC = () => {
           extraClass={styles.formChild}
         />
         <EmailInput
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.email as string}
           name={"email"}
           isIcon={false}
           extraClass={styles.formChild}
         />
         <PasswordInput
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.password as string}
           name={"password"}
           extraClass={styles.formChild}

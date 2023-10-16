@@ -20,7 +20,7 @@ import {
   setFilings,
 } from "../../services/actions/burger-constructor";
 import { placeOrder } from "../../services/actions/order-details";
-import { TIngredient, TIngredientWithUuid } from "../../utils/types";
+import { TIngredient } from "../../utils/types";
 
 const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();

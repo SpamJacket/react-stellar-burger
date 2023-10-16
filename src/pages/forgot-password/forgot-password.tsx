@@ -20,10 +20,6 @@ const ForgotPassword: FC = () => {
     email: "",
   });
 
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleChange(e);
-  };
-
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(handleForgotPassword(values, navigate));
@@ -34,7 +30,7 @@ const ForgotPassword: FC = () => {
       <h2 className={styles.title}>Восстановление пароля</h2>
       <form className={styles.form} onSubmit={onSubmit}>
         <EmailInput
-          onChange={onInputChange}
+          onChange={handleChange}
           value={values.email as string}
           name={"email"}
           placeholder="Укажите e-mail"

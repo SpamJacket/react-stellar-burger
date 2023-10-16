@@ -6,7 +6,7 @@ import {
 } from "../../utils/constants";
 
 import request from "../../utils/api";
-import { TAppThunk, TOrderWithStringIngredients } from "../../utils/types";
+import { TAppThunk, TOrderWithOwner } from "../../utils/types";
 
 export interface IPlaceOrderViewRequestAction {
   readonly type: typeof PLACE_ORDER_VIEW_REQUEST;
@@ -14,9 +14,7 @@ export interface IPlaceOrderViewRequestAction {
 
 export interface ISetOrderViewAction {
   readonly type: typeof SET_ORDER_VIEW;
-  readonly payload: ReadonlyArray<
-    TOrderWithStringIngredients & { owner: string; __v: number }
-  >;
+  readonly payload: ReadonlyArray<TOrderWithOwner>;
 }
 
 export interface IPlaceOrderViewFailedAction {

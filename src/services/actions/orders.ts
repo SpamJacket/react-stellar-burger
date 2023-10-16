@@ -7,7 +7,7 @@ import {
   ORDERS_WS_ERROR,
   ORDERS_WS_MESSAGE,
 } from "../../utils/constants";
-import { TOrderWithStringIngredients } from "../../utils/types";
+import { TOrderWithId } from "../../utils/types";
 
 export interface IOrdersConnectAction {
   readonly type: typeof ORDERS_CONNECT;
@@ -38,7 +38,7 @@ export interface IOrderWsErrorAction {
 export interface IOrderWsMessageAction {
   readonly type: typeof ORDERS_WS_MESSAGE;
   readonly payload: {
-    orders: Array<TOrderWithStringIngredients>;
+    orders: Array<TOrderWithId>;
     total: number;
     totalToday: number;
   };

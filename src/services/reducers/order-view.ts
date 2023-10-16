@@ -4,13 +4,11 @@ import {
   PLACE_ORDER_VIEW_FAILED,
   CLEAN_ORDER_VIEW,
 } from "../../utils/constants";
-import { TOrderWithStringIngredients } from "../../utils/types";
+import { TOrderWithOwner } from "../../utils/types";
 import { TOrderViewActions } from "../actions/order-view";
 
 type TOrderViewState = {
-  order: ReadonlyArray<
-    TOrderWithStringIngredients & { owner: string; __v: number }
-  > | null;
+  order: ReadonlyArray<TOrderWithOwner> | null;
   orderViewRequest: boolean;
   orderViewFailed: boolean;
 };

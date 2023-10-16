@@ -66,16 +66,18 @@ export type TUser = {
 
 export type TOrder = {
   createdAt: string;
+  ingredients: Array<string>;
   name: string;
   number: number;
   status: string;
+};
+
+export type TOrderWithId = TOrder & {
   updatedAt: string;
   _id: string;
 };
 
-export type TOrderWithStringIngredients = TOrder & {
-  ingredients: Array<string>;
-};
+export type TOrderWithOwner = TOrderWithId & { owner: string; __v: string };
 
 export type TFetchOptions = {
   method: string;
@@ -115,12 +117,7 @@ export type TPostOrderRequest = {
 
 export type TGetOrderRequest = {
   success: boolean;
-  orders: Array<
-    TOrderWithStringIngredients & {
-      owner: string;
-      __v: number;
-    }
-  >;
+  orders: Array<TOrderWithOwner>;
 };
 
 export type TRequest = TUserRefreshRequest &
