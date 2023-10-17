@@ -6,14 +6,8 @@ import styles from "./orders-list.module.css";
 
 import OrderElement from "../order-element/order-element";
 
-import {
-  connect as connectOrders,
-  disconnect as disconnectOrders,
-} from "../../services/actions/orders";
-import {
-  connect as connectFeed,
-  disconnect as disconnectFeed,
-} from "../../services/actions/feed";
+import { feedSlice } from "../../services/slices/feed";
+import { ordersSlice } from "../../services/slices/orders";
 import { BASE_WS_ORDERS_URL } from "../../utils/constants";
 
 const OrdersList: FC = () => {
@@ -26,15 +20,15 @@ const OrdersList: FC = () => {
   const connect = useCallback(
     isPrivateList
       ? (endpoint: string) =>
-          dispatch(connectOrders(BASE_WS_ORDERS_URL + endpoint))
+          dispatch(ordersSlice.actions.connect(BASE_WS_ORDERS_URL + endpoint))
       : (endpoint: string) =>
-          dispatch(connectFeed(BASE_WS_ORDERS_URL + endpoint)),
+          dispatch(feedSlice.actions.connect(BASE_WS_ORDERS_URL + endpoint)),
     [dispatch]
   );
   const disconnect = useCallback(
     isPrivateList
-      ? () => dispatch(disconnectOrders())
-      : () => dispatch(disconnectFeed()),
+      ? () => dispatch(ordersSlice.actions.disconnect())
+      : () => dispatch(feedSlice.actions.disconnect()),
     [dispatch]
   );
 

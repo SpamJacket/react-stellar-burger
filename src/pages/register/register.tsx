@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent } from "react";
+import { FC, FormEvent } from "react";
 import { useDispatch } from "../../services/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { registerUser } from "../../services/actions/user";
+import { registerUser } from "../../services/actionCreators/user";
 import { useForm } from "../../services/hooks/useForm";
 
 const Register: FC = () => {

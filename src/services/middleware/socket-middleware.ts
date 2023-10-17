@@ -19,32 +19,32 @@ const socketMiddleware = (
         onMessage,
       } = wsActions;
 
-      if (type === wsConnect) {
+      if (type === wsConnect.type) {
         socket = new WebSocket(action.payload);
-        dispatch({ type: wsConnecting });
+        dispatch(wsConnecting());
       }
 
       if (socket) {
         socket.onopen = () => {
-          dispatch({ type: onOpen });
+          dispatch(onOpen());
         };
 
         socket.onclose = () => {
-          dispatch({ type: onClose });
+          dispatch(onClose());
         };
 
         socket.onerror = () => {
-          dispatch({ type: onError, payload: "WebSocket error" });
+          dispatch(onError("WebSocket error"));
         };
 
         socket.onmessage = (e) => {
           const { data } = e;
           const parseData = JSON.parse(data);
 
-          dispatch({ type: onMessage, payload: parseData });
+          dispatch(onMessage(parseData));
         };
 
-        if (type === wsDisconnect) {
+        if (type === wsDisconnect.type) {
           socket.close();
           socket = null;
         }

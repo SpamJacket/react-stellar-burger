@@ -12,7 +12,7 @@ const OrderDetails: FC = () => {
 
   return (
     <>
-      <h4 className={styles.title}>{order?.orderNumber}</h4>
+      <h4 className={styles.title}>{order?.number}</h4>
       <h5 className={styles.subtitle}>идентификатор заказа</h5>
       {/* Не нашел другой способ взять фон для галочки */}
       <div className={styles.icon}>

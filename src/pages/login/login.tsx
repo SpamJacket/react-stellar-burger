@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, FormEvent } from "react";
+import { FC, FormEvent } from "react";
 import { useDispatch } from "../../services/hooks/hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { useForm } from "../../services/hooks/useForm";
-import { loginUser } from "../../services/actions/user";
+import { loginUser } from "../../services/actionCreators/user";
 
 const Login: FC = () => {
   const dispatch = useDispatch();

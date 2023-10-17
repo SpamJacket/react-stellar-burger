@@ -15,12 +15,12 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import {
-  addToConstructorList,
-  setFilings,
-} from "../../services/actions/burger-constructor";
-import { placeOrder } from "../../services/actions/order-details";
-import { TIngredient } from "../../utils/types";
+import { constructorSlice } from "../../services/slices/burger-constructor";
+import { placeOrder } from "../../services/actionCreators/order-details";
+import { TIngredientWithUuid } from "../../utils/types";
+
+const { addToConstructorList, setFilings, cleanConstructorList } =
+  constructorSlice.actions;
 
 const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const BurgerConstructor: FC = () => {
     (store) => store.orderDetails
   );
 
-  const [, dropTarget] = useDrop<TIngredient>({
+  const [, dropTarget] = useDrop<TIngredientWithUuid>({
     accept: "ingredient",
     drop(item) {
       dispatch(addToConstructorList(item));
@@ -54,10 +54,19 @@ const BurgerConstructor: FC = () => {
   const [isModalOpened, setIsModalOpened] = React.useState<boolean>(false);
 
   const handleOrderButtonClick = () => {
-    if (user && bun) {
-      const ingredientsId = [bun._id];
-      filings.forEach((filing) => ingredientsId.push(filing._id));
-      dispatch(placeOrder(ingredientsId, setIsModalOpened));
+    if (user) {
+      if (bun) {
+        const ingredientsId = [bun._id];
+        filings.forEach((filing) => ingredientsId.push(filing._id));
+        dispatch(
+          placeOrder({
+            ingredients: ingredientsId,
+          })
+        ).then(() => {
+          setIsModalOpened(true);
+          dispatch(cleanConstructorList());
+        });
+      }
     } else {
       navigate("/login");
     }

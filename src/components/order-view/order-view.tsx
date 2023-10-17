@@ -8,10 +8,10 @@ import OrderViewElement from "../order-view-element/order-view-element";
 
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import {
-  setOrderView,
-  cleanOrderView,
-} from "../../services/actions/order-view";
+import { setOrderView } from "../../services/actionCreators/order-view";
+import { orderViewSlice } from "../../services/slices/order-view";
+
+const { cleanOrderView } = orderViewSlice.actions;
 
 const OrderView: FC<{ isPage?: boolean }> = ({ isPage = false }) => {
   const dispatch = useDispatch();

@@ -23,9 +23,12 @@ import ProfileForm from "../profile-form/profile-form";
 import OrdersList from "../orders-list/orders-list";
 import OrderView from "../order-view/order-view";
 
-import { getUser, setAuthChecked } from "../../services/actions/user";
-import { getIngredients } from "../../services/actions/burger-ingredients";
+import { getUser } from "../../services/actionCreators/user";
+import { userSlice } from "../../services/slices/user";
+import { getIngredients } from "../../services/actionCreators/burger-ingredients";
 import { PreviousPage } from "../../utils/types";
+
+const { setAuthChecked } = userSlice.actions;
 
 const App: FC = () => {
   const dispatch = useDispatch();
@@ -35,15 +38,12 @@ const App: FC = () => {
     location.state && location.state.previousPage;
 
   React.useEffect(() => {
+    dispatch(getIngredients());
     if (localStorage.getItem("accessToken")) {
       dispatch(getUser());
     } else {
       dispatch(setAuthChecked(true));
     }
-  }, [dispatch]);
-
-  React.useEffect(() => {
-    dispatch(getIngredients());
   }, [dispatch]);
 
   const handleModalClose = () => {

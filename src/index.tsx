@@ -3,63 +3,13 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
-import {
-  legacy_createStore as createStore,
-  applyMiddleware,
-  StoreEnhancer,
-} from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import setupStore from "./services/store";
 import { Provider } from "react-redux";
-import rootReducer from "./services/reducers/index";
-import thunk from "redux-thunk";
 import { BrowserRouter as Router } from "react-router-dom";
-import socketMiddleware from "./services/middleware/socket-middleware";
-import {
-  FEED_CONNECT,
-  FEED_DISCONNECT,
-  FEED_WS_CONNECTING,
-  FEED_WS_OPEN,
-  FEED_WS_CLOSE,
-  FEED_WS_ERROR,
-  FEED_WS_MESSAGE,
-  ORDERS_CONNECT,
-  ORDERS_DISCONNECT,
-  ORDERS_WS_CONNECTING,
-  ORDERS_WS_OPEN,
-  ORDERS_WS_CLOSE,
-  ORDERS_WS_ERROR,
-  ORDERS_WS_MESSAGE,
-} from "./utils/constants";
-
-const feedMiddleware = socketMiddleware({
-  wsConnect: FEED_CONNECT,
-  wsDisconnect: FEED_DISCONNECT,
-  wsConnecting: FEED_WS_CONNECTING,
-  onOpen: FEED_WS_OPEN,
-  onClose: FEED_WS_CLOSE,
-  onError: FEED_WS_ERROR,
-  onMessage: FEED_WS_MESSAGE,
-});
-
-const ordersMiddleware = socketMiddleware({
-  wsConnect: ORDERS_CONNECT,
-  wsDisconnect: ORDERS_DISCONNECT,
-  wsConnecting: ORDERS_WS_CONNECTING,
-  onOpen: ORDERS_WS_OPEN,
-  onClose: ORDERS_WS_CLOSE,
-  onError: ORDERS_WS_ERROR,
-  onMessage: ORDERS_WS_MESSAGE,
-});
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
 
-const enhancer: StoreEnhancer<{
-  dispatch: unknown;
-}> = composeWithDevTools(
-  applyMiddleware(thunk, feedMiddleware, ordersMiddleware)
-);
-
-const store = createStore(rootReducer, enhancer);
+const store = setupStore();
 
 root.render(
   <React.StrictMode>
@@ -76,4 +26,4 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-export default store;
+export default setupStore;

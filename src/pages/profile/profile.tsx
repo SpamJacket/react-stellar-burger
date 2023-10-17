@@ -4,7 +4,7 @@ import { NavLink, Outlet } from "react-router-dom";
 
 import styles from "./profile.module.css";
 
-import { logoutUser } from "../../services/actions/user";
+import { logoutUser } from "../../services/actionCreators/user";
 
 const Profile: FC = () => {
   const dispatch = useDispatch();

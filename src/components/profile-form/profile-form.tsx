@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useCallback, ChangeEvent, FormEvent } from "react";
+import React, { FC, useMemo, useCallback, FormEvent } from "react";
 import { useDispatch, useSelector } from "../../services/hooks/hooks";
 
 import styles from "./profile-form.module.css";
@@ -10,7 +10,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { updateUser } from "../../services/actions/user";
+import { updateUser } from "../../services/actionCreators/user";
 import { useForm } from "../../services/hooks/useForm";
 
 const ProfileForm: FC = () => {
@@ -26,10 +26,6 @@ const ProfileForm: FC = () => {
   const [isNameDisabled, setIsNameDisabled] = React.useState<boolean>(true);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    handleChange(e);
-  };
 
   const onIconClick = () => {
     setTimeout(() => {
@@ -79,7 +75,7 @@ const ProfileForm: FC = () => {
             <Input
               type={"text"}
               placeholder="Имя"
-              onChange={onInputChange}
+              onChange={handleChange}
               ref={inputRef}
               icon={"EditIcon"}
               onIconClick={onIconClick}
@@ -91,14 +87,14 @@ const ProfileForm: FC = () => {
             />
             <EmailInput
               placeholder="Логин"
-              onChange={onInputChange}
+              onChange={handleChange}
               isIcon={true}
               value={values.email}
               name={"email"}
             />
             <PasswordInput
               placeholder="Пароль"
-              onChange={onInputChange}
+              onChange={handleChange}
               value={values.password}
               name={"password"}
               icon="EditIcon"

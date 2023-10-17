@@ -9,8 +9,10 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { deleteFromConstructorList } from "../../services/actions/burger-constructor";
+import { constructorSlice } from "../../services/slices/burger-constructor";
 import { TIngredientWithUuid } from "../../utils/types";
+
+const { deleteFromConstructorList } = constructorSlice.actions;
 
 const BurgerElement: FC<{
   filing: TIngredientWithUuid;

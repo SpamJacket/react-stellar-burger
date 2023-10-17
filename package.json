@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.5",
+    "@reduxjs/toolkit": "^1.9.7",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.14.0",
     "clsx": "^2.0.0",
     "prop-types": "^15.8.1",

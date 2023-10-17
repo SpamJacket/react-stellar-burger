@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, FormEvent } from "react";
+import { FC, FormEvent } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "../../services/hooks/hooks";
 
@@ -11,7 +11,7 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { useForm } from "../../services/hooks/useForm";
-import { handleResetPassword } from "../../services/actions/user";
+import { handleResetPassword } from "../../services/actionCreators/user";
 
 const ResetPassword: FC = () => {
   const dispatch = useDispatch();
@@ -24,7 +24,9 @@ const ResetPassword: FC = () => {
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(handleResetPassword(values, navigate));
+    dispatch(handleResetPassword(values)).then(() => {
+      navigate("/login");
+    });
   };
 
   if (
