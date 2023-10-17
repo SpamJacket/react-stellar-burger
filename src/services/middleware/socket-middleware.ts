@@ -1,8 +1,6 @@
-import { TWebSocketMiddleware, TWebSocketActions } from "../../utils/types";
+import type { WebSocketMiddleware, WebSocketActions } from "../../utils/types";
 
-const socketMiddleware = (
-  wsActions: TWebSocketActions
-): TWebSocketMiddleware => {
+const socketMiddleware = (wsActions: WebSocketActions): WebSocketMiddleware => {
   return (store) => {
     let socket: WebSocket | null = null;
 

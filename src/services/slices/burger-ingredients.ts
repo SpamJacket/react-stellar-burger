@@ -1,14 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TIngredient } from "../../utils/types";
+import type { Ingredient } from "../../utils/types";
 import { getIngredients } from "../actionCreators/burger-ingredients";
 
-type TBurgerIngredientsState = {
-  ingredients: ReadonlyArray<TIngredient>;
+type BurgerIngredientsState = {
+  ingredients: ReadonlyArray<Ingredient>;
   ingredientsRequest: boolean;
   ingredientsFailed: boolean;
 };
 
-const initialState: TBurgerIngredientsState = {
+const initialState: BurgerIngredientsState = {
   ingredients: [],
   ingredientsRequest: false,
   ingredientsFailed: false,
@@ -25,7 +25,7 @@ export const ingredientsSlice = createSlice({
     },
     [getIngredients.fulfilled.type]: (
       state,
-      action: PayloadAction<Array<TIngredient>>
+      action: PayloadAction<Array<Ingredient>>
     ) => {
       state.ingredientsRequest = false;
       state.ingredientsFailed = false;

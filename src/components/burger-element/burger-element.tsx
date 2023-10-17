@@ -10,12 +10,12 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 
 import { constructorSlice } from "../../services/slices/burger-constructor";
-import { TIngredientWithUuid } from "../../utils/types";
+import type { IngredientWithUuid } from "../../utils/types";
 
 const { deleteFromConstructorList } = constructorSlice.actions;
 
 const BurgerElement: FC<{
-  filing: TIngredientWithUuid;
+  filing: IngredientWithUuid;
   sortIngredients: Function;
 }> = React.memo(({ filing, sortIngredients }) => {
   const dispatch = useDispatch();

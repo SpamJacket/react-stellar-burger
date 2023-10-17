@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TUser, TUserLoginRequest } from "../../utils/types";
+import type { User, UserLoginRequest } from "../../utils/types";
 import {
   loginUser,
   logoutUser,
@@ -9,14 +9,13 @@ import {
   getUser,
   updateUser,
 } from "../actionCreators/user";
-import { NavigateFunction } from "react-router-dom";
 
-type TUserState = {
-  user: TUser | null;
+type UserState = {
+  user: User | null;
   isAuthChecked: boolean;
 };
 
-const initialState: TUserState = {
+const initialState: UserState = {
   user: null,
   isAuthChecked: false,
 };
@@ -25,7 +24,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<TUser | null>) {
+    setUser(state, action: PayloadAction<User | null>) {
       state.user = action.payload;
     },
     setAuthChecked(state, action: PayloadAction<boolean>) {
@@ -35,7 +34,7 @@ export const userSlice = createSlice({
   extraReducers: {
     [loginUser.fulfilled.type]: (
       state,
-      action: PayloadAction<TUserLoginRequest>
+      action: PayloadAction<UserLoginRequest>
     ) => {
       state.user = action.payload.user;
       localStorage.setItem("refreshToken", action.payload.refreshToken);
@@ -48,7 +47,7 @@ export const userSlice = createSlice({
     },
     [registerUser.fulfilled.type]: (
       state,
-      action: PayloadAction<TUserLoginRequest>
+      action: PayloadAction<UserLoginRequest>
     ) => {
       state.user = action.payload.user;
       localStorage.setItem("refreshToken", action.payload.refreshToken);
@@ -61,7 +60,7 @@ export const userSlice = createSlice({
     [handleResetPassword.fulfilled.type]: () => {
       localStorage.setItem("resetFlag", "false");
     },
-    [getUser.fulfilled.type]: (state, action: PayloadAction<TUser>) => {
+    [getUser.fulfilled.type]: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.isAuthChecked = true;
     },
@@ -71,7 +70,7 @@ export const userSlice = createSlice({
       state.user = null;
       state.isAuthChecked = true;
     },
-    [updateUser.fulfilled.type]: (state, action: PayloadAction<TUser>) => {
+    [updateUser.fulfilled.type]: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
   },

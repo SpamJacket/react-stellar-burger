@@ -1,5 +1,5 @@
 import { BASE_URL } from "./constants";
-import type { TFetchOptions, TRequest } from "./types";
+import type { FetchOptions, Request } from "./types";
 
 const checkResponse = (res: { ok: any; json: () => Promise<any> }) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
@@ -15,11 +15,11 @@ const checkSuccess = (res: { ok: any; success: boolean; message: string }) => {
 
 const request = async (
   endpoint: string,
-  options?: TFetchOptions | { method: string }
+  options?: FetchOptions | { method: string }
 ) => {
   return (await fetch(BASE_URL + endpoint, options)
     .then(checkResponse)
-    .then(checkSuccess)) as TRequest | never;
+    .then(checkSuccess)) as Request | never;
 };
 
 const refreshToken = () => {
@@ -36,7 +36,7 @@ const refreshToken = () => {
 
 export const fetchWithRefresh = async (
   endpoint: string,
-  options: TFetchOptions
+  options: FetchOptions
 ) => {
   try {
     return await request(endpoint, options);

@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import request, { fetchWithRefresh } from "../../utils/api";
-import { TInputs } from "../../utils/types";
+import type { Inputs } from "../../utils/types";
 
 export const loginUser = createAsyncThunk(
   "loginUser/fetchAll",
-  async ({ email, password }: TInputs, thunkAPI) => {
+  async ({ email, password }: Inputs, thunkAPI) => {
     try {
       return await request("/auth/login", {
         method: "POST",
@@ -43,7 +43,7 @@ export const logoutUser = createAsyncThunk(
 
 export const registerUser = createAsyncThunk(
   "registerUser/fetchAll",
-  async ({ email, password, name }: TInputs, thunkAPI) => {
+  async ({ email, password, name }: Inputs, thunkAPI) => {
     try {
       return await request("/auth/register", {
         method: "POST",
@@ -64,7 +64,7 @@ export const registerUser = createAsyncThunk(
 
 export const handleForgotPassword = createAsyncThunk(
   "forgotPassword/fetchAll",
-  async ({ email }: TInputs, thunkAPI) => {
+  async ({ email }: Inputs, thunkAPI) => {
     try {
       const res = await request("/password-reset", {
         method: "POST",
@@ -82,7 +82,7 @@ export const handleForgotPassword = createAsyncThunk(
 
 export const handleResetPassword = createAsyncThunk(
   "resetPassword/fetchAll",
-  async ({ password, code }: TInputs, thunkAPI) => {
+  async ({ password, code }: Inputs, thunkAPI) => {
     try {
       const res = await request("/password-reset/reset", {
         method: "POST",
@@ -121,8 +121,8 @@ export const getUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "updateUser/fetchAll",
-  async ({ name, email, password }: TInputs, thunkAPI) => {
-    const body: TInputs =
+  async ({ name, email, password }: Inputs, thunkAPI) => {
+    const body: Inputs =
       password === ""
         ? {
             email,

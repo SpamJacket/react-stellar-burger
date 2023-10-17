@@ -1,15 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TOrderWithId } from "../../utils/types";
+import type { OrderWithId } from "../../utils/types";
 
-type TFeedState = {
+type FeedState = {
   status: string;
-  orders: Array<TOrderWithId>;
+  orders: Array<OrderWithId>;
   total: number | null;
   totalToday: number | null;
   error: string;
 };
 
-const initialState: TFeedState = {
+const initialState: FeedState = {
   status: "offline",
   orders: [],
   total: null,
@@ -39,7 +39,7 @@ export const feedSlice = createSlice({
     wsMessage(
       state,
       action: PayloadAction<{
-        orders: Array<TOrderWithId>;
+        orders: Array<OrderWithId>;
         total: number;
         totalToday: number;
       }>

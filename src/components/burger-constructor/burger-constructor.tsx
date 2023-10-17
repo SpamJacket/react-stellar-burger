@@ -17,7 +17,7 @@ import {
 
 import { constructorSlice } from "../../services/slices/burger-constructor";
 import { placeOrder } from "../../services/actionCreators/order-details";
-import { TIngredientWithUuid } from "../../utils/types";
+import type { IngredientWithUuid } from "../../utils/types";
 
 const { addToConstructorList, setFilings, cleanConstructorList } =
   constructorSlice.actions;
@@ -33,7 +33,7 @@ const BurgerConstructor: FC = () => {
     (store) => store.orderDetails
   );
 
-  const [, dropTarget] = useDrop<TIngredientWithUuid>({
+  const [, dropTarget] = useDrop<IngredientWithUuid>({
     accept: "ingredient",
     drop(item) {
       dispatch(addToConstructorList(item));

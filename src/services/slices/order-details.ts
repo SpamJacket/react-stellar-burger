@@ -1,14 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { placeOrder } from "../actionCreators/order-details";
-import { TOrderWithOwner } from "../../utils/types";
+import { OrderWithOwner } from "../../utils/types";
 
-type TOrderDetailsState = {
-  order: TOrderWithOwner | null;
+type OrderDetailsState = {
+  order: OrderWithOwner | null;
   orderRequest: boolean;
   orderFailed: boolean;
 };
 
-const initialState: TOrderDetailsState = {
+const initialState: OrderDetailsState = {
   order: null,
   orderRequest: false,
   orderFailed: false,
@@ -25,7 +25,7 @@ export const orderDetailsSlice = createSlice({
     },
     [placeOrder.fulfilled.type]: (
       state,
-      action: PayloadAction<TOrderWithOwner>
+      action: PayloadAction<OrderWithOwner>
     ) => {
       state.orderRequest = false;
       state.orderFailed = false;

@@ -3,7 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import Preloader from "../../pages/preloader/preloader";
 import { FC } from "react";
-import { TLocation } from "../../utils/types";
+import type { Location } from "../../utils/types";
 
 const Protected: FC<{
   onlyUnAuth?: boolean;
@@ -17,7 +17,7 @@ const Protected: FC<{
   }
 
   if (onlyUnAuth && user) {
-    const { from }: TLocation = location.state || { from: { pathname: "/" } };
+    const { from }: Location = location.state || { from: { pathname: "/" } };
     return <Navigate to={from} />;
   }
 

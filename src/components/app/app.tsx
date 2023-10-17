@@ -26,7 +26,7 @@ import OrderView from "../order-view/order-view";
 import { getUser } from "../../services/actionCreators/user";
 import { userSlice } from "../../services/slices/user";
 import { getIngredients } from "../../services/actionCreators/burger-ingredients";
-import { PreviousPage } from "../../utils/types";
+import type { PreviousPage } from "../../utils/types";
 
 const { setAuthChecked } = userSlice.actions;
 

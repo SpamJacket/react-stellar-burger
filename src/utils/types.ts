@@ -12,16 +12,16 @@ export type PreviousPage = {
   state: null | PreviousPage;
 };
 
-export type TLocation = PreviousPage & { from: { pathname: string } };
+export type Location = PreviousPage & { from: { pathname: string } };
 
-export type TInputs = {
+export type Inputs = {
   email?: string;
   password?: string;
   name?: string;
   code?: string;
 };
 
-export type TIngredient = {
+export type Ingredient = {
   calories: number;
   carbohydrates: number;
   fat: number;
@@ -36,14 +36,14 @@ export type TIngredient = {
   _id: string;
 };
 
-export type TIngredientWithUuid = TIngredient & { constructorId: string };
+export type IngredientWithUuid = Ingredient & { constructorId: string };
 
-export type TUser = {
+export type User = {
   name: string;
   email: string;
 };
 
-export type TOrder = {
+export type Order = {
   createdAt: string;
   ingredients: Array<string>;
   name: string;
@@ -51,68 +51,68 @@ export type TOrder = {
   status: string;
 };
 
-export type TOrderWithId = TOrder & {
+export type OrderWithId = Order & {
   updatedAt: string;
   _id: string;
 };
 
-export type TOrderWithOwner = TOrderWithId & { owner: string; __v?: string };
+export type OrderWithOwner = OrderWithId & { owner: string; __v?: string };
 
-export type TFetchOptions = {
+export type FetchOptions = {
   method: string;
   headers: { [key: string]: string };
   body?: string;
 };
 
-export type TUserRequest = {
+export type UserRequest = {
   success: boolean;
-  user: TUser;
+  user: User;
 };
 
-export type TDataRequest = {
-  data: Array<TIngredient>;
+export type DataRequest = {
+  data: Array<Ingredient>;
   success: boolean;
 };
 
-export type TUserRefreshRequest = {
+export type UserRefreshRequest = {
   success: boolean;
   refreshToken: string;
   accessToken: string;
 };
 
-export type TUserLoginRequest = TUserRefreshRequest & {
-  user: TUser;
+export type UserLoginRequest = UserRefreshRequest & {
+  user: User;
 };
 
-export type TPostOrderRequest = {
+export type PostOrderRequest = {
   success: boolean;
   name: string;
-  order: TOrder & {
-    ingredients: Array<TIngredient>;
-    owner: TUser;
+  order: Order & {
+    ingredients: Array<Ingredient>;
+    owner: User;
     price: number;
   };
 };
 
-export type TGetOrderRequest = {
+export type GetOrderRequest = {
   success: boolean;
-  orders: Array<TOrderWithOwner>;
+  orders: Array<OrderWithOwner>;
 };
 
-export type TRequest = TUserRefreshRequest &
-  TUserLoginRequest &
-  TDataRequest &
-  TUserRequest &
-  TPostOrderRequest &
-  TGetOrderRequest & { success: boolean; message: string };
+export type Request = UserRefreshRequest &
+  UserLoginRequest &
+  DataRequest &
+  UserRequest &
+  PostOrderRequest &
+  GetOrderRequest & { success: boolean; message: string };
 
-export type TRootState = ReturnType<typeof rootReducer>;
-export type TAppStore = ReturnType<typeof setupStore>;
-export type TAppDispatch = TAppStore["dispatch"];
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppDispatch = AppStore["dispatch"];
 
-export type TWebSocketMiddleware = Middleware<{}, TRootState>;
+export type WebSocketMiddleware = Middleware<{}, RootState>;
 
-type TFeedWsActions = {
+type FeedWsActions = {
   wsConnect: typeof feedSlice.actions.connect;
   wsDisconnect: typeof feedSlice.actions.disconnect;
   wsConnecting: typeof feedSlice.actions.wsConnecting;
@@ -122,7 +122,7 @@ type TFeedWsActions = {
   onMessage: typeof feedSlice.actions.wsMessage;
 };
 
-type TOrdersWsActions = {
+type OrdersWsActions = {
   wsConnect: typeof ordersSlice.actions.connect;
   wsDisconnect: typeof ordersSlice.actions.disconnect;
   wsConnecting: typeof ordersSlice.actions.wsConnecting;
@@ -132,4 +132,4 @@ type TOrdersWsActions = {
   onMessage: typeof ordersSlice.actions.wsMessage;
 };
 
-export type TWebSocketActions = TOrdersWsActions | TFeedWsActions;
+export type WebSocketActions = OrdersWsActions | FeedWsActions;

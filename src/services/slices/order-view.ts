@@ -1,14 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TOrderWithOwner } from "../../utils/types";
+import type { OrderWithOwner } from "../../utils/types";
 import { setOrderView } from "../actionCreators/order-view";
 
-type TOrderViewState = {
-  order: Array<TOrderWithOwner> | null;
+type OrderViewState = {
+  order: Array<OrderWithOwner> | null;
   orderViewRequest: boolean;
   orderViewFailed: boolean;
 };
 
-const initialState: TOrderViewState = {
+const initialState: OrderViewState = {
   order: null,
   orderViewRequest: false,
   orderViewFailed: false,
@@ -31,7 +31,7 @@ export const orderViewSlice = createSlice({
     },
     [setOrderView.fulfilled.type]: (
       state,
-      action: PayloadAction<Array<TOrderWithOwner>>
+      action: PayloadAction<Array<OrderWithOwner>>
     ) => {
       state.orderViewRequest = false;
       state.orderViewFailed = false;

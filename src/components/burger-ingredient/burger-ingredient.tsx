@@ -9,9 +9,9 @@ import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { TIngredient } from "../../utils/types";
+import type { Ingredient } from "../../utils/types";
 
-const BurgerIngredient: FC<{ ingredientData: TIngredient; counter: number }> =
+const BurgerIngredient: FC<{ ingredientData: Ingredient; counter: number }> =
   React.memo(({ ingredientData, counter }) => {
     const location = useLocation();
 

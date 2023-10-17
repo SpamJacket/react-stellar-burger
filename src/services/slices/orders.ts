@@ -1,15 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TOrderWithId } from "../../utils/types";
+import type { OrderWithId } from "../../utils/types";
 
-type TOrdersState = {
+type OrdersState = {
   status: string;
-  orders: Array<TOrderWithId>;
+  orders: Array<OrderWithId>;
   total: number | null;
   totalToday: number | null;
   error: string;
 };
 
-const initialState: TOrdersState = {
+const initialState: OrdersState = {
   status: "offline",
   orders: [],
   total: null,
@@ -39,7 +39,7 @@ export const ordersSlice = createSlice({
     wsMessage(
       state,
       action: PayloadAction<{
-        orders: Array<TOrderWithId>;
+        orders: Array<OrderWithId>;
         total: number;
         totalToday: number;
       }>

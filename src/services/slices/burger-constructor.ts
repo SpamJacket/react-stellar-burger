@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { TIngredientWithUuid } from "../../utils/types";
+import type { IngredientWithUuid } from "../../utils/types";
 import { v4 as uuidv4 } from "uuid";
 
-type TBurgerConstructorState = {
-  bun: TIngredientWithUuid | null;
-  filings: Array<TIngredientWithUuid>;
+type BurgerConstructorState = {
+  bun: IngredientWithUuid | null;
+  filings: Array<IngredientWithUuid>;
 };
 
-const initialState: TBurgerConstructorState = {
+const initialState: BurgerConstructorState = {
   bun: null,
   filings: [],
 };
@@ -16,7 +16,7 @@ export const constructorSlice = createSlice({
   name: "constructor",
   initialState,
   reducers: {
-    addToConstructorList(state, action: PayloadAction<TIngredientWithUuid>) {
+    addToConstructorList(state, action: PayloadAction<IngredientWithUuid>) {
       if (action.payload.type === "bun") {
         state.bun = action.payload;
       } else {
@@ -33,7 +33,7 @@ export const constructorSlice = createSlice({
       state.bun = null;
       state.filings = [];
     },
-    setFilings(state, action: PayloadAction<Array<TIngredientWithUuid>>) {
+    setFilings(state, action: PayloadAction<Array<IngredientWithUuid>>) {
       state.filings = action.payload;
     },
   },
