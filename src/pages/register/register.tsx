@@ -73,7 +73,7 @@ const Register: FC = () => {
           size="medium"
           extraClass={styles.link}
           onClick={() => {
-            navigate("/login");
+            navigate("/react-stellar-burger/login");
           }}
         >
           Войти

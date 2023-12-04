@@ -56,7 +56,7 @@ const ForgotPassword: FC = () => {
           type="secondary"
           size="medium"
           extraClass={styles.link}
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/react-stellar-burger/login")}
         >
           Войти
         </Button>

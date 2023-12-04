@@ -19,7 +19,7 @@ const Profile: FC = () => {
       <nav className={styles.links}>
         <NavLink
           end
-          to={"/profile"}
+          to={"/react-stellar-burger/profile"}
           className={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
@@ -27,14 +27,18 @@ const Profile: FC = () => {
           Профиль
         </NavLink>
         <NavLink
-          to={"/profile/orders"}
+          to={"/react-stellar-burger/profile/orders"}
           className={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
         >
           История заказов
         </NavLink>
-        <NavLink className={styles.link} onClick={handleLogout} to={"/"}>
+        <NavLink
+          className={styles.link}
+          onClick={handleLogout}
+          to={"/react-stellar-burger/"}
+        >
           Выход
         </NavLink>
         <p className={styles.text}>

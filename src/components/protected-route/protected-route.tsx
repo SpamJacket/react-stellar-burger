@@ -17,12 +17,16 @@ const Protected: FC<{
   }
 
   if (onlyUnAuth && user) {
-    const { from }: Location = location.state || { from: { pathname: "/" } };
+    const { from }: Location = location.state || {
+      from: { pathname: "/react-stellar-burger/" },
+    };
     return <Navigate to={from} />;
   }
 
   if (!onlyUnAuth && !user) {
-    return <Navigate to="/login" state={{ from: location }} />;
+    return (
+      <Navigate to="/react-stellar-burger/login" state={{ from: location }} />
+    );
   }
 
   return component;

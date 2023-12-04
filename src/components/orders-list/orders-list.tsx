@@ -12,7 +12,7 @@ import { BASE_WS_ORDERS_URL } from "../../utils/constants";
 
 const OrdersList: FC = () => {
   const dispatch = useDispatch();
-  const isPrivateList = useMatch("/profile/orders");
+  const isPrivateList = useMatch("/react-stellar-burger/profile/orders");
   const { orders, status } = useSelector(
     isPrivateList ? (store) => store.orders : (store) => store.feed
   );

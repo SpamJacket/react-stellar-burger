@@ -68,7 +68,7 @@ const BurgerConstructor: FC = () => {
         });
       }
     } else {
-      navigate("/login");
+      navigate("/react-stellar-burger/login");
     }
   };
 

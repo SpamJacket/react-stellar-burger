@@ -62,7 +62,7 @@ const Login: FC = () => {
           size="medium"
           extraClass={styles.link}
           onClick={() => {
-            navigate("/register");
+            navigate("/react-stellar-burger/register");
           }}
         >
           Зарегистрироваться
@@ -76,7 +76,7 @@ const Login: FC = () => {
           size="medium"
           extraClass={styles.link}
           onClick={() => {
-            navigate("/forgot-password");
+            navigate("/react-stellar-burger/forgot-password");
           }}
         >
           Восстановить пароль

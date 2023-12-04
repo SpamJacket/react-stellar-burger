@@ -54,32 +54,41 @@ const App: FC = () => {
     <div className={styles.app}>
       <AppHeader />
       <Routes location={previousPage || location}>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<OnlyUnAuth component={<Login />} />} />
+        <Route path="/react-stellar-burger/" element={<Home />} />
         <Route
-          path="/register"
+          path="/react-stellar-burger/login"
+          element={<OnlyUnAuth component={<Login />} />}
+        />
+        <Route
+          path="/react-stellar-burger/register"
           element={<OnlyUnAuth component={<Register />} />}
         />
         <Route
-          path="/forgot-password"
+          path="/react-stellar-burger/forgot-password"
           element={<OnlyUnAuth component={<ForgotPassword />} />}
         />
         <Route
-          path="/reset-password"
+          path="/react-stellar-burger/reset-password"
           element={<OnlyUnAuth component={<ResetPassword />} />}
         />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
+        <Route path="/react-stellar-burger/feed" element={<FeedPage />} />
+        <Route
+          path="/react-stellar-burger/profile"
+          element={<OnlyAuth component={<Profile />} />}
+        >
           <Route path="" element={<ProfileForm />} />
           <Route path="orders" element={<OrdersList />} />
         </Route>
         <Route
-          path="/ingredients/:ingredientId"
+          path="/react-stellar-burger/ingredients/:ingredientId"
           element={<IngredientDetailsPage />}
         />
-        <Route path="/feed/:orderNumber" element={<OrderViewPage />} />
         <Route
-          path="/profile/orders/:orderNumber"
+          path="/react-stellar-burger/feed/:orderNumber"
+          element={<OrderViewPage />}
+        />
+        <Route
+          path="/react-stellar-burger/profile/orders/:orderNumber"
           element={<OnlyAuth component={<OrderViewPage />} />}
         />
         <Route path="*" element={<NotFound />} />
@@ -88,7 +97,7 @@ const App: FC = () => {
       {previousPage && (
         <Routes>
           <Route
-            path="/ingredients/:ingredientId"
+            path="/react-stellar-burger/ingredients/:ingredientId"
             element={
               <Modal closeModal={handleModalClose}>
                 <IngredientDetails />
@@ -96,7 +105,7 @@ const App: FC = () => {
             }
           />
           <Route
-            path="/profile/orders/:orderNumber"
+            path="/react-stellar-burger/profile/orders/:orderNumber"
             element={
               <Modal closeModal={handleModalClose}>
                 <OrderView />
@@ -104,7 +113,7 @@ const App: FC = () => {
             }
           />
           <Route
-            path="/feed/:orderNumber"
+            path="/react-stellar-burger/feed/:orderNumber"
             element={
               <Modal closeModal={handleModalClose}>
                 <OrderView />

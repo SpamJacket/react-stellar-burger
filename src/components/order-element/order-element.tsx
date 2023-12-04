@@ -13,7 +13,7 @@ const OrderElement: FC<{
   data: Order;
 }> = ({ data: { createdAt, ingredients, name, number, status } }) => {
   const location = useLocation();
-  const isPrivateList = useMatch("/profile/orders");
+  const isPrivateList = useMatch("/react-stellar-burger/profile/orders");
   const ingredientsList = useSelector((store) => store.ingredientsList);
 
   const translateStatus = React.useMemo(() => {
@@ -108,7 +108,11 @@ const OrderElement: FC<{
     <>
       {name && (
         <Link
-          to={isPrivateList ? `/profile/orders/${number}` : `/feed/${number}`}
+          to={
+            isPrivateList
+              ? `/react-stellar-burger/profile/orders/${number}`
+              : `/react-stellar-burger/feed/${number}`
+          }
           state={{ previousPage: location }}
           className={styles.link}
         >

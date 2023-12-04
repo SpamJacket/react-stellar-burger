@@ -12,15 +12,15 @@ import {
 
 const AppHeader: FC = () => {
   const navigate = useNavigate();
-  const isConstructor = useMatch("/");
-  const isOrdersList = useMatch("/feed/*");
-  const isProfile = useMatch("/profile/*");
+  const isConstructor = useMatch("/react-stellar-burger/");
+  const isOrdersList = useMatch("/react-stellar-burger/feed/*");
+  const isProfile = useMatch("/react-stellar-burger/profile/*");
 
   return (
     <header className={styles.header}>
       <nav className={styles.navBar}>
         <NavLink
-          to={"/"}
+          to={"/react-stellar-burger/"}
           type="button"
           aria-label="Конструктор"
           className={({ isActive }) =>
@@ -31,7 +31,7 @@ const AppHeader: FC = () => {
           <p className={styles.text}>Конструктор</p>
         </NavLink>
         <NavLink
-          to={"/feed"}
+          to={"/react-stellar-burger/feed"}
           type="button"
           aria-label="Лента заказов"
           className={({ isActive }) =>
@@ -42,12 +42,15 @@ const AppHeader: FC = () => {
           <p className={styles.text}>Лента заказов</p>
         </NavLink>
       </nav>
-      <div className={styles.logo} onClick={() => navigate("/")}>
+      <div
+        className={styles.logo}
+        onClick={() => navigate("/react-stellar-burger/")}
+      >
         <Logo />
       </div>
       <nav className={styles.navBar}>
         <NavLink
-          to={"/profile"}
+          to={"/react-stellar-burger/profile"}
           type="button"
           aria-label="Личный кабинет"
           className={({ isActive }) =>

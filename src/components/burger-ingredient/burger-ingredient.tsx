@@ -42,7 +42,7 @@ const BurgerIngredient: FC<{ ingredientData: Ingredient; counter: number }> =
 
     return (
       <Link
-        to={`/ingredients/${ingredientData._id}`}
+        to={`/react-stellar-burger/ingredients/${ingredientData._id}`}
         state={{ previousPage: location }}
         className={styles.link}
       >

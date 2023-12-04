@@ -25,7 +25,7 @@ const ResetPassword: FC = () => {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(handleResetPassword(values)).then(() => {
-      navigate("/login");
+      navigate("/react-stellar-burger/login");
     });
   };
 
@@ -33,7 +33,7 @@ const ResetPassword: FC = () => {
     localStorage.getItem("resetFlag") === "false" ||
     !localStorage.getItem("resetFlag")
   ) {
-    return <Navigate to="/" replace={true} />;
+    return <Navigate to="/react-stellar-burger/" replace={true} />;
   }
 
   return (
@@ -75,7 +75,7 @@ const ResetPassword: FC = () => {
           extraClass={styles.link}
           onClick={() => {
             localStorage.setItem("resetFlag", "false");
-            navigate("/login");
+            navigate("/react-stellar-burger/login");
           }}
         >
           Войти
